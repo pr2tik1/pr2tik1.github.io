@@ -1,0 +1,93 @@
+[
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html",
+    "href": "posts/hierarchical/Plotly-Sunburst.html",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "",
+    "text": "Data visualization plays a vital role in various domains such as data analytics, data science, data dashboarding, and exploratory/statistical analysis. Within the Python and R ecosystems, there are several popular visualization libraries commonly used such as :\n\nMatplotlib\nSeaborn\nPlotly\nAltair\nBokeh\n\nAmong these, the widely used library is the Plotly Graphing Library, which offers libraries in multiple languages, high-quality scientific/non-scientific graphs, and easily shareable interactive plots.\nIn this post, I will be discussing an intriguing plot called the Sunburst Chart. Sunburst charts provide an interactive visualization of layered information, allowing for an enhanced understanding of complex data structures."
+  },
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html#introduction",
+    "href": "posts/hierarchical/Plotly-Sunburst.html#introduction",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "",
+    "text": "Data visualization plays a vital role in various domains such as data analytics, data science, data dashboarding, and exploratory/statistical analysis. Within the Python and R ecosystems, there are several popular visualization libraries commonly used such as :\n\nMatplotlib\nSeaborn\nPlotly\nAltair\nBokeh\n\nAmong these, the widely used library is the Plotly Graphing Library, which offers libraries in multiple languages, high-quality scientific/non-scientific graphs, and easily shareable interactive plots.\nIn this post, I will be discussing an intriguing plot called the Sunburst Chart. Sunburst charts provide an interactive visualization of layered information, allowing for an enhanced understanding of complex data structures."
+  },
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html#sunburst-chart",
+    "href": "posts/hierarchical/Plotly-Sunburst.html#sunburst-chart",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "Sunburst Chart",
+    "text": "Sunburst Chart\nA sunburst chart is a powerful visualization tool used to represent hierarchical datasets. In a hierarchical dataset, there exists a parent-child relationship among the features or variables, resembling a tree-like structure. To generate a sunburst plot using Plotly, you can leverage the capabilities of either plotly.express or plotly.graph_objects libraries.\nNow, let’s delve into how this data would appear by visualizing it using a sunburst chart."
+  },
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html#hierarchical-data",
+    "href": "posts/hierarchical/Plotly-Sunburst.html#hierarchical-data",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "Hierarchical Data",
+    "text": "Hierarchical Data\nHierarchical datasets are a type of data organization where the data is structured in a hierarchical manner, forming a tree-like structure. In this structure, data elements are grouped into parent-child relationships, where each parent can have one or more children, and each child can be a parent of other elements, forming multiple levels of nesting.\nConsider an example dataframe (dummy data for demonstration purposes) with a tree-like structure, where the columns or features exhibit parent-child relationships with other columns.\n\nGeneral Dataset: This dataframe contains classes and values organized in columns, as depicted in the sample data provided.\nSunburst Dataset: This hierarchical dataframe defines the logical parent-child relationships between columns and their corresponding values.\n\nThe following dataset is a dummy data for demonstration.\n\n#Importing pandas to handle dataframe\nimport pandas as pd\n# Suppress pandas warnings\nimport warnings\nwarnings.filterwarnings(\"ignore\")\n\n\ndata = pd.read_csv(\"../data/dummy_data.csv\")\ndata.head(5)\n\n\n\n\n\n\n\n\nCountry\nState\nCity\nPopulation\n\n\n\n\n0\nIndia\nINMP\nA1\n512\n\n\n1\nIndia\nINCG\nB2\n12201\n\n\n2\nIndia\nINCG\nM1\n9021\n\n\n3\nUSA\nUSNY\nC2\n812\n\n\n4\nUSA\nUSNY\nN1\n821\n\n\n\n\n\n\n\nThe dataset is not in hierachical form. The sunburst chart needs a parent, child and value variable for generating the plot. Hence, we need to convert the table into a ‘chart-acceptable’ format. The following function performs the job. The function is modified version of original function defined at Plotly’s documentation, to know more about this please visit here.\n\ndef build_hierarchical_dataframe(df, levels, value_column, metric):\n    \"\"\"\n    Build a hierarchy of levels for Sunburst.\n    \n    Args:\n        df (pd.DataFrame): Input pandas DataFrame.\n        levels (list): List of column names in the order, child to root.\n        value_column (str): Name of the column to display in the chart.\n        metric (str): Specifies the metric, either \"sum\" or \"count\".\n        \n    Returns:\n        pd.DataFrame: A pandas DataFrame for Sunburst with columns ['id', 'parent', 'value'].\n    \"\"\"\n    df_all_trees = pd.DataFrame(columns=['id', 'parent', 'value'])\n    \n    for i, level in enumerate(levels):\n        df_tree = pd.DataFrame(columns=['id', 'parent', 'value'])\n        \n        # Groupby based on the chosen metric\n        if metric == \"count\":\n            dfg = df.groupby(levels[i:]).count()\n        else:\n            dfg = df.groupby(levels[i:]).sum()\n        \n        dfg = dfg.reset_index()\n        df_tree['id'] = dfg[level].copy()\n\n        # Set parent of the levels\n        if i &lt; len(levels) - 1:\n            df_tree['parent'] = dfg[levels[i+1]].copy()\n        else:\n            df_tree['parent'] = 'Total'\n        \n        df_tree['value'] = dfg[value_column]\n        df_all_trees = pd.concat([df_all_trees, df_tree], ignore_index=True)\n    \n    # Value calculation for the parent\n    if metric == \"count\":\n        total = pd.Series(dict(id='Total', parent='', value=df[value_column].count()))\n    else:\n        total = pd.Series(dict(id='Total', parent='', value=df[value_column].sum()))\n    \n    # Add frames one below the other to form the final dataframe\n    df_all_trees = pd.concat([df_all_trees, pd.DataFrame([total])], ignore_index=True)\n    return df_all_trees\n\n\nlevels = ['City', 'State', 'Country'] \nvalue_column = 'Population'\n\n\n(1) Hierarchical Sum dataframe\nThis dataframe represents total population accross Country, State and City under study.\n\ndf_sum=build_hierarchical_dataframe(data, levels, value_column, metric=\"sum\")\ndf_sum.head()\n\n\n\n\n\n\n\n\nid\nparent\nvalue\n\n\n\n\n0\nA1\nINMP\n512\n\n\n1\nB2\nINCG\n12201\n\n\n2\nC2\nUSNY\n812\n\n\n3\nD1\nINSD\n9104\n\n\n4\nE2\nINGD\n132\n\n\n\n\n\n\n\n\n\n(2) Hierarchical Count dataframe\nThis dataframe represents number of sub-classes (like City) accross Country and State under study.\n\ndf_count=build_hierarchical_dataframe(data, levels, value_column, metric=\"count\")\ndf_count.head()\n\n\n\n\n\n\n\n\nid\nparent\nvalue\n\n\n\n\n0\nA1\nINMP\n1\n\n\n1\nB2\nINCG\n1\n\n\n2\nC2\nUSNY\n1\n\n\n3\nD1\nINSD\n1\n\n\n4\nE2\nINGD\n1"
+  },
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html#visualisation",
+    "href": "posts/hierarchical/Plotly-Sunburst.html#visualisation",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "Visualisation",
+    "text": "Visualisation\nNow we would see the two most common ways of plotting sunburst charts in python. The user can choose any of the following modules,\n\nPlotly Express\nPlotly Graph Objects\n\nBoth of these modules generate same “figure object”. Just the difference comes in code syntax and in flexibility of modifying graph as required. Plotly express is more of generating plot by calling function from already defined set of parameters. One may be more comfortable in tweaking the details while working with graph objects. However, the beauty of plotly is that you are able do the same things in the figure generated from plotly express as those are possible in that with graph objects. \nWe will be using both of them, and generate the plots for the datasets generated in the above section.\n\nfrom io import StringIO\nfrom IPython.display import display_html, HTML\n\n\n(1) Plotly Express\n\nimport plotly.express as px \n\nfigure = px.sunburst(data, path=['Country', 'State', 'City'], values='Population')\nfigure.update_layout(margin=dict(t=10, b=10, r=10, l=10))\nfigure.show() \n# HTML(figure.to_html(include_plotlyjs='cdn'))\n\n\n                                                \n\n\n\n\n(2) Graph Objects\n\nimport plotly.graph_objects as go\n\nfigure = go.Figure()\nfigure.add_trace(go.Sunburst(\n        labels=df_sum['id'],\n        parents=df_sum['parent'],\n        values=df_sum['value'],\n        branchvalues='total',\n        marker=dict(colorscale='Rdbu'),\n        hovertemplate='&lt;b&gt; Country : %{label} &lt;/b&gt; &lt;br&gt; Count : %{value} &lt;extra&gt;Population&lt;/extra&gt;',\n        maxdepth=2)\n    )\nfigure.update_layout(margin=dict(t=10, b=10, r=10, l=10))\nfigure.show() \n# HTML(figure.to_html(include_plotlyjs='cdn'))"
+  },
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html#communicating-plots-with-json",
+    "href": "posts/hierarchical/Plotly-Sunburst.html#communicating-plots-with-json",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "Communicating Plots with JSON",
+    "text": "Communicating Plots with JSON\nWe can take these plots and convert them to JSONs. This comes handy when we need the plots to communicate from server part of a web application to client. Plotly has in-built function to save figure as json : write_json(). Following cells show how to write and regenerate the plots.\n\nfigure.write_json(\"../data/Sunburst_Chart.json\")\n\n\nimport json\n\nopened_file = open(\"../data/Sunburst_Chart.json\")\nopened_fig = json.load(opened_file)\n\nfig_ = go.Figure(\n    data = opened_fig['data'],\n    layout = opened_fig['layout']\n    )\nfig_.show()\n# HTML(fig_.to_html())"
+  },
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html#custom-plots",
+    "href": "posts/hierarchical/Plotly-Sunburst.html#custom-plots",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "Custom Plots",
+    "text": "Custom Plots\nIn this final section we would see the go.Figure subplots, where fully customize the plots.\n\nfrom plotly.subplots import make_subplots\n\nfig = make_subplots(1, 2, specs=[[{\"type\": \"domain\"}, {\"type\": \"domain\"}]],)\nfig.add_trace(go.Sunburst(\n    labels=df_sum['id'],\n    parents=df_sum['parent'],\n    values=df_sum['value'],\n    branchvalues='total',\n    marker=dict(colorscale='sunset'),\n    hovertemplate='&lt;b&gt; Country : %{label} &lt;/b&gt; &lt;br&gt; Count : %{value} &lt;extra&gt;Population&lt;/extra&gt;',\n    maxdepth=2), 1, 1)\n\nfig.add_trace(go.Sunburst(\n    labels=df_count['id'],\n    parents=df_count['parent'],\n    values=df_count['value'],\n    branchvalues='total',\n    marker=dict(colorscale='viridis'),\n    hovertemplate='&lt;b&gt; Country : %{label} &lt;/b&gt; &lt;br&gt; Count : %{value} &lt;extra&gt;Cities&lt;/extra&gt;',\n    maxdepth=2), 1, 2)\n\nfig.update_layout(margin=dict(t=10, b=10, r=10, l=10))\nfig.show()\n# HTML(fig.to_html())"
+  },
+  {
+    "objectID": "posts/hierarchical/Plotly-Sunburst.html#only-sunburst-what-are-some-alternatives-to-sunburst",
+    "href": "posts/hierarchical/Plotly-Sunburst.html#only-sunburst-what-are-some-alternatives-to-sunburst",
+    "title": "Hierarchical Data Visualization Demystified",
+    "section": "Only Sunburst ? What are some alternatives to Sunburst ?",
+    "text": "Only Sunburst ? What are some alternatives to Sunburst ?\nSunburst is one of the ways of visualizing the Hierarchical Data, we can also visualize such datasets using Treemap charts. For example -\n\nfig = px.treemap(data, \n                 path=[px.Constant(\"World\"), 'Country', 'State', 'City'], \n                 values='Population')\nfig.update_layout(margin = dict(t=50, l=25, r=25, b=25))\nfig.show()"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": " devExplore ",
+    "section": "",
+    "text": "Hierarchical Data Visualization Demystified\n\n\n\n\n\n\n\ncode\n\n\nanalysis\n\n\ndata visualization\n\n\nPlotly\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nJun 19, 2023\n\n\nPratik Kumar\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About me",
+    "section": "",
+    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain.\nMy enthusiasm for software engineering extends beyond the workplace, as I actively engage in exploring innovative technologies and staying up-to-date with the latest industry trends."
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "About me",
+    "section": "👨🏻‍💻 Experience",
+    "text": "👨🏻‍💻 Experience\n\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nElucidata | Aug 2021 - Present  - Data Analyst  - Software Engineer"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "About me",
+    "section": "🏫 Education",
+    "text": "🏫 Education\n\nNational Institute of Technology, Raipur | Bachelors in Electronics and Communication Engineering(Aug 2016 - June 2020)"
+  },
+  {
+    "objectID": "about.html#skills",
+    "href": "about.html#skills",
+    "title": "About me",
+    "section": "🤹🏻 Skills",
+    "text": "🤹🏻 Skills"
+  }
+]
