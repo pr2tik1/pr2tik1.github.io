@@ -65,29 +65,22 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About me",
+    "title": "Let’s connect !",
     "section": "",
-    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain.\nMy enthusiasm for software engineering extends beyond the workplace, as I actively engage in exploring innovative technologies and staying up-to-date with the latest industry trends."
+    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
+  },
+  {
+    "objectID": "about.html#hi-i-am-pratik-kumar",
+    "href": "about.html#hi-i-am-pratik-kumar",
+    "title": "Let’s connect !",
+    "section": "",
+    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
   },
   {
     "objectID": "about.html#experience",
     "href": "about.html#experience",
-    "title": "About me",
+    "title": "Let’s connect !",
     "section": "👨🏻‍💻 Experience",
     "text": "👨🏻‍💻 Experience\n\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nElucidata | Aug 2021 - Present  - Data Analyst  - Software Engineer"
-  },
-  {
-    "objectID": "about.html#education",
-    "href": "about.html#education",
-    "title": "About me",
-    "section": "🏫 Education",
-    "text": "🏫 Education\n\nNational Institute of Technology, Raipur | Bachelors in Electronics and Communication Engineering(Aug 2016 - June 2020)"
-  },
-  {
-    "objectID": "about.html#skills",
-    "href": "about.html#skills",
-    "title": "About me",
-    "section": "🤹🏻 Skills",
-    "text": "🤹🏻 Skills"
   }
 ]
