@@ -1,6 +1,6 @@
 ---
 title: <br> devExplore <br> 
-subtitle: Unveiling the World of Tech, One Discovery at a Time <br> <br> <br> <br> <br> <br> 
+subtitle: Unveiling the world of tech, one discovery at a time 🔭 <br> <br> <br> <br> <br> <br> 
 title-block-style: default
 title-block-banner: images/black-bg.png
 title-block-banner-color: white

@@ -56,79 +56,44 @@
     "text": "Only Sunburst ? What are some alternatives to Sunburst ?\nSunburst is one of the ways of visualizing the Hierarchical Data, we can also visualize such datasets using Treemap charts. For example -\n\nfig = px.treemap(data, \n                 path=[px.Constant(\"World\"), 'Country', 'State', 'City'], \n                 values='Population')\nfig.update_layout(margin = dict(t=50, l=25, r=25, b=25))\nfig.show()"
   },
   {
+    "objectID": "posts/remote-extension/remote-containers.html",
+    "href": "posts/remote-extension/remote-containers.html",
+    "title": "Efficient project management using Dockers",
+    "section": "",
+    "text": "Dockers are excellent tools in software development. The key benefit of Dockers is that they allow users to package an application with all its dependencies into a standardized unit for software development. They have a low impact on the operating system and are very fast, using minimal disk space. Instead of encapsulating the entire machine, they encapsulate the environments for an application, making it easy to share code, rebuild applications, and distribute them.\nUsing Microsoft’s extension called : Dev Containers we can harness these benefits. The Dev Containers extension enables the use of a Docker container as a full-featured development environment. This helps developers in the following ways:\n\nDevelop with a consistent and reproducible environment.\nQuickly swap between different, separate development environments and safely make updates without worrying about impacting your local machine.\nMake it easy for new team members / contributors to get up and running in a consistent development environment.\n\nPersonally, I have been using Dev Containers to manage projects with different requirements. As a software engineer at Elucidata, I am responsible for developing various applications that require different versions of R, Python, and JavaScript. Remote containers have been immensely helpful in keeping the dedicated packages for each application within their project directories only.\nWhile there are other alternatives such as virtual environments (e.g.- pyenv, venv) and package management tools (for e.g. - packrat, renv), containerization proves to be more efficient for bigger projects where we have to manage these R and Python environments together. With minimal code, we can instruct the required installations and quickly reproduce the environment.\nThe Dev Containers extension supports two primary operating models:\n\nYou can use a container as your full-time development environment\nYou can attach to a running container to inspect it."
+  },
+  {
+    "objectID": "posts/remote-extension/remote-containers.html#requirements",
+    "href": "posts/remote-extension/remote-containers.html#requirements",
+    "title": "Efficient project management using Dockers",
+    "section": "Requirements",
+    "text": "Requirements\nYou can use Docker with the Dev Containers extension in a few ways, including:\n\nDocker installed locally\nDocker installed on a remote environment\nOther Docker compliant CLIs, installed locally or remotely\n\nWhile other CLIs may work, they are not officially supported. Note that attaching to a Kubernetes cluster only requires a properly configured kubectl CLI\n\n\nVisit here to know more about system requirements."
+  },
+  {
+    "objectID": "posts/remote-extension/remote-containers.html#installation",
+    "href": "posts/remote-extension/remote-containers.html#installation",
+    "title": "Efficient project management using Dockers",
+    "section": "Installation",
+    "text": "Installation\nTo get started, follow this official step by step tutorial here."
+  },
+  {
+    "objectID": "posts/remote-extension/remote-containers.html#devcontainerdevcontainer.json",
+    "href": "posts/remote-extension/remote-containers.html#devcontainerdevcontainer.json",
+    "title": "Efficient project management using Dockers",
+    "section": ".devcontainer/devcontainer.json",
+    "text": ".devcontainer/devcontainer.json\nWithin the .devcontainer folder the devcontainer.json config file helps the extension to determine the name of the container, which image to use, extensions to install, port to expose and other configurations. Few examples,\n\n1. Shiny Application\nConsider there are multiple projects that you are working on, and each of them require different R versions and packages. You can set the value of the image key from below to any version of choice for R.\n{\n    \"name\" : \"Project 1\",\n    \"image\": \"r-base:latest\" //Any version as per requirement from dockerhub\n}\n{\n    \"name\" : \"Project 2\",\n    \"image\": \"r-base:4.1\" //Any version as per requirement from dockerhub\n}\n\n\n2. Using Custom Docker Image\nNow, suppose you want to use your own image with a specific R version, package installations, and other tools/languages included. In that case, you can create a custom Dockerfile (just make sure to specify the correct path for this file) as follows,\n# Use the specified R base image\nFROM r-base:latest\n\n# Set non-interactive mode for apt-get\nENV DEBIAN_FRONTEND=noninteractive\n\n# Expose port 4200\nEXPOSE 4200\n\n# Install necessary system dependencies\nRUN apt-get update && apt-get install -y \\\n    make \\\n    build-essential \\\n    git \\\n    wget \\\n    curl \n\n## Python setup\n# Switch to user \"docker\" to install pyenv\nUSER docker\nRUN curl https://pyenv.run | bash\n\n# Set up Python paths\nENV PATH=\"/home/docker/.pyenv/bin:$PATH\"\nENV PATH=\"/home/docker/.pyenv/versions/3.9.13/bin:$PATH\"\n\n# Install Python 3.9.13\nRUN PYTHON_CONFIGURE_OPTS=\"--enable-shared\" pyenv install 3.9.13\n\n# Switch back to root user for the remaining steps\nUSER root\n\n## Python virtual env and packages\n# Copy requirements.txt into the image\nCOPY requirements.txt requirements.txt\n\n# Create and activate Python virtual environment\nRUN rm -rf my_venv && python3 -m venv my_venv && \\\n    . my_venv/bin/activate && \\\n    python3 -m pip install --upgrade pip && \\\n    pip install -r requirements.txt\n\n# Install R packages using renv\nCOPY renv.lock renv.lock\nRUN R -e \"install.packages('renv'); renv::restore()\"\nNow with this Dockerfile, run the extension using following devcontainer.json :\n{\n    \"name\": \"Custom App\",\n    \"build\": {\n      \"dockerfile\": \"Dockerfile\",  //path to your custom Dockerfile.\n      \"context\": \"..\"\n    },\n    \"remoteUser\": \"docker\"\n}\n\n\n3. Post Installation Step\nWhen it comes to development, there could be a constant update in list of packages in your project. Now building everytime for each newly added package can be time consuming. Hence, we can install packages after building the image with minimal layers. So that the files would like :\n\nThe updated config file .devcontainer/devcontainer.json would now look like:\n\n{\n    \"name\": \"Custom App\",\n    \"build\": {\n      \"dockerfile\": \"Dockerfile\", //path to your custom Dockerfile.\n      \"context\": \"..\"\n    },\n    \"remoteUser\": \"docker\",\n    \"postCreateCommand\": \"bash .devcontainer/build_environment.sh\" // Can use any scripting language of choice.\n}\n\nYou can use a bash script to install packages after the build of container .devcontainer/build_environment.sh :\n\n## Install R packages\nR -e \"install.packages('renv'); renv::restore()\"\n\n\n## Install python packages\nrm -rf my_venv && python3 -m venv my_venv && \\\n    . my_venv/bin/activate && \\\n    python3 -m pip install --upgrade pip && \\\n    pip install -r requirements.txt"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": " devExplore ",
     "section": "",
-    "text": "Remote Containers\n\n\n\n\n\n\n\ncode\n\n\nDocker\n\n\nPlotly\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nJul 31, 2023\n\n\nPratik Kumar\n\n\n1 min\n\n\n\n\n\n\n  \n\n\n\n\nHierarchical Data Visualization Demystified\n\n\n\n\n\n\n\ncode\n\n\nanalysis\n\n\ndata visualization\n\n\nPlotly\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nJun 19, 2023\n\n\nPratik Kumar\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
+    "text": "Efficient project management using Dockers\n\n\n\n\n\n\n\ncode\n\n\nDockers\n\n\nPython\n\n\nR\n\n\nProductivity\n\n\nBlog\n\n\n\n\n\n\n\n\n\n\n\nJul 31, 2023\n\n\nPratik Kumar\n\n\n6 min\n\n\n\n\n\n\n  \n\n\n\n\nHierarchical Data Visualization Demystified\n\n\n\n\n\n\n\ndata visualization\n\n\nPlotly\n\n\nPython\n\n\nBlog\n\n\n\n\n\n\n\n\n\n\n\nJun 19, 2023\n\n\nPratik Kumar\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
     "href": "about.html",
     "title": "Let’s connect !",
-    "section": "",
-    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
-  },
-  {
-    "objectID": "about.html#experience",
-    "href": "about.html#experience",
-    "title": "Let’s connect !",
-    "section": "👨🏻‍💻 Experience",
-    "text": "👨🏻‍💻 Experience\n\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nElucidata | Aug 2021 - Present  - Data Analyst  - Software Engineer"
-  },
-  {
-    "objectID": "about.html#education",
-    "href": "about.html#education",
-    "title": "About me",
-    "section": "🏫 Education",
-    "text": "🏫 Education\n\nNational Institute of Technology, Raipur | Bachelors in Electronics and Communication Engineering(Aug 2016 - June 2020)"
-  },
-  {
-    "objectID": "about.html#skills",
-    "href": "about.html#skills",
-    "title": "About me",
-    "section": "🤹🏻 Skills",
-    "text": "🤹🏻 Skills"
-  },
-  {
-    "objectID": "posts/remote-extension/remote-containers.html",
-    "href": "posts/remote-extension/remote-containers.html",
-    "title": "Remote Containers",
-    "section": "",
-    "text": "docker ps"
-  },
-  {
-    "objectID": "posts/remote-extension/remote-containers.html#containers",
-    "href": "posts/remote-extension/remote-containers.html#containers",
-    "title": "Remote Containers",
-    "section": "",
-    "text": "docker ps"
-  },
-  {
-    "objectID": "about.html#opensource",
-    "href": "about.html#opensource",
-    "title": "About me",
-    "section": "Opensource",
-    "text": "Opensource\nI love to contribute to opensource ! View my contributions,"
-  },
-  {
-    "objectID": "about.html#opensource-contributions",
-    "href": "about.html#opensource-contributions",
-    "title": "Let’s connect !",
-    "section": "🫶 Opensource Contributions",
-    "text": "🫶 Opensource Contributions"
-  },
-  {
-    "objectID": "about.html#hi-am-pratik",
-    "href": "about.html#hi-am-pratik",
-    "title": "About me",
-    "section": "",
-    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
-  },
-  {
-    "objectID": "about.html#hi-i-am-pratik",
-    "href": "about.html#hi-i-am-pratik",
-    "title": "About me",
     "section": "",
     "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
   },
@@ -140,10 +105,10 @@
     "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
   },
   {
-    "objectID": "about.html#resume",
-    "href": "about.html#resume",
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
     "title": "Let’s connect !",
-    "section": "📄 Resume",
-    "text": "📄 Resume"
+    "section": "👨🏻‍💻 Experience",
+    "text": "👨🏻‍💻 Experience\n\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nElucidata | Aug 2021 - Present  - Data Analyst  - Software Engineer"
   }
 ]

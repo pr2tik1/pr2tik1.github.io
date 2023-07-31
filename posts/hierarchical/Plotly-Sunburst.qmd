@@ -12,11 +12,10 @@ format:
 author: Pratik Kumar
 date: '2023-06-19'
 categories:
-  - code
-  - analysis
   - data visualization
   - Plotly
   - Python
+  - Blog
 website:
   back-to-top-navigation: true
   page-footer: 'Copyright 2023, Pratik Kumar'
