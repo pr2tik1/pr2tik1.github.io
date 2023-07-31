@@ -93,22 +93,15 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "Let’s connect !",
+    "title": "Pratik Kumar",
     "section": "",
-    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
+    "text": "Hello! 👋 I am a software engineer who loves working on websites, AI, and data-related projects. When I’m not coding, I enjoy going on treks, exploring new cuisines, and playing sports like football, badminton, cricket, and table tennis. I love photography and watching exciting movies like “Edge of Tomorrow”. And I am always up for a coffee !\nCurrently, I am working at Elucidata, solving some of the complex problems in drug discovery."
   },
   {
-    "objectID": "about.html#hi-i-am-pratik-kumar",
-    "href": "about.html#hi-i-am-pratik-kumar",
-    "title": "Let’s connect !",
-    "section": "",
-    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
-  },
-  {
-    "objectID": "about.html#experience",
-    "href": "about.html#experience",
-    "title": "Let’s connect !",
-    "section": "👨🏻‍💻 Experience",
-    "text": "👨🏻‍💻 Experience\n\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nElucidata | Aug 2021 - Present  - Data Analyst  - Software Engineer"
+    "objectID": "about.html#work-experience",
+    "href": "about.html#work-experience",
+    "title": "Pratik Kumar",
+    "section": "👨🏻‍💻 Work Experience",
+    "text": "👨🏻‍💻 Work Experience\n\nElucidata | Aug 2021 - Present  - Software Engineer (current)  - Data Analyst\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern"
   }
 ]
