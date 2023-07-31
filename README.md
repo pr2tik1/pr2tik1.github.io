@@ -1,2 +1,3 @@
 # Portfolio
-Personal Website built from scratch
+
+Personal Website built from scratch using QUARTO.
