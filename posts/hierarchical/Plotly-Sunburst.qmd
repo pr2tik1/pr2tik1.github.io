@@ -22,6 +22,9 @@ website:
   page-footer: 'Copyright 2023, Pratik Kumar'
 toc: true
 jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
 ---
 
 ## Introduction 
