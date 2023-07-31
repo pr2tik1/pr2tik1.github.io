@@ -1,8 +1,8 @@
 ---
-title: "About me"
+title: "Let's connect !"
 about:
-#   image: "images/welcome.jpeg"
-  template: marquee
+  image: "images/profile-1.png"
+  template: trestles
   links:
     - icon: twitter
       text: Twitter
@@ -13,11 +13,24 @@ about:
     - icon: github
       text: Github
       href: https://github.com/pr2tik1
+    - icon: kaggle
+      text: Kaggle
+      href: https://www.kaggle.com/pr2tik1
+    - icon: medium
+      text: Medium
+      href: https://medium.com/@pr2tik1
+    - icon: leetcode
+      text: Leetcode
+      href: https://leetcode.com/pr2tik1/
+    - icon: instagram
+      text: Instagram
+      href: https://instagram.com/pratikkumar04
 
 ---
-I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain. 
 
-My enthusiasm for software engineering extends beyond the workplace, as I actively engage in exploring innovative technologies and staying up-to-date with the latest industry trends. 
+## Hi 👋 I am Pratik Kumar!
+
+I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - **Elucidata**.
 
 ## 👨🏻‍💻 Experience
 ---
@@ -33,25 +46,5 @@ My enthusiasm for software engineering extends beyond the workplace, as I active
   - Software Engineer
 
 
-## 🏫 Education 
----
-
-**National Institute of Technology, Raipur** | <br>Bachelors in Electronics and Communication Engineering<br>(Aug 2016 - June 2020)
-
-## 🤹🏻 Skills
----
-<p>
-  <img src="https://img.shields.io/badge/Python-%2314354C.svg?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/R-%23276DC3.svg?style=flat-square&logo=R&logoColor=white" alt="R">
-  <img src="https://img.shields.io/badge/Shiny-%2382B6B1.svg?style=flat-square&logo=RStudio&logoColor=white" alt="Shiny">
-  <img src="https://img.shields.io/badge/Plotly-%233F4F75.svg?style=flat-square&logo=Plotly&logoColor=white" alt="Plotly">
-  <img src="https://img.shields.io/badge/JavaScript-%23F7DF1E.svg?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript">
-  <img src="https://img.shields.io/badge/HTML-%23E34F26.svg?style=flat-square&logo=html5&logoColor=white" alt="HTML">
-  <img src="https://img.shields.io/badge/CSS-%231572B6.svg?style=flat-square&logo=css3&logoColor=white" alt="CSS">
-  <img src="https://img.shields.io/badge/Docker-%232496ED.svg?style=flat-square&logo=docker&logoColor=white" alt="Docker">
-  <img src="https://img.shields.io/badge/GitHub%20Actions-%232671E5.svg?style=flat-square&logo=github-actions&logoColor=white" alt="GitHub Actions">
-  <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=flat-square&logo=amazon-aws&logoColor=white" alt="AWS">
-  <img src="https://img.shields.io/badge/React-%2361DAFB.svg?style=flat-square&logo=react&logoColor=white" alt="React">
-  <img src="https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat-square&logo=PyTorch&logoColor=white" alt="PyTorch">
-  <img src="https://img.shields.io/badge/Bash-%234EAA25.svg?style=flat-square&logo=GNU%20Bash&logoColor=white" alt="Bash">
-</p>
+<!-- ## 📄 Resume
+--- -->

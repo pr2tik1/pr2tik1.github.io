@@ -60,19 +60,19 @@
     "href": "index.html",
     "title": " devExplore ",
     "section": "",
-    "text": "Hierarchical Data Visualization Demystified\n\n\n\n\n\n\n\ncode\n\n\nanalysis\n\n\ndata visualization\n\n\nPlotly\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nJun 19, 2023\n\n\nPratik Kumar\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
+    "text": "Remote Containers\n\n\n\n\n\n\n\ncode\n\n\nDocker\n\n\nPlotly\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nJul 31, 2023\n\n\nPratik Kumar\n\n\n1 min\n\n\n\n\n\n\n  \n\n\n\n\nHierarchical Data Visualization Demystified\n\n\n\n\n\n\n\ncode\n\n\nanalysis\n\n\ndata visualization\n\n\nPlotly\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nJun 19, 2023\n\n\nPratik Kumar\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About me",
+    "title": "Let’s connect !",
     "section": "",
-    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain.\nMy enthusiasm for software engineering extends beyond the workplace, as I actively engage in exploring innovative technologies and staying up-to-date with the latest industry trends."
+    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
   },
   {
     "objectID": "about.html#experience",
     "href": "about.html#experience",
-    "title": "About me",
+    "title": "Let’s connect !",
     "section": "👨🏻‍💻 Experience",
     "text": "👨🏻‍💻 Experience\n\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nElucidata | Aug 2021 - Present  - Data Analyst  - Software Engineer"
   },
@@ -89,5 +89,61 @@
     "title": "About me",
     "section": "🤹🏻 Skills",
     "text": "🤹🏻 Skills"
+  },
+  {
+    "objectID": "posts/remote-extension/remote-containers.html",
+    "href": "posts/remote-extension/remote-containers.html",
+    "title": "Remote Containers",
+    "section": "",
+    "text": "docker ps"
+  },
+  {
+    "objectID": "posts/remote-extension/remote-containers.html#containers",
+    "href": "posts/remote-extension/remote-containers.html#containers",
+    "title": "Remote Containers",
+    "section": "",
+    "text": "docker ps"
+  },
+  {
+    "objectID": "about.html#opensource",
+    "href": "about.html#opensource",
+    "title": "About me",
+    "section": "Opensource",
+    "text": "Opensource\nI love to contribute to opensource ! View my contributions,"
+  },
+  {
+    "objectID": "about.html#opensource-contributions",
+    "href": "about.html#opensource-contributions",
+    "title": "Let’s connect !",
+    "section": "🫶 Opensource Contributions",
+    "text": "🫶 Opensource Contributions"
+  },
+  {
+    "objectID": "about.html#hi-am-pratik",
+    "href": "about.html#hi-am-pratik",
+    "title": "About me",
+    "section": "",
+    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
+  },
+  {
+    "objectID": "about.html#hi-i-am-pratik",
+    "href": "about.html#hi-i-am-pratik",
+    "title": "About me",
+    "section": "",
+    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
+  },
+  {
+    "objectID": "about.html#hi-i-am-pratik-kumar",
+    "href": "about.html#hi-i-am-pratik-kumar",
+    "title": "Let’s connect !",
+    "section": "",
+    "text": "I am a software engineer with a passion for web application development, AI, deep learning, and building data-driven projects. Currently, I am working as a software engineer at a drug discovery startup in the bioinformatics domain - Elucidata."
+  },
+  {
+    "objectID": "about.html#resume",
+    "href": "about.html#resume",
+    "title": "Let’s connect !",
+    "section": "📄 Resume",
+    "text": "📄 Resume"
   }
 ]

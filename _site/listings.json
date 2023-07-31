@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/remote-extension/remote-containers.html",
       "/posts/hierarchical/Plotly-Sunburst.html"
     ]
   }

@@ -1,6 +1,6 @@
 ---
 title: Hierarchical Data Visualization Demystified
-image: ../images/seventeen.jpeg
+image: ../post-images/seventeen.jpeg
 title-block-style: default
 title-block-banner: black
 title-block-banner-color: white
