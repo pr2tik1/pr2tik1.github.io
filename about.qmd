@@ -17,18 +17,17 @@ about:
       href: https://medium.com/@pr2tik1
     - icon: instagram
       href: https://instagram.com/pratikkumar04
-    # - icon: leetcode
-    #   text: Leetcode
-    #   href: https://leetcode.com/pr2tik1/
-    # - icon: kaggle
-    #   text: Kaggle
-    #   href: https://www.kaggle.com/pr2tik1
+    - icon: file-earmark-person-fill
+      text: Resume
+      href: https://drive.google.com/file/d/1bO2scT5bjixISLEEfXicsK6k-TkwPAHC/view?usp=sharing
     
 ---
 
 Hello! 👋 I am a software engineer who loves working on websites, AI, and data-related projects. When I'm not coding, I enjoy going on treks, exploring new cuisines, and playing sports like football, badminton, cricket, and table tennis. I love photography and watching exciting movies like "Edge of Tomorrow". And I am always up for a coffee !
 
-Currently, I am working at [**Elucidata**](https://www.elucidata.io/), solving some of the complex problems in drug discovery.
+Currently, I am working at [**Elucidata**](https://www.elucidata.io/), solving some of the complex problems in drug discovery. 
+
+View my **resume** [here](https://drive.google.com/file/d/1bO2scT5bjixISLEEfXicsK6k-TkwPAHC/view?usp=sharing).
 
 ## 👨🏻‍💻 Work Experience
 ---

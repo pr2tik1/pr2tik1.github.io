@@ -1,0 +1,54 @@
+---
+title: Optimizing R Shiny apps
+image: ../post-images/OIG.jpeg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+server: shiny
+format: html
+author: Pratik Kumar
+date: '2023-12-28'
+categories:
+  - Web Application
+  - R
+  - R Shiny
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2023, Pratik Kumar'
+toc: true
+comments:
+  utterances:
+    repo: pr2tik1/pr2tik1.github.io
+---
+
+# Optimizing shiny app ? Do I need it ?
+
+R-Shiny apps excel in rapidly crafting applications for diverse analyses using custom libraries—be it statistical, bioinformatics, or data visualization. However, as the user's journey becomes intricate, challenges arise. When datasets grow, complexities accumulate, and interactive plots burgeon with points, the need for optimization becomes paramount.
+
+There can be several reasons for which the app may become "laggy," or certain features may take more time to load. These are common observations that an R-Shiny developer may come across. I will be addressing a few of them and will also try to share strategies to resolve them here.
+
+
+```{r}
+sliderInput("bins", "Number of bins:", 
+            min = 1, max = 50, value = 30)
+plotOutput("distPlot")
+```
+
+```{r}
+#| context: server
+output$distPlot <- renderPlot({
+  x <- faithful[, 2]  # Old Faithful Geyser data
+  bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  hist(x, breaks = bins, col = 'darkgray', border = 'white')
+})
+```
+
+# How can I see the pain-points ?
+
+# Possible Solutions and Strategies
+
+# Conclusion
+
+
