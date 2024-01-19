@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Pratik Kumar">
+<meta name="dcterms.date" content="2024-01-19">
 
-<title>devExplore -  devExplore </title>
+<title>devExplore - Simplifying R Package Management - renv vs packrat</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./images/logo.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,35 +69,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-date','listing-title','listing-author','listing-reading-time','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <style>
 
       .quarto-title-block .quarto-title-banner h1,
@@ -112,45 +83,16 @@ ul.task-list li input[type="checkbox"] {
 
       .quarto-title-block .quarto-title-banner {
         color: white;
-background-image: url(images/black-bg.png);
-background-size: cover;
+background: black;
       }
 </style>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
-<meta name="twitter:title" content="devExplore -  devExplore ">
-<meta name="twitter:description" content="Unveiling the world of tech, one discovery at a time 🔭      ">
-<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="devExplore - Simplifying R Package Management - renv vs packrat">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://pr2tik1.github.io/posts/post-images/190124.jpeg">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed">
@@ -160,10 +102,10 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/logo.png" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">devExplore</span>
     </a>
   </div>
@@ -174,11 +116,11 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About me</span></a>
   </li>  
 </ul>
@@ -213,163 +155,205 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title"><br> devExplore <br></h1>
-            <p class="subtitle lead">Unveiling the world of tech, one discovery at a time 🔭 <br> <br> <br> <br> <br> <br></p>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Simplifying R Package Management - renv vs packrat</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">Coding practices</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Pratik Kumar </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 19, 2024</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-conundrum-of-package-management" id="toc-the-conundrum-of-package-management" class="nav-link active" data-scroll-target="#the-conundrum-of-package-management">The Conundrum of Package Management</a></li>
+  <li><a href="#meet-renv" id="toc-meet-renv" class="nav-link" data-scroll-target="#meet-renv">Meet renv</a></li>
+  <li><a href="#how-to-reproduce-renv-envrionment" id="toc-how-to-reproduce-renv-envrionment" class="nav-link" data-scroll-target="#how-to-reproduce-renv-envrionment">How to reproduce renv envrionment ?</a></li>
+  <li><a href="#example-renv.lock-file" id="toc-example-renv.lock-file" class="nav-link" data-scroll-target="#example-renv.lock-file">Example renv.lock file</a></li>
+  <li><a href="#exploring-packrat" id="toc-exploring-packrat" class="nav-link" data-scroll-target="#exploring-packrat">Exploring packrat</a></li>
+  <li><a href="#choosing-the-right-tool-for-you" id="toc-choosing-the-right-tool-for-you" class="nav-link" data-scroll-target="#choosing-the-right-tool-for-you">Choosing the Right Tool for You</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p>In this blog post, we’ll explore two popular tools for R package management – renv and packrat. We’ll delve into their features, advantages, and provide practical examples to help you make an informed decision.</p>
+<section id="the-conundrum-of-package-management" class="level2">
+<h2 class="anchored" data-anchor-id="the-conundrum-of-package-management">The Conundrum of Package Management</h2>
+<p>Installing R packages is not always a walk in the park. Packages sourced from repositories such as CRAN, BiocManager, or GitHub can introduce complexity, involving multiple OS dependencies. This complexity magnifies during installation, making it challenging to manage, reproduce, and keep track of installed packages for a specific project. Enter package management tools, designed to streamline this process.</p>
+</section>
+<section id="meet-renv" class="level2">
+<h2 class="anchored" data-anchor-id="meet-renv">Meet renv</h2>
+<section id="what-is-renv" class="level4">
+<h4 class="anchored" data-anchor-id="what-is-renv">What is renv?</h4>
+<p><strong>renv</strong> is a package management tool for R that focuses on project-specific isolation. It allows you to create a self-contained environment for your R project, capturing and managing dependencies effectively.</p>
+</section>
+<section id="key-features-of-renv" class="level4">
+<h4 class="anchored" data-anchor-id="key-features-of-renv">Key Features of renv</h4>
+<ol type="1">
+<li><p>Isolation: renv creates a dedicated project library, ensuring that each project has its own set of packages, eliminating conflicts between projects.</p></li>
+<li><p>Snapshotting: With renv, you can create a snapshot of your project’s dependencies, making it easy to replicate the environment on another machine.</p></li>
+<li><p>Version Control Integration: renv integrates seamlessly with version control systems, ensuring reproducibility across different development environments.</p></li>
+</ol>
+</section>
+<section id="getting-started-with-renv" class="level4">
+<h4 class="anchored" data-anchor-id="getting-started-with-renv">Getting Started with renv</h4>
+<pre class="{R}"><code># Install renv
+install.packages("renv")
+
+# Initialize renv in your project
+library(renv)
+renv::init()
+
+# Install and snapshot dependencies
+renv::install("package_name")
+renv::snapshot()</code></pre>
+</section>
+</section>
+<section id="how-to-reproduce-renv-envrionment" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-reproduce-renv-envrionment">How to reproduce renv envrionment ?</h2>
+<p>The above snapshot step produces a <code>renv.lock</code> file that is basically a record of the exact package versions and dependencies used in your project. This renv.lock file is your golden ticket to reproducing the renv environment on another machine or at a later time. Here’s how you can effortlessly replicate your renv environment:</p>
+<section id="reproducing-the-renv-environment" class="level4">
+<h4 class="anchored" data-anchor-id="reproducing-the-renv-environment">Reproducing the renv Environment</h4>
+<ol type="1">
+<li><p>Sharing the renv.lock File: Share the renv.lock file with your collaborators or store it in your version control system (e.g., Git). This file acts as a precise blueprint of your project’s dependencies.</p></li>
+<li><p>Initialization on a New Machine: On a new machine or for a different developer, start by cloning your project repository (if using version control). Navigate to the project directory and open an R session.</p></li>
+</ol>
+<pre class="{R}"><code># Install renv (if not already installed)
+install.packages("renv")
+
+# Initialize renv in the project
+library(renv)
+renv::init()
+
+# Restore the environment using the lock file
+renv::restore()</code></pre>
+<ol start="3" type="1">
+<li>Installing Packages: Once the environment is restored, install the required packages using the snapshot.</li>
+</ol>
+<pre class="{R}"><code># Install packages from the lock file
+renv::install()</code></pre>
+</section>
+</section>
+<section id="example-renv.lock-file" class="level2">
+<h2 class="anchored" data-anchor-id="example-renv.lock-file">Example renv.lock file</h2>
+<p>In the following example:</p>
+<ol type="1">
+<li>The “R” section specifies the R version used in the project.</li>
+<li>The “Packages” section lists the packages used, each with its name, version, and source (e.g., CRAN).</li>
+<li>The “Dependencies” section outlines the dependencies for each package, including both Imports and LinkingTo.</li>
+</ol>
+<pre class="{json}"><code>{
+  "R": {
+    "Version": "4.2.0"
+  },
+  "Packages": {
+    "data.table": {
+      "Package": "data.table",
+      "Version": "1.14.0",
+      "Source": "CRAN"
+    },
+    "ggplot2": {
+      "Package": "ggplot2",
+      "Version": "3.3.5",
+      "Source": "CRAN"
+    }
+  },
+  "Dependencies": {
+    "data.table": {
+      "Imports": [],
+      "LinkingTo": []
+    },
+    "ggplot2": {
+      "Imports": [
+        "methods",
+        "grDevices",
+        "graphics",
+        "stats"
+      ],
+      "LinkingTo": []
+    }
+  }
+}</code></pre>
+</section>
+<section id="exploring-packrat" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-packrat">Exploring packrat</h2>
+<section id="what-is-packrat" class="level4">
+<h4 class="anchored" data-anchor-id="what-is-packrat">What is packrat?</h4>
+<p><strong>packrat</strong> is another robust package management tool for R. It addresses the challenges of package management by providing project-specific libraries and snapshot capabilities.</p>
+</section>
+<section id="key-features-of-packrat" class="level4">
+<h4 class="anchored" data-anchor-id="key-features-of-packrat">Key Features of packrat</h4>
+<ol type="1">
+<li><p><strong>Bundled Library</strong>: packrat creates a local library for each project, ensuring that packages are self-contained within the project directory.</p></li>
+<li><p><strong>Snapshotting</strong>: Similar to renv, packrat enables you to create a snapshot of your project’s dependencies, promoting reproducibility.</p></li>
+<li><p><strong>Integration with IDEs</strong>: packrat integrates seamlessly with popular R IDEs, making it convenient for developers who rely on specific development environments.</p></li>
+</ol>
+</section>
+<section id="getting-started-with-packrat" class="level4">
+<h4 class="anchored" data-anchor-id="getting-started-with-packrat">Getting Started with packrat</h4>
+<pre class="{R}"><code># Install packrat
+install.packages("packrat")
+
+# Initialize packrat in your project
+library(packrat)
+packrat::init()
+
+# Install and snapshot dependencies
+packrat::install("package_name")
+packrat::snapshot()</code></pre>
+</section>
+</section>
+<section id="choosing-the-right-tool-for-you" class="level2">
+<h2 class="anchored" data-anchor-id="choosing-the-right-tool-for-you">Choosing the Right Tool for You</h2>
+<p>Both renv and packrat offer powerful solutions to the challenges of R package management. Your choice may depend on personal preference, project requirements, or team workflows. Experiment with both tools and consider factors like ease of use, integration capabilities, and community support.</p>
+<p>Effective package management is the cornerstone of reproducibility and collaboration in R development. Choose wisely, and may your R projects flourish without the headaches of package chaos!</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ol type="1">
+<li><a href="https://rstudio.github.io/renv/articles/renv.html">renv</a></li>
+<li><a href="https://rstudio.github.io/packrat/">packrat</a></li>
+<li><a href="https://cran.r-project.org/web/packages/renv/vignettes/packrat.html">renv vs packrat</a></li>
+</ol>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="R,Coding practices" data-listing-date-sort="1705622400000" data-listing-file-modified-sort="1705643881871" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="904">
-<a href="./posts/r-package-mgt/r-package-mgt.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="./posts/post-images/190124.jpeg" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Simplifying R Package Management - renv vs packrat
-</h5>
-<div class="listing-reading-time card-text text-muted">
-5 min
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Coding practices'); return false;">
-Coding practices
-</div>
-</div>
-<div class="card-text listing-description">
-In this blog post, we’ll explore two popular tools for R package management – renv and packrat. We’ll delve into their features, advantages, and provide practical examples…
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Pratik Kumar
-</div>
-<div class="listing-date">
-Jan 19, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="Dockers,Python,R,Coding Practices" data-listing-date-sort="1690761600000" data-listing-file-modified-sort="1705643928479" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1022">
-<a href="./posts/remote-extension/remote-containers.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="./posts/post-images/dockers.jpeg" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Efficient project management using Dockers
-</h5>
-<div class="listing-reading-time card-text text-muted">
-6 min
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Dockers'); return false;">
-Dockers
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Python'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Coding Practices'); return false;">
-Coding Practices
-</div>
-</div>
-<div class="card-text listing-description">
-Dockers are excellent tools in software development. The key benefit of Dockers is that they allow users to package an application with all its dependencies into a…
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Pratik Kumar
-</div>
-<div class="listing-date">
-Jul 31, 2023
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="data visualization,Plotly,Python,Coding practices" data-listing-date-sort="1687132800000" data-listing-file-modified-sort="1705640988947" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1370">
-<a href="./posts/hierarchical/Plotly-Sunburst.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="./posts/post-images/seventeen.jpeg" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hierarchical Data Visualization Demystified
-</h5>
-<div class="listing-reading-time card-text text-muted">
-7 min
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('data visualization'); return false;">
-data visualization
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Plotly'); return false;">
-Plotly
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Python'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Coding practices'); return false;">
-Coding practices
-</div>
-</div>
-<div class="card-text listing-description">
-Data visualization plays a vital role in various domains such as data analytics, data science, data dashboarding, and exploratory/statistical analysis. Within the Python and…
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Pratik Kumar
-</div>
-<div class="listing-date">
-Jun 19, 2023
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -757,6 +741,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://utteranc.es/client.js" repo="pr2tik1/pr2tik1.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -766,17 +752,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="./about.html">
+    <a class="nav-link" href="../../about.html">
 <p>About</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="./license.html">
+    <a class="nav-link" href="../../license.html">
 <p>License</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="./trademark.html">
+    <a class="nav-link" href="../../trademark.html">
 <p>Trademark</p>
 </a>
   </li>  

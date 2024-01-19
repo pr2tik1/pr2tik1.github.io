@@ -1,1 +1,1 @@
-Sitemap: git@github.com-pr2tik1:pr2tik1/pr2tik1.github.io.git/sitemap.xml
+Sitemap: https://pr2tik1.github.io/sitemap.xml

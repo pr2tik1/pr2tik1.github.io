@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>git@github.com-pr2tik1:pr2tik1/pr2tik1.github.io.git/posts/hierarchical/Plotly-Sunburst.html</loc>
-    <lastmod>2023-10-02T07:41:24.179Z</lastmod>
+    <loc>https://pr2tik1.github.io/trademark.html</loc>
+    <lastmod>2024-01-19T05:02:50.831Z</lastmod>
   </url>
   <url>
-    <loc>git@github.com-pr2tik1:pr2tik1/pr2tik1.github.io.git/posts/remote-extension/remote-containers.html</loc>
-    <lastmod>2023-10-02T07:41:27.681Z</lastmod>
+    <loc>https://pr2tik1.github.io/posts/remote-extension/remote-containers.html</loc>
+    <lastmod>2024-01-19T05:58:48.479Z</lastmod>
   </url>
   <url>
-    <loc>git@github.com-pr2tik1:pr2tik1/pr2tik1.github.io.git/trademark.html</loc>
-    <lastmod>2023-10-02T07:41:28.031Z</lastmod>
+    <loc>https://pr2tik1.github.io/license.html</loc>
+    <lastmod>2024-01-19T05:02:50.715Z</lastmod>
   </url>
   <url>
-    <loc>git@github.com-pr2tik1:pr2tik1/pr2tik1.github.io.git/index.html</loc>
-    <lastmod>2023-10-02T07:41:28.742Z</lastmod>
+    <loc>https://pr2tik1.github.io/about.html</loc>
+    <lastmod>2024-01-19T05:02:50.707Z</lastmod>
   </url>
   <url>
-    <loc>git@github.com-pr2tik1:pr2tik1/pr2tik1.github.io.git/about.html</loc>
-    <lastmod>2023-10-02T07:41:29.136Z</lastmod>
+    <loc>https://pr2tik1.github.io/index.html</loc>
+    <lastmod>2024-01-19T06:10:30.735Z</lastmod>
   </url>
   <url>
-    <loc>git@github.com-pr2tik1:pr2tik1/pr2tik1.github.io.git/license.html</loc>
-    <lastmod>2023-10-02T07:41:29.454Z</lastmod>
+    <loc>https://pr2tik1.github.io/posts/hierarchical/Plotly-Sunburst.html</loc>
+    <lastmod>2024-01-19T05:09:48.947Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pr2tik1.github.io/posts/r-package-mgt/r-package-mgt.html</loc>
+    <lastmod>2024-01-19T05:58:01.871Z</lastmod>
   </url>
 </urlset>
