@@ -15,7 +15,7 @@ categories:
   - data visualization
   - Plotly
   - Python
-  - Blog
+  - Coding practices
 website:
   back-to-top-navigation: true
   page-footer: 'Copyright 2023, Pratik Kumar'

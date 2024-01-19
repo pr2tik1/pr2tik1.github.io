@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": " devExplore ",
-    "section": "",
-    "text": "Optimizing R Shiny apps\n\n\n\n\n\n\n\nWeb Application\n\n\nR\n\n\nR Shiny\n\n\n\n\n\n\n\n\n\n\n\nDec 28, 2023\n\n\nPratik Kumar\n\n\n1 min\n\n\n\n\n\n\n  \n\n\n\n\nEfficient project management using Dockers\n\n\n\n\n\n\n\ncode\n\n\nDockers\n\n\nPython\n\n\nR\n\n\nProductivity\n\n\nBlog\n\n\n\n\n\n\n\n\n\n\n\nJul 31, 2023\n\n\nPratik Kumar\n\n\n6 min\n\n\n\n\n\n\n  \n\n\n\n\nHierarchical Data Visualization Demystified\n\n\n\n\n\n\n\ndata visualization\n\n\nPlotly\n\n\nPython\n\n\nBlog\n\n\n\n\n\n\n\n\n\n\n\nJun 19, 2023\n\n\nPratik Kumar\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "posts/remote-extension/remote-containers.html",
     "href": "posts/remote-extension/remote-containers.html",
     "title": "Efficient project management using Dockers",
@@ -33,6 +26,27 @@
     "title": "Efficient project management using Dockers",
     "section": ".devcontainer/devcontainer.json",
     "text": ".devcontainer/devcontainer.json\nWithin the .devcontainer folder the devcontainer.json config file helps the extension to determine the name of the container, which image to use, extensions to install, port to expose and other configurations. Few examples,\n\n1. Shiny Application\nConsider there are multiple projects that you are working on, and each of them require different R versions and packages. You can set the value of the image key from below to any version of choice for R.\n{\n    \"name\" : \"Project 1\",\n    \"image\": \"r-base:latest\" //Any version as per requirement from dockerhub\n}\n{\n    \"name\" : \"Project 2\",\n    \"image\": \"r-base:4.1\" //Any version as per requirement from dockerhub\n}\n\n\n2. Using Custom Docker Image\nNow, suppose you want to use your own image with a specific R version, package installations, and other tools/languages included. In that case, you can create a custom Dockerfile (just make sure to specify the correct path for this file) as follows,\n# Use the specified R base image\nFROM r-base:latest\n\n# Set non-interactive mode for apt-get\nENV DEBIAN_FRONTEND=noninteractive\n\n# Expose port 4200\nEXPOSE 4200\n\n# Install necessary system dependencies\nRUN apt-get update && apt-get install -y \\\n    make \\\n    build-essential \\\n    git \\\n    wget \\\n    curl \n\n## Python setup\n# Switch to user \"docker\" to install pyenv\nUSER docker\nRUN curl https://pyenv.run | bash\n\n# Set up Python paths\nENV PATH=\"/home/docker/.pyenv/bin:$PATH\"\nENV PATH=\"/home/docker/.pyenv/versions/3.9.13/bin:$PATH\"\n\n# Install Python 3.9.13\nRUN PYTHON_CONFIGURE_OPTS=\"--enable-shared\" pyenv install 3.9.13\n\n# Switch back to root user for the remaining steps\nUSER root\n\n## Python virtual env and packages\n# Copy requirements.txt into the image\nCOPY requirements.txt requirements.txt\n\n# Create and activate Python virtual environment\nRUN rm -rf my_venv && python3 -m venv my_venv && \\\n    . my_venv/bin/activate && \\\n    python3 -m pip install --upgrade pip && \\\n    pip install -r requirements.txt\n\n# Install R packages using renv\nCOPY renv.lock renv.lock\nRUN R -e \"install.packages('renv'); renv::restore()\"\nNow with this Dockerfile, run the extension using following devcontainer.json :\n{\n    \"name\": \"Custom App\",\n    \"build\": {\n      \"dockerfile\": \"Dockerfile\",  //path to your custom Dockerfile.\n      \"context\": \"..\"\n    },\n    \"remoteUser\": \"docker\"\n}\n\n\n3. Post Installation Step\nWhen it comes to development, there could be a constant update in list of packages in your project. Now building everytime for each newly added package can be time consuming. Hence, we can install packages after building the image with minimal layers. So that the files would like :\n\nThe updated config file .devcontainer/devcontainer.json would now look like:\n\n{\n    \"name\": \"Custom App\",\n    \"build\": {\n      \"dockerfile\": \"Dockerfile\", //path to your custom Dockerfile.\n      \"context\": \"..\"\n    },\n    \"remoteUser\": \"docker\",\n    \"postCreateCommand\": \"bash .devcontainer/build_environment.sh\" // Can use any scripting language of choice.\n}\n\nYou can use a bash script to install packages after the build of container .devcontainer/build_environment.sh :\n\n## Install R packages\nR -e \"install.packages('renv'); renv::restore()\"\n\n\n## Install python packages\nrm -rf my_venv && python3 -m venv my_venv && \\\n    . my_venv/bin/activate && \\\n    python3 -m pip install --upgrade pip && \\\n    pip install -r requirements.txt"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Pratik Kumar",
+    "section": "",
+    "text": "Hello! 👋 I am a software engineer who loves working on websites, AI, and data-related projects. When I’m not coding, I enjoy going on treks, exploring new cuisines, and playing sports like football, badminton, cricket, and table tennis. I love photography and watching exciting movies like “Edge of Tomorrow”. And I am always up for a coffee !\nCurrently, I am working at Elucidata, solving some of the complex problems in drug discovery.\nView my resume here."
+  },
+  {
+    "objectID": "about.html#work-experience",
+    "href": "about.html#work-experience",
+    "title": "Pratik Kumar",
+    "section": "👨🏻‍💻 Work Experience",
+    "text": "👨🏻‍💻 Work Experience\n\nElucidata | Aug 2021 - Present  - Software Engineer (current)  - Data Analyst\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": " devExplore ",
+    "section": "",
+    "text": "Simplifying R Package Management - renv vs packrat\n\n\n5 min\n\n\n\nR\n\n\nCoding practices\n\n\n\n\n\n\n\nPratik Kumar\n\n\nJan 19, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEfficient project management using Dockers\n\n\n6 min\n\n\n\nDockers\n\n\nPython\n\n\nR\n\n\nCoding Practices\n\n\n\n\n\n\n\nPratik Kumar\n\n\nJul 31, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHierarchical Data Visualization Demystified\n\n\n7 min\n\n\n\ndata visualization\n\n\nPlotly\n\n\nPython\n\n\nCoding practices\n\n\n\n\n\n\n\nPratik Kumar\n\n\nJun 19, 2023\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/hierarchical/Plotly-Sunburst.html",
@@ -67,7 +81,7 @@
     "href": "posts/hierarchical/Plotly-Sunburst.html#visualisation",
     "title": "Hierarchical Data Visualization Demystified",
     "section": "Visualisation",
-    "text": "Visualisation\nNow we would see the two most common ways of plotting sunburst charts in python. The user can choose any of the following modules,\n\nPlotly Express\nPlotly Graph Objects\n\nBoth of these modules generate same “figure object”. Just the difference comes in code syntax and in flexibility of modifying graph as required. Plotly express is more of generating plot by calling function from already defined set of parameters. One may be more comfortable in tweaking the details while working with graph objects. However, the beauty of plotly is that you are able do the same things in the figure generated from plotly express as those are possible in that with graph objects. \nWe will be using both of them, and generate the plots for the datasets generated in the above section.\n\nfrom io import StringIO\nfrom IPython.display import display_html, HTML\n\n\n(1) Plotly Express\n\nimport plotly.express as px \n\nfigure = px.sunburst(data, path=['Country', 'State', 'City'], values='Population')\nfigure.update_layout(margin=dict(t=10, b=10, r=10, l=10))\nfigure.show() \n# HTML(figure.to_html(include_plotlyjs='cdn'))\n\n\n                                                \n\n\n\n\n(2) Graph Objects\n\nimport plotly.graph_objects as go\n\nfigure = go.Figure()\nfigure.add_trace(go.Sunburst(\n        labels=df_sum['id'],\n        parents=df_sum['parent'],\n        values=df_sum['value'],\n        branchvalues='total',\n        marker=dict(colorscale='Rdbu'),\n        hovertemplate='&lt;b&gt; Country : %{label} &lt;/b&gt; &lt;br&gt; Count : %{value} &lt;extra&gt;Population&lt;/extra&gt;',\n        maxdepth=2)\n    )\nfigure.update_layout(margin=dict(t=10, b=10, r=10, l=10))\nfigure.show() \n# HTML(figure.to_html(include_plotlyjs='cdn'))"
+    "text": "Visualisation\nNow we would see the two most common ways of plotting sunburst charts in python. The user can choose any of the following modules,\n\nPlotly Express\nPlotly Graph Objects\n\nBoth of these modules generate same “figure object”. Just the difference comes in code syntax and in flexibility of modifying graph as required. Plotly express is more of generating plot by calling function from already defined set of parameters. One may be more comfortable in tweaking the details while working with graph objects. However, the beauty of plotly is that you are able do the same things in the figure generated from plotly express as those are possible in that with graph objects. \nWe will be using both of them, and generate the plots for the datasets generated in the above section.\n\nfrom io import StringIO\nfrom IPython.display import display_html, HTML\n\n\n(1) Plotly Express\n\nimport plotly.express as px \n\nfigure = px.sunburst(data, path=['Country', 'State', 'City'], values='Population')\nfigure.update_layout(margin=dict(t=10, b=10, r=10, l=10))\nfigure.show() \n# HTML(figure.to_html(include_plotlyjs='cdn'))\n\n                                                \n\n\n\n\n(2) Graph Objects\n\nimport plotly.graph_objects as go\n\nfigure = go.Figure()\nfigure.add_trace(go.Sunburst(\n        labels=df_sum['id'],\n        parents=df_sum['parent'],\n        values=df_sum['value'],\n        branchvalues='total',\n        marker=dict(colorscale='Rdbu'),\n        hovertemplate='&lt;b&gt; Country : %{label} &lt;/b&gt; &lt;br&gt; Count : %{value} &lt;extra&gt;Population&lt;/extra&gt;',\n        maxdepth=2)\n    )\nfigure.update_layout(margin=dict(t=10, b=10, r=10, l=10))\nfigure.show() \n# HTML(figure.to_html(include_plotlyjs='cdn'))"
   },
   {
     "objectID": "posts/hierarchical/Plotly-Sunburst.html#communicating-plots-with-json",
@@ -91,24 +105,59 @@
     "text": "Only Sunburst ? What are some alternatives to Sunburst ?\nSunburst is one of the ways of visualizing the Hierarchical Data, we can also visualize such datasets using Treemap charts. For example -\n\nfig = px.treemap(data, \n                 path=[px.Constant(\"World\"), 'Country', 'State', 'City'], \n                 values='Population')\nfig.update_layout(margin = dict(t=50, l=25, r=25, b=25))\nfig.show()"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Pratik Kumar",
+    "objectID": "posts/r-package-mgt/r-package-mgt.html",
+    "href": "posts/r-package-mgt/r-package-mgt.html",
+    "title": "Simplifying R Package Management - renv vs packrat",
     "section": "",
-    "text": "Hello! 👋 I am a software engineer who loves working on websites, AI, and data-related projects. When I’m not coding, I enjoy going on treks, exploring new cuisines, and playing sports like football, badminton, cricket, and table tennis. I love photography and watching exciting movies like “Edge of Tomorrow”. And I am always up for a coffee !\nCurrently, I am working at Elucidata, solving some of the complex problems in drug discovery.\nView my resume here."
+    "text": "In this blog post, we’ll explore two popular tools for R package management – renv and packrat. We’ll delve into their features, advantages, and provide practical examples to help you make an informed decision."
   },
   {
-    "objectID": "about.html#work-experience",
-    "href": "about.html#work-experience",
-    "title": "Pratik Kumar",
-    "section": "👨🏻‍💻 Work Experience",
-    "text": "👨🏻‍💻 Work Experience\n\nElucidata | Aug 2021 - Present  - Software Engineer (current)  - Data Analyst\nElucidata | May 2021 - Aug 2021  - Data Science Intern\nBayer Cropscience | May 2019 - June 2019  - Data Science Intern"
+    "objectID": "posts/r-package-mgt/r-package-mgt.html#the-conundrum-of-package-management",
+    "href": "posts/r-package-mgt/r-package-mgt.html#the-conundrum-of-package-management",
+    "title": "Simplifying R Package Management - renv vs packrat",
+    "section": "The Conundrum of Package Management",
+    "text": "The Conundrum of Package Management\nInstalling R packages is not always a walk in the park. Packages sourced from repositories such as CRAN, BiocManager, or GitHub can introduce complexity, involving multiple OS dependencies. This complexity magnifies during installation, making it challenging to manage, reproduce, and keep track of installed packages for a specific project. Enter package management tools, designed to streamline this process."
   },
   {
-    "objectID": "posts/optimizing-r-shiny/opt-shiny.html",
-    "href": "posts/optimizing-r-shiny/opt-shiny.html",
-    "title": "Optimizing R Shiny apps",
-    "section": "",
-    "text": "Optimizing shiny app ? Do I need it ?\nR-Shiny apps excel in rapidly crafting applications for diverse analyses using custom libraries—be it statistical, bioinformatics, or data visualization. However, as the user’s journey becomes intricate, challenges arise. When datasets grow, complexities accumulate, and interactive plots burgeon with points, the need for optimization becomes paramount.\nThere can be several reasons for which the app may become “laggy,” or certain features may take more time to load. These are common observations that an R-Shiny developer may come across. I will be addressing a few of them and will also try to share strategies to resolve them here.\n\n\n\nNumber of bins:\n\n\n\n\n\n\n\n\n\nHow can I see the pain-points ?\n\n\nPossible Solutions and Strategies\n\n\nConclusion"
+    "objectID": "posts/r-package-mgt/r-package-mgt.html#meet-renv",
+    "href": "posts/r-package-mgt/r-package-mgt.html#meet-renv",
+    "title": "Simplifying R Package Management - renv vs packrat",
+    "section": "Meet renv",
+    "text": "Meet renv\n\nWhat is renv?\nrenv is a package management tool for R that focuses on project-specific isolation. It allows you to create a self-contained environment for your R project, capturing and managing dependencies effectively.\n\n\nKey Features of renv\n\nIsolation: renv creates a dedicated project library, ensuring that each project has its own set of packages, eliminating conflicts between projects.\nSnapshotting: With renv, you can create a snapshot of your project’s dependencies, making it easy to replicate the environment on another machine.\nVersion Control Integration: renv integrates seamlessly with version control systems, ensuring reproducibility across different development environments.\n\n\n\nGetting Started with renv\n# Install renv\ninstall.packages(\"renv\")\n\n# Initialize renv in your project\nlibrary(renv)\nrenv::init()\n\n# Install and snapshot dependencies\nrenv::install(\"package_name\")\nrenv::snapshot()"
+  },
+  {
+    "objectID": "posts/r-package-mgt/r-package-mgt.html#how-to-reproduce-renv-envrionment",
+    "href": "posts/r-package-mgt/r-package-mgt.html#how-to-reproduce-renv-envrionment",
+    "title": "Simplifying R Package Management - renv vs packrat",
+    "section": "How to reproduce renv envrionment ?",
+    "text": "How to reproduce renv envrionment ?\nThe above snapshot step produces a renv.lock file that is basically a record of the exact package versions and dependencies used in your project. This renv.lock file is your golden ticket to reproducing the renv environment on another machine or at a later time. Here’s how you can effortlessly replicate your renv environment:\n\nReproducing the renv Environment\n\nSharing the renv.lock File: Share the renv.lock file with your collaborators or store it in your version control system (e.g., Git). This file acts as a precise blueprint of your project’s dependencies.\nInitialization on a New Machine: On a new machine or for a different developer, start by cloning your project repository (if using version control). Navigate to the project directory and open an R session.\n\n# Install renv (if not already installed)\ninstall.packages(\"renv\")\n\n# Initialize renv in the project\nlibrary(renv)\nrenv::init()\n\n# Restore the environment using the lock file\nrenv::restore()\n\nInstalling Packages: Once the environment is restored, install the required packages using the snapshot.\n\n# Install packages from the lock file\nrenv::install()"
+  },
+  {
+    "objectID": "posts/r-package-mgt/r-package-mgt.html#example-renv.lock-file",
+    "href": "posts/r-package-mgt/r-package-mgt.html#example-renv.lock-file",
+    "title": "Simplifying R Package Management - renv vs packrat",
+    "section": "Example renv.lock file",
+    "text": "Example renv.lock file\nIn the following example:\n\nThe “R” section specifies the R version used in the project.\nThe “Packages” section lists the packages used, each with its name, version, and source (e.g., CRAN).\nThe “Dependencies” section outlines the dependencies for each package, including both Imports and LinkingTo.\n\n{\n  \"R\": {\n    \"Version\": \"4.2.0\"\n  },\n  \"Packages\": {\n    \"data.table\": {\n      \"Package\": \"data.table\",\n      \"Version\": \"1.14.0\",\n      \"Source\": \"CRAN\"\n    },\n    \"ggplot2\": {\n      \"Package\": \"ggplot2\",\n      \"Version\": \"3.3.5\",\n      \"Source\": \"CRAN\"\n    }\n  },\n  \"Dependencies\": {\n    \"data.table\": {\n      \"Imports\": [],\n      \"LinkingTo\": []\n    },\n    \"ggplot2\": {\n      \"Imports\": [\n        \"methods\",\n        \"grDevices\",\n        \"graphics\",\n        \"stats\"\n      ],\n      \"LinkingTo\": []\n    }\n  }\n}"
+  },
+  {
+    "objectID": "posts/r-package-mgt/r-package-mgt.html#exploring-packrat",
+    "href": "posts/r-package-mgt/r-package-mgt.html#exploring-packrat",
+    "title": "Simplifying R Package Management - renv vs packrat",
+    "section": "Exploring packrat",
+    "text": "Exploring packrat\n\nWhat is packrat?\npackrat is another robust package management tool for R. It addresses the challenges of package management by providing project-specific libraries and snapshot capabilities.\n\n\nKey Features of packrat\n\nBundled Library: packrat creates a local library for each project, ensuring that packages are self-contained within the project directory.\nSnapshotting: Similar to renv, packrat enables you to create a snapshot of your project’s dependencies, promoting reproducibility.\nIntegration with IDEs: packrat integrates seamlessly with popular R IDEs, making it convenient for developers who rely on specific development environments.\n\n\n\nGetting Started with packrat\n# Install packrat\ninstall.packages(\"packrat\")\n\n# Initialize packrat in your project\nlibrary(packrat)\npackrat::init()\n\n# Install and snapshot dependencies\npackrat::install(\"package_name\")\npackrat::snapshot()"
+  },
+  {
+    "objectID": "posts/r-package-mgt/r-package-mgt.html#choosing-the-right-tool-for-you",
+    "href": "posts/r-package-mgt/r-package-mgt.html#choosing-the-right-tool-for-you",
+    "title": "Simplifying R Package Management - renv vs packrat",
+    "section": "Choosing the Right Tool for You",
+    "text": "Choosing the Right Tool for You\nBoth renv and packrat offer powerful solutions to the challenges of R package management. Your choice may depend on personal preference, project requirements, or team workflows. Experiment with both tools and consider factors like ease of use, integration capabilities, and community support.\nEffective package management is the cornerstone of reproducibility and collaboration in R development. Choose wisely, and may your R projects flourish without the headaches of package chaos!"
+  },
+  {
+    "objectID": "posts/r-package-mgt/r-package-mgt.html#references",
+    "href": "posts/r-package-mgt/r-package-mgt.html#references",
+    "title": "Simplifying R Package Management - renv vs packrat",
+    "section": "References",
+    "text": "References\n\nrenv\npackrat\nrenv vs packrat"
   }
 ]

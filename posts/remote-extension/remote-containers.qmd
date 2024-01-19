@@ -12,12 +12,10 @@ format:
 author: Pratik Kumar
 date: '2023-07-31'
 categories:
-  - code
   - Dockers
   - Python
   - R
-  - Productivity
-  - Blog
+  - Coding Practices
 website:
   back-to-top-navigation: true
   page-footer: 'Copyright 2023, Pratik Kumar'

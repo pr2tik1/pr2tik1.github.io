@@ -10,7 +10,7 @@ listing:
   sort: "date desc"
   image-align: left
   # categories: true
-  # type: grid
+  type: grid
   # sort-ui: true
   # filter-ui: true
   fields: [image, date, title, author, reading-time, description, categories]

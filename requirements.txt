@@ -1,0 +1,6 @@
+numpy==1.26.3
+pandas==2.1.4
+plotly==5.18.0
+pytz==2023.3.post1
+tenacity==8.2.3
+tzdata==2023.4
