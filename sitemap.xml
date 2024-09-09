@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pr2tik1.github.io/trademark.html</loc>
-    <lastmod>2024-01-19T05:02:50.831Z</lastmod>
+    <loc>https://pr2tik1.github.io/index.html</loc>
+    <lastmod>2024-09-09T17:00:30.903Z</lastmod>
   </url>
   <url>
     <loc>https://pr2tik1.github.io/posts/remote-extension/remote-containers.html</loc>
-    <lastmod>2024-01-19T06:20:10.471Z</lastmod>
+    <lastmod>2024-09-09T17:28:04.855Z</lastmod>
   </url>
   <url>
-    <loc>https://pr2tik1.github.io/license.html</loc>
-    <lastmod>2024-01-19T05:02:50.715Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pr2tik1.github.io/about.html</loc>
-    <lastmod>2024-01-19T05:02:50.707Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pr2tik1.github.io/index.html</loc>
-    <lastmod>2024-01-19T06:14:08.283Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pr2tik1.github.io/posts/hierarchical/Plotly-Sunburst.html</loc>
-    <lastmod>2024-01-19T06:17:33.719Z</lastmod>
+    <loc>https://pr2tik1.github.io/posts/kaggle/titanic-survival-eda-feature-engineering-preds.html</loc>
+    <lastmod>2024-09-09T20:12:16.221Z</lastmod>
   </url>
   <url>
     <loc>https://pr2tik1.github.io/posts/r-package-mgt/r-package-mgt.html</loc>
-    <lastmod>2024-01-19T06:18:16.727Z</lastmod>
+    <lastmod>2024-09-09T17:27:56.431Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pr2tik1.github.io/about.html</loc>
+    <lastmod>2024-09-09T16:43:50.223Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pr2tik1.github.io/license.html</loc>
+    <lastmod>2024-09-09T16:43:50.235Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pr2tik1.github.io/posts/hierarchical/Plotly-Sunburst.html</loc>
+    <lastmod>2024-09-09T17:42:43.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pr2tik1.github.io/posts/kaggle/loan-status-eda-classification.html</loc>
+    <lastmod>2024-09-09T20:12:16.221Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pr2tik1.github.io/trademark.html</loc>
+    <lastmod>2024-09-09T16:43:50.319Z</lastmod>
   </url>
 </urlset>
