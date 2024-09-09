@@ -1,0 +1,529 @@
+---
+title: House Price Prediction
+image: ../post-images/5.jpg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2021-03-10'
+categories:
+  - Data Science
+  - Data Visualization
+  - Python
+  - Machine Learning
+  - Feature Engineering
+  - Kaggle
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+With the goal of predicting house prices this notebook uses sklearn, scipy and visualisation libraries such as matplotlib and plotly. I have used regression models and XG Boost to predict the prices. 
+
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:10.400424Z', iopub.status.busy: '2021-04-22T07:07:10.398578Z', iopub.status.idle: '2021-04-22T07:07:13.193078Z', shell.execute_reply: '2021-04-22T07:07:13.193654Z'}
+#| papermill: {duration: 2.83844, end_time: '2021-04-22T07:07:13.193952', exception: false, start_time: '2021-04-22T07:07:10.355512', status: completed}
+#| tags: []
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.express as px
+import numpy as np
+import seaborn as sns
+from scipy import stats
+from scipy.stats import skew
+from scipy.special import boxcox1p
+from scipy.stats import boxcox_normmax
+from datetime import datetime
+
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
+
+from utils import handle_data
+
+import warnings
+warnings.filterwarnings("ignore")
+```
+
+## (A) Data Loading and Handling section
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:13.345429Z', iopub.status.busy: '2021-04-22T07:07:13.344474Z', iopub.status.idle: '2021-04-22T07:07:13.440513Z', shell.execute_reply: '2021-04-22T07:07:13.441146Z'}
+#| papermill: {duration: 0.136738, end_time: '2021-04-22T07:07:13.441358', exception: false, start_time: '2021-04-22T07:07:13.304620', status: completed}
+#| tags: []
+data = pd.read_csv("../input/house-prices-advanced-regression-techniques/train.csv")
+print(data.shape)
+data.head()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:13.528877Z', iopub.status.busy: '2021-04-22T07:07:13.527745Z', iopub.status.idle: '2021-04-22T07:07:13.570644Z', shell.execute_reply: '2021-04-22T07:07:13.571117Z'}
+#| papermill: {duration: 0.086177, end_time: '2021-04-22T07:07:13.571316', exception: false, start_time: '2021-04-22T07:07:13.485139', status: completed}
+#| tags: []
+test = pd.read_csv("../input/house-prices-advanced-regression-techniques/test.csv")
+test.shape
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:13.666190Z', iopub.status.busy: '2021-04-22T07:07:13.660206Z', iopub.status.idle: '2021-04-22T07:07:13.674263Z', shell.execute_reply: '2021-04-22T07:07:13.675066Z'}
+#| papermill: {duration: 0.064862, end_time: '2021-04-22T07:07:13.675267', exception: false, start_time: '2021-04-22T07:07:13.610405', status: completed}
+#| tags: []
+num, cat, cont, disc, yr = handle_data(data).extract_var()
+print("Numerical : "+str(len(num))+", Categorical "+
+      str(len(cat)) + ", Continuous: " + str(len(cont))+ ", Discrete: " + str(len(disc)))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:13.760321Z', iopub.status.busy: '2021-04-22T07:07:13.759358Z', iopub.status.idle: '2021-04-22T07:07:13.763833Z', shell.execute_reply: '2021-04-22T07:07:13.763231Z'}
+#| papermill: {duration: 0.049653, end_time: '2021-04-22T07:07:13.763975', exception: false, start_time: '2021-04-22T07:07:13.714322', status: completed}
+#| tags: []
+#Features with Year
+yr
+```
+
+## (B) Feature Engineering section
+---
+We will be checking for missing values, high cardinality, rare labels and outliers. These are common problems that a dataset has in general.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:13.933829Z', iopub.status.busy: '2021-04-22T07:07:13.932853Z', iopub.status.idle: '2021-04-22T07:07:13.942079Z', shell.execute_reply: '2021-04-22T07:07:13.941420Z'}
+#| papermill: {duration: 0.060727, end_time: '2021-04-22T07:07:13.942238', exception: false, start_time: '2021-04-22T07:07:13.881511', status: completed}
+#| tags: []
+data.isnull().sum()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.037409Z', iopub.status.busy: '2021-04-22T07:07:14.036368Z', iopub.status.idle: '2021-04-22T07:07:14.045781Z', shell.execute_reply: '2021-04-22T07:07:14.045066Z'}
+#| papermill: {duration: 0.063508, end_time: '2021-04-22T07:07:14.045946', exception: false, start_time: '2021-04-22T07:07:13.982438', status: completed}
+#| tags: []
+test.isnull().sum()
+```
+
+### (B.1.) Handling Missing Data Columns
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.217404Z', iopub.status.busy: '2021-04-22T07:07:14.214974Z', iopub.status.idle: '2021-04-22T07:07:14.221970Z', shell.execute_reply: '2021-04-22T07:07:14.222475Z'}
+#| papermill: {duration: 0.053914, end_time: '2021-04-22T07:07:14.222661', exception: false, start_time: '2021-04-22T07:07:14.168747', status: completed}
+#| tags: []
+data = data.drop(columns = ['PoolQC', 'MiscFeature','Alley','Fence','FireplaceQu'])
+test = test.drop(columns = ['PoolQC', 'MiscFeature','Alley','Fence','FireplaceQu'])
+train_pre = handle_data(data = data) 
+test_pre = handle_data(data = test)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.313748Z', iopub.status.busy: '2021-04-22T07:07:14.312612Z', iopub.status.idle: '2021-04-22T07:07:14.325532Z', shell.execute_reply: '2021-04-22T07:07:14.324854Z'}
+#| papermill: {duration: 0.06278, end_time: '2021-04-22T07:07:14.325672', exception: false, start_time: '2021-04-22T07:07:14.262892', status: completed}
+#| tags: []
+#Updating the columns in different types of variables
+num, cat, cont, disc, yr = train_pre.extract_var()
+num_test, cat_test, cont_test, disc_test, yr_test = test_pre.extract_var()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.429132Z', iopub.status.busy: '2021-04-22T07:07:14.420849Z', iopub.status.idle: '2021-04-22T07:07:14.455378Z', shell.execute_reply: '2021-04-22T07:07:14.456274Z'}
+#| papermill: {duration: 0.090554, end_time: '2021-04-22T07:07:14.456532', exception: false, start_time: '2021-04-22T07:07:14.365978', status: completed}
+#| tags: []
+#For Categorical data
+train_pre.check_for_missing(cat)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.552869Z', iopub.status.busy: '2021-04-22T07:07:14.552085Z', iopub.status.idle: '2021-04-22T07:07:14.557439Z', shell.execute_reply: '2021-04-22T07:07:14.556862Z'}
+#| papermill: {duration: 0.059122, end_time: '2021-04-22T07:07:14.557580', exception: false, start_time: '2021-04-22T07:07:14.498458', status: completed}
+#| tags: []
+#For numerical data
+train_pre.check_for_missing(cont)
+```
+
+### (B.2) Imputation
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.738798Z', iopub.status.busy: '2021-04-22T07:07:14.737994Z', iopub.status.idle: '2021-04-22T07:07:14.763590Z', shell.execute_reply: '2021-04-22T07:07:14.764131Z'}
+#| papermill: {duration: 0.078695, end_time: '2021-04-22T07:07:14.764331', exception: false, start_time: '2021-04-22T07:07:14.685636', status: completed}
+#| tags: []
+train_pre.Imputation(cont,stats=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.857794Z', iopub.status.busy: '2021-04-22T07:07:14.857107Z', iopub.status.idle: '2021-04-22T07:07:14.892449Z', shell.execute_reply: '2021-04-22T07:07:14.893029Z'}
+#| papermill: {duration: 0.085563, end_time: '2021-04-22T07:07:14.893270', exception: false, start_time: '2021-04-22T07:07:14.807707', status: completed}
+#| tags: []
+train_pre.Imputation(cat,stats=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:14.985796Z', iopub.status.busy: '2021-04-22T07:07:14.985147Z', iopub.status.idle: '2021-04-22T07:07:15.021400Z', shell.execute_reply: '2021-04-22T07:07:15.020819Z'}
+#| papermill: {duration: 0.083599, end_time: '2021-04-22T07:07:15.021556', exception: false, start_time: '2021-04-22T07:07:14.937957', status: completed}
+#| tags: []
+test_pre.Imputation(cat_test,stats=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:15.118831Z', iopub.status.busy: '2021-04-22T07:07:15.118143Z', iopub.status.idle: '2021-04-22T07:07:15.139255Z', shell.execute_reply: '2021-04-22T07:07:15.138705Z'}
+#| papermill: {duration: 0.074137, end_time: '2021-04-22T07:07:15.139408', exception: false, start_time: '2021-04-22T07:07:15.065271', status: completed}
+#| tags: []
+test_pre.Imputation(cont_test,stats=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:15.233469Z', iopub.status.busy: '2021-04-22T07:07:15.232782Z', iopub.status.idle: '2021-04-22T07:07:15.236107Z', shell.execute_reply: '2021-04-22T07:07:15.236844Z'}
+#| papermill: {duration: 0.052451, end_time: '2021-04-22T07:07:15.237072', exception: false, start_time: '2021-04-22T07:07:15.184621', status: completed}
+#| tags: []
+print(data.shape, test.shape)
+```
+
+### (B.2.) Handling High Cardinality and Rare Labels
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:15.427594Z', iopub.status.busy: '2021-04-22T07:07:15.425188Z', iopub.status.idle: '2021-04-22T07:07:15.456036Z', shell.execute_reply: '2021-04-22T07:07:15.456599Z'}
+#| papermill: {duration: 0.082359, end_time: '2021-04-22T07:07:15.456767', exception: false, start_time: '2021-04-22T07:07:15.374408', status: completed}
+#| tags: []
+multi_cat_cols = []
+
+for col in data[cat].columns:
+        if data[col].nunique() > 10: 
+            multi_cat_cols.append(col)  
+            print(col)
+            #print(data[cat].groupby(col)[col].count()/ len(data[cat]))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:15.553486Z', iopub.status.busy: '2021-04-22T07:07:15.552800Z', iopub.status.idle: '2021-04-22T07:07:15.577139Z', shell.execute_reply: '2021-04-22T07:07:15.576450Z'}
+#| papermill: {duration: 0.075596, end_time: '2021-04-22T07:07:15.577295', exception: false, start_time: '2021-04-22T07:07:15.501699', status: completed}
+#| tags: []
+train_pre.find_non_rare_labels('Neighborhood', 0.05)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:15.674886Z', iopub.status.busy: '2021-04-22T07:07:15.673898Z', iopub.status.idle: '2021-04-22T07:07:15.696432Z', shell.execute_reply: '2021-04-22T07:07:15.695664Z'}
+#| papermill: {duration: 0.073556, end_time: '2021-04-22T07:07:15.696582', exception: false, start_time: '2021-04-22T07:07:15.623026', status: completed}
+#| tags: []
+for variable in ['Neighborhood', 'Exterior1st', 'Exterior2nd']:
+    data = train_pre.rare_encoding(variable, 0.05)
+    test = test_pre.rare_encoding(variable, 0.05)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:15.809372Z', iopub.status.busy: '2021-04-22T07:07:15.808696Z', iopub.status.idle: '2021-04-22T07:07:16.597259Z', shell.execute_reply: '2021-04-22T07:07:16.596474Z'}
+#| papermill: {duration: 0.849363, end_time: '2021-04-22T07:07:16.597406', exception: false, start_time: '2021-04-22T07:07:15.748043', status: completed}
+#| tags: []
+for col in ['Neighborhood', 'Exterior1st', 'Exterior2nd']:
+    temp_df = pd.Series(data[col].value_counts() / len(data) )
+
+    # make plot with the above percentages
+    fig = temp_df.sort_values(ascending=False).plot.bar()
+    fig.set_xlabel(col)
+
+    # add a line at 5 % to flag the threshold for rare categories
+    fig.axhline(y=0.05, color='red')
+    fig.set_ylabel('Percentage of houses')
+    plt.show()
+```
+
+### (B.3.) Handling Outliers
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:16.802255Z', iopub.status.busy: '2021-04-22T07:07:16.801485Z', iopub.status.idle: '2021-04-22T07:07:29.126975Z', shell.execute_reply: '2021-04-22T07:07:29.127480Z'}
+#| papermill: {duration: 12.384706, end_time: '2021-04-22T07:07:29.127668', exception: false, start_time: '2021-04-22T07:07:16.742962', status: completed}
+#| tags: []
+print("Train Data")
+cols = ['SalePrice', 'BsmtFinSF1', 'GrLivArea', 'LotArea','1stFlrSF','TotalBsmtSF']
+sns_plot = sns.pairplot(data[cols], size = 2.5);
+sns_plot.savefig("output.png")
+sns_plot
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:29.253335Z', iopub.status.busy: '2021-04-22T07:07:29.252660Z', iopub.status.idle: '2021-04-22T07:07:29.262177Z', shell.execute_reply: '2021-04-22T07:07:29.262724Z'}
+#| papermill: {duration: 0.074097, end_time: '2021-04-22T07:07:29.262898', exception: false, start_time: '2021-04-22T07:07:29.188801', status: completed}
+#| tags: []
+outliers = data[
+    (data['GrLivArea'] > 4000) &
+    (data['SalePrice'] < 300000)&
+    (data['LotArea'] > 100000) &
+    (data['TotalBsmtSF'] > 3000) &
+    (data['1stFlrSF'] > 2500)]
+
+data.drop(outliers.index, inplace=True)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:29.384449Z', iopub.status.busy: '2021-04-22T07:07:29.383682Z', iopub.status.idle: '2021-04-22T07:07:29.393529Z', shell.execute_reply: '2021-04-22T07:07:29.394372Z'}
+#| papermill: {duration: 0.071247, end_time: '2021-04-22T07:07:29.394594', exception: false, start_time: '2021-04-22T07:07:29.323347', status: completed}
+#| tags: []
+outliers = test[
+    (test['GrLivArea'] > 4000) &
+    (test['LotArea'] > 100000) &
+    (test['TotalBsmtSF'] > 3000) &
+    (test['1stFlrSF'] > 2500)
+]
+
+test.drop(outliers.index, inplace=True)
+    
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:29.518865Z', iopub.status.busy: '2021-04-22T07:07:29.517133Z', iopub.status.idle: '2021-04-22T07:07:29.522746Z', shell.execute_reply: '2021-04-22T07:07:29.522178Z'}
+#| papermill: {duration: 0.07031, end_time: '2021-04-22T07:07:29.522893', exception: false, start_time: '2021-04-22T07:07:29.452583', status: completed}
+#| tags: []
+#Functions with Updated data !
+train_pre = handle_data(data = data) 
+test_pre = handle_data(data = test)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:29.650352Z', iopub.status.busy: '2021-04-22T07:07:29.649574Z', iopub.status.idle: '2021-04-22T07:07:29.654831Z', shell.execute_reply: '2021-04-22T07:07:29.654191Z'}
+#| papermill: {duration: 0.071466, end_time: '2021-04-22T07:07:29.654969', exception: false, start_time: '2021-04-22T07:07:29.583503', status: completed}
+#| tags: []
+print(data.shape, test.shape)
+```
+
+## (C) Heatmap and Correlation
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:29.896998Z', iopub.status.busy: '2021-04-22T07:07:29.895050Z', iopub.status.idle: '2021-04-22T07:07:31.059595Z', shell.execute_reply: '2021-04-22T07:07:31.058652Z'}
+#| papermill: {duration: 1.229313, end_time: '2021-04-22T07:07:31.059769', exception: false, start_time: '2021-04-22T07:07:29.830456', status: completed}
+#| tags: []
+corr_matrix = data.corr()
+plt.subplots(figsize=(15,10))
+sns.heatmap(corr_matrix, vmax=0.9, square=True)
+```
+
+### (D) Encoding the categorical features
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:31.308869Z', iopub.status.busy: '2021-04-22T07:07:31.308131Z', iopub.status.idle: '2021-04-22T07:07:31.312502Z', shell.execute_reply: '2021-04-22T07:07:31.313081Z'}
+#| papermill: {duration: 0.068622, end_time: '2021-04-22T07:07:31.313296', exception: false, start_time: '2021-04-22T07:07:31.244674', status: completed}
+#| tags: []
+from sklearn.preprocessing import OrdinalEncoder
+ordinal_encoder = OrdinalEncoder()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:31.437083Z', iopub.status.busy: '2021-04-22T07:07:31.436399Z', iopub.status.idle: '2021-04-22T07:07:31.585277Z', shell.execute_reply: '2021-04-22T07:07:31.586004Z'}
+#| papermill: {duration: 0.212972, end_time: '2021-04-22T07:07:31.586204', exception: false, start_time: '2021-04-22T07:07:31.373232', status: completed}
+#| tags: []
+data[cat] = ordinal_encoder.fit_transform(data[cat])
+test[cat_test] = ordinal_encoder.fit_transform(test[cat_test])
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:31.710017Z', iopub.status.busy: '2021-04-22T07:07:31.709331Z', iopub.status.idle: '2021-04-22T07:07:31.725423Z', shell.execute_reply: '2021-04-22T07:07:31.724733Z'}
+#| papermill: {duration: 0.079477, end_time: '2021-04-22T07:07:31.725561', exception: false, start_time: '2021-04-22T07:07:31.646084', status: completed}
+#| tags: []
+num, cat, cont, disc, yr = train_pre.extract_var()
+print("Numerical : "+str(len(num))+", Categorical "+
+      str(len(cat)) + ", Continuous: " + str(len(cont))+ ", Discrete: " + str(len(disc)))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:31.857533Z', iopub.status.busy: '2021-04-22T07:07:31.856752Z', iopub.status.idle: '2021-04-22T07:07:31.866768Z', shell.execute_reply: '2021-04-22T07:07:31.866134Z'}
+#| papermill: {duration: 0.07997, end_time: '2021-04-22T07:07:31.866921', exception: false, start_time: '2021-04-22T07:07:31.786951', status: completed}
+#| tags: []
+num_test, cat_test, cont_test, disc_test, yr_test = test_pre.extract_var()
+print("Numerical : "+str(len(num_test))+", Categorical "+
+      str(len(cat_test)) + ", Continuous: " + str(len(cont_test))+ ", Discrete: " + str(len(disc_test)))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:31.992401Z', iopub.status.busy: '2021-04-22T07:07:31.991710Z', iopub.status.idle: '2021-04-22T07:07:32.020287Z', shell.execute_reply: '2021-04-22T07:07:32.019575Z'}
+#| papermill: {duration: 0.092836, end_time: '2021-04-22T07:07:32.020438', exception: false, start_time: '2021-04-22T07:07:31.927602', status: completed}
+#| tags: []
+train_pre.check_for_missing(num)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:32.154286Z', iopub.status.busy: '2021-04-22T07:07:32.153098Z', iopub.status.idle: '2021-04-22T07:07:32.183590Z', shell.execute_reply: '2021-04-22T07:07:32.182794Z'}
+#| papermill: {duration: 0.099452, end_time: '2021-04-22T07:07:32.183797', exception: false, start_time: '2021-04-22T07:07:32.084345', status: completed}
+#| tags: []
+test_pre.check_for_missing(num_test)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:32.319083Z', iopub.status.busy: '2021-04-22T07:07:32.318014Z', iopub.status.idle: '2021-04-22T07:07:32.323220Z', shell.execute_reply: '2021-04-22T07:07:32.323743Z'}
+#| papermill: {duration: 0.074683, end_time: '2021-04-22T07:07:32.323926', exception: false, start_time: '2021-04-22T07:07:32.249243', status: completed}
+#| tags: []
+data.fillna(0, inplace = True)
+test.fillna(0, inplace = True)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:32.475526Z', iopub.status.busy: '2021-04-22T07:07:32.474853Z', iopub.status.idle: '2021-04-22T07:07:32.491194Z', shell.execute_reply: '2021-04-22T07:07:32.490633Z'}
+#| papermill: {duration: 0.102794, end_time: '2021-04-22T07:07:32.491330', exception: false, start_time: '2021-04-22T07:07:32.388536', status: completed}
+#| tags: []
+data.head()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:32.622472Z', iopub.status.busy: '2021-04-22T07:07:32.621481Z', iopub.status.idle: '2021-04-22T07:07:32.624666Z', shell.execute_reply: '2021-04-22T07:07:32.624072Z'}
+#| papermill: {duration: 0.070663, end_time: '2021-04-22T07:07:32.624815', exception: false, start_time: '2021-04-22T07:07:32.554152', status: completed}
+#| tags: []
+#Functions with Updated data !
+train_pre = handle_data(data = data) 
+test_pre = handle_data(data = test)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:32.757914Z', iopub.status.busy: '2021-04-22T07:07:32.757282Z', iopub.status.idle: '2021-04-22T07:07:32.762404Z', shell.execute_reply: '2021-04-22T07:07:32.761412Z'}
+#| papermill: {duration: 0.074099, end_time: '2021-04-22T07:07:32.762603', exception: false, start_time: '2021-04-22T07:07:32.688504', status: completed}
+#| tags: []
+print(data.shape, test.shape)
+```
+
+## (E) Machine learning section
+---
+
+We will be using 3 models : Linear Regression, Lasso Regression and XG Boost to predict the sale price amount of the houses. The problem is classified as regression problem, hence we are using such models. 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:33.026859Z', iopub.status.busy: '2021-04-22T07:07:33.026218Z', iopub.status.idle: '2021-04-22T07:07:33.029664Z', shell.execute_reply: '2021-04-22T07:07:33.029011Z'}
+#| papermill: {duration: 0.073076, end_time: '2021-04-22T07:07:33.029805', exception: false, start_time: '2021-04-22T07:07:32.956729', status: completed}
+#| tags: []
+from sklearn.model_selection import train_test_split , KFold, cross_val_score
+from sklearn.metrics import mean_squared_error, r2_score
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:33.166944Z', iopub.status.busy: '2021-04-22T07:07:33.165417Z', iopub.status.idle: '2021-04-22T07:07:33.171761Z', shell.execute_reply: '2021-04-22T07:07:33.171219Z'}
+#| papermill: {duration: 0.078443, end_time: '2021-04-22T07:07:33.171906', exception: false, start_time: '2021-04-22T07:07:33.093463', status: completed}
+#| tags: []
+X_train, X_test, y_train, y_test = train_test_split(data.drop('SalePrice', axis=1), data['SalePrice'], test_size=0.2, random_state=42)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:33.307383Z', iopub.status.busy: '2021-04-22T07:07:33.306695Z', iopub.status.idle: '2021-04-22T07:07:33.310614Z', shell.execute_reply: '2021-04-22T07:07:33.310067Z'}
+#| papermill: {duration: 0.072642, end_time: '2021-04-22T07:07:33.310751', exception: false, start_time: '2021-04-22T07:07:33.238109', status: completed}
+#| tags: []
+print(X_train.shape, y_train.shape, data.shape, test.shape)
+```
+
+### (E.1.) Linear Regression
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:33.576423Z', iopub.status.busy: '2021-04-22T07:07:33.575636Z', iopub.status.idle: '2021-04-22T07:07:33.616275Z', shell.execute_reply: '2021-04-22T07:07:33.617088Z'}
+#| papermill: {duration: 0.112914, end_time: '2021-04-22T07:07:33.617375', exception: false, start_time: '2021-04-22T07:07:33.504461', status: completed}
+#| tags: []
+from sklearn.linear_model import LinearRegression
+regr = LinearRegression()
+# Train the model using the training sets
+regr.fit(X_train, y_train)
+
+# Make predictions using the testing set
+y_test_pred = regr.predict(X_test)
+y_train_pred = regr.predict(X_train)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:33.834540Z', iopub.status.busy: '2021-04-22T07:07:33.833856Z', iopub.status.idle: '2021-04-22T07:07:33.840448Z', shell.execute_reply: '2021-04-22T07:07:33.841467Z'}
+#| papermill: {duration: 0.077327, end_time: '2021-04-22T07:07:33.841785', exception: false, start_time: '2021-04-22T07:07:33.764458', status: completed}
+#| tags: []
+from sklearn.metrics import r2_score
+from sklearn.metrics import mean_squared_error
+
+print('MSE train: %.3f, test: %.3f' % (
+        mean_squared_error(y_train, y_train_pred),
+        mean_squared_error(y_test, y_test_pred)))
+print('R^2 train: %.3f, test: %.3f' % (
+        r2_score(y_train, y_train_pred),
+        r2_score(y_test, y_test_pred)))
+```
+
+### (E.2.) Lasso Regression 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:34.106710Z', iopub.status.busy: '2021-04-22T07:07:34.105730Z', iopub.status.idle: '2021-04-22T07:07:34.283110Z', shell.execute_reply: '2021-04-22T07:07:34.284242Z'}
+#| papermill: {duration: 0.247114, end_time: '2021-04-22T07:07:34.284527', exception: false, start_time: '2021-04-22T07:07:34.037413', status: completed}
+#| tags: []
+from sklearn.linear_model import Lasso
+
+lasso = Lasso(alpha=0.1)
+lasso.fit(X_train, y_train)
+y_train_pred_1 = lasso.predict(X_train)
+y_test_pred_1= lasso.predict(X_test)
+#print(lasso.coef_)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:34.511485Z', iopub.status.busy: '2021-04-22T07:07:34.509480Z', iopub.status.idle: '2021-04-22T07:07:34.516599Z', shell.execute_reply: '2021-04-22T07:07:34.515826Z'}
+#| papermill: {duration: 0.079039, end_time: '2021-04-22T07:07:34.516783', exception: false, start_time: '2021-04-22T07:07:34.437744', status: completed}
+#| tags: []
+print('MSE train: %.3f, test: %.3f' % (
+        mean_squared_error(y_train, y_train_pred_1),
+        mean_squared_error(y_test, y_test_pred_1)))
+print('R^2 train: %.3f, test: %.3f' % (
+        r2_score(y_train, y_train_pred_1),
+        r2_score(y_test, y_test_pred_1)))
+```
+
+### (E.3.) XGBoost
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:34.802353Z', iopub.status.busy: '2021-04-22T07:07:34.801558Z', iopub.status.idle: '2021-04-22T07:07:45.558511Z', shell.execute_reply: '2021-04-22T07:07:45.559333Z'}
+#| papermill: {duration: 10.843707, end_time: '2021-04-22T07:07:45.559560', exception: false, start_time: '2021-04-22T07:07:34.715853', status: completed}
+#| tags: []
+import xgboost
+
+xgb = xgboost.XGBRegressor(colsample_bytree=0.4,
+                 gamma=0,                 
+                 learning_rate=0.07,
+                 max_depth=3,
+                 min_child_weight=1.5,
+                 n_estimators=10000,                                                                    
+                 reg_alpha=0.75,
+                 reg_lambda=0.45,
+                 subsample=0.6,
+                 seed=42)
+xgb.fit(X_train,y_train)
+y_test_pred_2 = xgb.predict(X_test)
+y_train_pred_2= xgb.predict(X_train)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:45.720930Z', iopub.status.busy: '2021-04-22T07:07:45.719682Z', iopub.status.idle: '2021-04-22T07:07:45.728058Z', shell.execute_reply: '2021-04-22T07:07:45.729663Z'}
+#| papermill: {duration: 0.09672, end_time: '2021-04-22T07:07:45.729973', exception: false, start_time: '2021-04-22T07:07:45.633253', status: completed}
+#| tags: []
+print('MSE train: %.3f, test: %.3f' % (
+        mean_squared_error(y_train, y_train_pred_2),
+        mean_squared_error(y_test, y_test_pred_2)))
+print('R^2 train: %.3f, test: %.3f' % (
+        r2_score(y_train, y_train_pred_2),
+        r2_score(y_test, y_test_pred_2)))
+```
+
+# Submission
+
+We find out that out of the models the XG Boost performs better over our dataset. Hence I am using the model for final predication on test dataset.  
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:07:46.180398Z', iopub.status.busy: '2021-04-22T07:07:46.179418Z', iopub.status.idle: '2021-04-22T07:07:46.277465Z', shell.execute_reply: '2021-04-22T07:07:46.278194Z'}
+#| papermill: {duration: 0.171782, end_time: '2021-04-22T07:07:46.278404', exception: false, start_time: '2021-04-22T07:07:46.106622', status: completed}
+#| tags: []
+y_pred = xgb.predict(test)
+final_predictions = y_pred
+
+submission = pd.DataFrame({
+        "Id": test["Id"],
+        "SalePrice": final_predictions
+    })
+
+submission.to_csv("xgb.csv", encoding='utf-8', index=False)
+
+print(submission.head())
+```
+
+# Thankyou!
+
+Author : [Pratik Kumar](https://pr2tik1.github.io)
+

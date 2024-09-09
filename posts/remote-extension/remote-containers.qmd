@@ -1,6 +1,6 @@
 ---
 title: Efficient project management using Dockers
-image: ../post-images/dockers.jpeg
+image: ../post-images/3.jpg
 title-block-style: default
 title-block-banner: black
 title-block-banner-color: white
@@ -18,7 +18,7 @@ categories:
   - Coding Practices
 website:
   back-to-top-navigation: true
-  page-footer: 'Copyright 2023, Pratik Kumar'
+  page-footer: 'Copyright 2024, Pratik Kumar'
 toc: true
 jupyter: python3
 comments: 

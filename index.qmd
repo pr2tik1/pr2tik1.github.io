@@ -9,10 +9,10 @@ listing:
   contents: posts
   sort: "date desc"
   image-align: left
-  # categories: true
-  type: grid
-  # sort-ui: true
-  # filter-ui: true
+  categories: true
+  type: default
+  sort-ui: true
+  filter-ui: true
   fields: [image, date, title, author, reading-time, description, categories]
 ---
 

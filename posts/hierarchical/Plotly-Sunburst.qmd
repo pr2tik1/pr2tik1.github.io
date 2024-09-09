@@ -1,6 +1,6 @@
 ---
 title: Hierarchical Data Visualization Demystified
-image: ../post-images/seventeen.jpeg
+image: ../post-images/1.jpg
 title-block-style: default
 title-block-banner: black
 title-block-banner-color: white
@@ -12,13 +12,13 @@ format:
 author: Pratik Kumar
 date: '2023-06-19'
 categories:
-  - data visualization
+  - Data Visualization
   - Plotly
   - Python
-  - Coding practices
+  - Coding Practices
 website:
   back-to-top-navigation: true
-  page-footer: 'Copyright 2023, Pratik Kumar'
+  page-footer: 'Copyright 2024, Pratik Kumar'
 toc: true
 jupyter: python3
 comments: 

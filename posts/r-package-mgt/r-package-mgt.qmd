@@ -1,6 +1,6 @@
 ---
 title: Simplifying R Package Management - renv vs packrat
-image: ../post-images/190124.jpeg
+image: ../post-images/2.jpg
 title-block-style: default
 title-block-banner: black
 title-block-banner-color: white
@@ -13,10 +13,10 @@ author: Pratik Kumar
 date: '2024-01-19'
 categories:
   - R
-  - Coding practices
+  - Coding Practices
 website:
   back-to-top-navigation: true
-  page-footer: 'Copyright 2023, Pratik Kumar'
+  page-footer: 'Copyright 2024, Pratik Kumar'
 toc: true
 comments:
   utterances:

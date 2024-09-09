@@ -1,0 +1,478 @@
+---
+title: "\U0001F9D8‍♂️ Basics of CNN in PyTorch"
+image: ../post-images/5.jpg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2021-03-10'
+categories:
+  - Data Science
+  - Data Visualization
+  - Python
+  - Machine Learning
+  - Feature Engineering
+  - Kaggle
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+Convolutional Neural Networks, do we really understand what goes under the hood? Imagining what actually goes within a deep learning architecture can be tough. That's okay it's normal! As neural networks are still called the *black box*, even though we have moved ahead so much towards powerful-complex models. This notebook is an attempt to understand a very common yet powerful deep learning model of working with image classification, detection, etc., known as **Convolution Neural Network**.
+
+![](https://miro.medium.com/max/3840/1*oB3S5yHHhvougJkPXuc8og.gif)
+
+
+Here, I have tried to explain each part of the deep learning with CNN architectures. We will be using PyTorch framework. Let's start!
+
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:43.067664Z', iopub.status.busy: '2021-05-06T14:33:43.066966Z', iopub.status.idle: '2021-05-06T14:33:43.117585Z', shell.execute_reply: '2021-05-06T14:33:43.116897Z'}
+#| papermill: {duration: 0.092587, end_time: '2021-05-06T14:33:43.117744', exception: false, start_time: '2021-05-06T14:33:43.025157', status: completed}
+#| tags: []
+#Importing few libraries 
+import imageio
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.rcParams["figure.figsize"] = (20,10)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:43.185923Z', iopub.status.busy: '2021-05-06T14:33:43.185254Z', iopub.status.idle: '2021-05-06T14:33:43.231577Z', shell.execute_reply: '2021-05-06T14:33:43.230969Z'}
+#| papermill: {duration: 0.081867, end_time: '2021-05-06T14:33:43.231710', exception: false, start_time: '2021-05-06T14:33:43.149843', status: completed}
+#| tags: []
+img = imageio.imread('../input/cat-and-dog/training_set/training_set/dogs/dog.1.jpg')
+img.shape
+```
+
+# Image
+---
+
+Let's understand more about a colored image. The image of an example from the dataset contains RGB(Red Green Blue) Channels. We will try to look how exactly, just a combination of three primary colors forms a complete image.   
+
+![](https://miro.medium.com/max/2146/1*icINeO4H7UKe3NlU1fXqlA.jpeg)
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:43.382612Z', iopub.status.busy: '2021-05-06T14:33:43.381870Z', iopub.status.idle: '2021-05-06T14:33:43.699949Z', shell.execute_reply: '2021-05-06T14:33:43.699414Z'}
+#| papermill: {duration: 0.372641, end_time: '2021-05-06T14:33:43.700111', exception: false, start_time: '2021-05-06T14:33:43.327470', status: completed}
+#| tags: []
+plt.imshow(img)
+```
+
+## RGB Channels
+---
+Notice the difference between pixel intensities of the original image splitted into images of each individual channels. 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:43.879636Z', iopub.status.busy: '2021-05-06T14:33:43.878992Z', iopub.status.idle: '2021-05-06T14:33:43.882423Z', shell.execute_reply: '2021-05-06T14:33:43.881720Z'}
+#| papermill: {duration: 0.052481, end_time: '2021-05-06T14:33:43.882574', exception: false, start_time: '2021-05-06T14:33:43.830093', status: completed}
+#| tags: []
+def show_rgb(img):
+    for i in range(3):
+        plt.subplot(1,3,i+1)
+        plt.imshow(img[:,:,i], cmap ='gray')
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:43.998444Z', iopub.status.busy: '2021-05-06T14:33:43.993429Z', iopub.status.idle: '2021-05-06T14:33:44.628802Z', shell.execute_reply: '2021-05-06T14:33:44.629278Z'}
+#| papermill: {duration: 0.702656, end_time: '2021-05-06T14:33:44.629458', exception: false, start_time: '2021-05-06T14:33:43.926802', status: completed}
+#| tags: []
+show_rgb(img)
+```
+
+# Convolutions and Layers
+---
+
+Now let's develop a model that would learn the information of image and would classify them into 'class'. But before we jump directly into developing some 'deep' architecture, we will each part of a convolution neural network.
+
+![](https://miro.medium.com/max/2560/1*ciDgQEjViWLnCbmX-EeSrA.gif)
+
+## So, what is a Convoution Neural Network?
+> In 1990s Yann LeCun introduced a powerful model that would classifiy handwritten digits with high accuracy(at that time). This popular model is known as LeNet. It had few operations different from the traditional [multi-layered perceptron](https://www.kaggle.com/pr2tik1/multi-layered-perceptron-pytorch). The LeNet model had a **convolution** operation and hence the name "Convolution Neural Networks".
+
+This technique proved to be effective after addition of two more factors:
+
+    1. Availability of better and powerful processors such as GPUs and TPUs.
+    2. Availability of large sets of data for training and testing.
+
+# Model
+---
+
+To summarize a convolution neural network contains: 
+
+- Model:
+    - Fully connected Layers
+    - Convolution Layers
+    - Pooling Layers
+    - Normalization Layers
+    - Striding operaiton
+    - Forward and Backward Propagation
+    - Activation Functions
+
+- Hyper-parameters:
+    - Updation Rule
+    - Loss function
+    - Learning Rate
+
+# PyTorch Section
+---
+
+PyTorch is one the commonly used frameworks in developing deep learning architectures, training theam and testing the network.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:45.117950Z', iopub.status.busy: '2021-05-06T14:33:45.117317Z', iopub.status.idle: '2021-05-06T14:33:46.215003Z', shell.execute_reply: '2021-05-06T14:33:46.214431Z'}
+#| papermill: {duration: 1.162413, end_time: '2021-05-06T14:33:46.215156', exception: false, start_time: '2021-05-06T14:33:45.052743', status: completed}
+#| tags: []
+#Importing pytorch and numpy
+import torch
+import numpy as np
+import torch.nn.functional as F
+```
+
+## 1. Fully Conneted Layer
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:46.460039Z', iopub.status.busy: '2021-05-06T14:33:46.459369Z', iopub.status.idle: '2021-05-06T14:33:46.553063Z', shell.execute_reply: '2021-05-06T14:33:46.553575Z'}
+#| papermill: {duration: 0.159528, end_time: '2021-05-06T14:33:46.553736', exception: false, start_time: '2021-05-06T14:33:46.394208', status: completed}
+#| tags: []
+#Flat input tensor
+x_fc = torch.randn(100,784)
+x_fc
+```
+
+Fully connected layer has set of weight matrices and biases. These together can be formulated as:
+
+   > Output = activation_function(Weight*Input + Bias)
+   
+Generally within a CNN these are placed at the end. The input is from the convolution layers and output is number of classes(2 in this case, Dog and Cat).
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:46.798254Z', iopub.status.busy: '2021-05-06T14:33:46.797645Z', iopub.status.idle: '2021-05-06T14:33:46.804417Z', shell.execute_reply: '2021-05-06T14:33:46.804959Z'}
+#| papermill: {duration: 0.071242, end_time: '2021-05-06T14:33:46.805132', exception: false, start_time: '2021-05-06T14:33:46.733890', status: completed}
+#| tags: []
+#Weights or Features
+W = torch.randn(784, 10)/np.sqrt(784)
+W.requires_grad_()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:46.930322Z', iopub.status.busy: '2021-05-06T14:33:46.929737Z', iopub.status.idle: '2021-05-06T14:33:46.938619Z', shell.execute_reply: '2021-05-06T14:33:46.938084Z'}
+#| papermill: {duration: 0.073147, end_time: '2021-05-06T14:33:46.938755', exception: false, start_time: '2021-05-06T14:33:46.865608', status: completed}
+#| tags: []
+b = torch.zeros(10, requires_grad=True)
+b
+```
+
+The activation function used here is a ReLU function. A ReLU activation function is a non-linear (**NOTE:** It looks linear but is non-linear for complete range.) More about ReLU [here](https://machinelearningmastery.com/rectified-linear-activation-function-for-deep-learning-neural-networks/).
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:47.187725Z', iopub.status.busy: '2021-05-06T14:33:47.187112Z', iopub.status.idle: '2021-05-06T14:33:47.227721Z', shell.execute_reply: '2021-05-06T14:33:47.228262Z'}
+#| papermill: {duration: 0.106374, end_time: '2021-05-06T14:33:47.228446', exception: false, start_time: '2021-05-06T14:33:47.122072', status: completed}
+#| tags: []
+y_pre = torch.matmul(x_fc,W)+b
+y = F.relu(y_pre)
+x_fc.shape, y.shape
+```
+
+Observe the shape of input and output as a vector of shape 100x784 and 100x10 respectively. The '100' denotes number of vectors/row and the 784 denotes a flattened image vector from a 28x28 image array. Finally in output the '10' denotes the number of classes.(This is just for example and not related to images in our dataset). 
+
+## 2. Convolution Layer
+---
+
+Following are two convolution layers that we usually find at initial stage of deep learning CNN architecture. 
+
+#### Layer 1: Weights and Biases
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:47.722800Z', iopub.status.busy: '2021-05-06T14:33:47.722205Z', iopub.status.idle: '2021-05-06T14:33:47.728785Z', shell.execute_reply: '2021-05-06T14:33:47.729404Z'}
+#| papermill: {duration: 0.071787, end_time: '2021-05-06T14:33:47.729562', exception: false, start_time: '2021-05-06T14:33:47.657775', status: completed}
+#| tags: []
+x_cnn = torch.randn(100,1,28,28)
+x_cnn.shape
+```
+
+A convolution operation requires "Filters" or "Weights" same as in a fully connected layer. But these are matrices of different sizes. The filters takes the normalized image arrays ([tensors](https://pytorch.org/docs/stable/tensors.html)) and returns feature maps as output. This are learned weights that is passed to next layer. 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:47.978564Z', iopub.status.busy: '2021-05-06T14:33:47.978003Z', iopub.status.idle: '2021-05-06T14:33:47.986415Z', shell.execute_reply: '2021-05-06T14:33:47.986923Z'}
+#| papermill: {duration: 0.07283, end_time: '2021-05-06T14:33:47.987089', exception: false, start_time: '2021-05-06T14:33:47.914259', status: completed}
+#| tags: []
+#Take 16 number of 3x3 filters initialized randomly: Weights/Filters
+W1 = torch.randn(16, 1, 3, 3)/np.sqrt(1*3*3)
+W1.requires_grad_()#to set weights for updation during training
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:48.198050Z', iopub.status.busy: '2021-05-06T14:33:48.197435Z', iopub.status.idle: '2021-05-06T14:33:48.203083Z', shell.execute_reply: '2021-05-06T14:33:48.203629Z'}
+#| papermill: {duration: 0.153664, end_time: '2021-05-06T14:33:48.203794', exception: false, start_time: '2021-05-06T14:33:48.050130', status: completed}
+#| tags: []
+#Take a vector of 16x1: Bias Vector
+b1 = torch.zeros(16, requires_grad=True)
+b1
+```
+
+Note the dimension of bias is not exactly same to output of matrix multiplication of weights and input vectors. This is because we will taking advantage of something called [broadcasting](https://machinelearningmastery.com/broadcasting-with-numpy-arrays/). 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:48.460308Z', iopub.status.busy: '2021-05-06T14:33:48.459697Z', iopub.status.idle: '2021-05-06T14:33:48.494284Z', shell.execute_reply: '2021-05-06T14:33:48.494968Z'}
+#| papermill: {duration: 0.103378, end_time: '2021-05-06T14:33:48.495165', exception: false, start_time: '2021-05-06T14:33:48.391787', status: completed}
+#| tags: []
+conv1_pre = F.conv2d(x_cnn, W1, bias=b1, stride=1, padding=1)
+conv1 = F.relu(conv1_pre)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:48.627120Z', iopub.status.busy: '2021-05-06T14:33:48.626492Z', iopub.status.idle: '2021-05-06T14:33:48.629989Z', shell.execute_reply: '2021-05-06T14:33:48.630450Z'}
+#| papermill: {duration: 0.0709, end_time: '2021-05-06T14:33:48.630629', exception: false, start_time: '2021-05-06T14:33:48.559729', status: completed}
+#| tags: []
+x_cnn.shape, conv1.shape
+```
+
+#### Layer 2: Weights and Biases
+
+Now similarly as above we create a second layer as below.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:49.020921Z', iopub.status.busy: '2021-05-06T14:33:49.020246Z', iopub.status.idle: '2021-05-06T14:33:49.048089Z', shell.execute_reply: '2021-05-06T14:33:49.048594Z'}
+#| papermill: {duration: 0.096965, end_time: '2021-05-06T14:33:49.048760', exception: false, start_time: '2021-05-06T14:33:48.951795', status: completed}
+#| tags: []
+W2 = torch.randn(32, 16, 3, 3)/np.sqrt(16*3*3)
+W2.requires_grad_()
+
+b2 = torch.zeros(32, requires_grad=True)
+
+conv2 = F.relu(F.conv2d(conv1, W2, b2, stride=1, padding=1))
+conv2.shape
+```
+
+#### Reshaping 
+
+While connecting the layers we often need to reshape the arrays. Developing a perfectly working CNN is all about building correct set of dimensions.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:49.311630Z', iopub.status.busy: '2021-05-06T14:33:49.310865Z', iopub.status.idle: '2021-05-06T14:33:49.318040Z', shell.execute_reply: '2021-05-06T14:33:49.317012Z'}
+#| papermill: {duration: 0.07631, end_time: '2021-05-06T14:33:49.318291', exception: false, start_time: '2021-05-06T14:33:49.241981', status: completed}
+#| tags: []
+M = torch.zeros(4, 3)
+
+M2 = M.view(1,1,12)
+M3 = M.view(-1)
+M4 = M.view(-1,2,3)
+M5 = M.view(2,1,2,3)
+
+print("M:{},\nM2: {}, \nM3: {}, \nM4: {},\nM5: {}." .format(M, M2, M3, M4, M5))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:49.454993Z', iopub.status.busy: '2021-05-06T14:33:49.454290Z', iopub.status.idle: '2021-05-06T14:33:49.460863Z', shell.execute_reply: '2021-05-06T14:33:49.459921Z'}
+#| papermill: {duration: 0.076137, end_time: '2021-05-06T14:33:49.461143', exception: false, start_time: '2021-05-06T14:33:49.385006', status: completed}
+#| tags: []
+# Reshape flat input image into a 4D batched image input
+x_flat = torch.randn(100, 784)
+x_reshaped = x_flat.view(-1, 1, 28, 28)
+
+# Print input shape
+print(x_reshaped.shape) #CNN expects 4D input: [batch, channel, height, width]
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:49.597758Z', iopub.status.busy: '2021-05-06T14:33:49.597149Z', iopub.status.idle: '2021-05-06T14:33:49.599930Z', shell.execute_reply: '2021-05-06T14:33:49.600485Z'}
+#| papermill: {duration: 0.073121, end_time: '2021-05-06T14:33:49.600661', exception: false, start_time: '2021-05-06T14:33:49.527540', status: completed}
+#| tags: []
+# Flatten convolutional feature maps into a vector
+h_flat = conv2.view(-1, 28*28*32)
+
+# Print output shape
+print(h_flat.shape) #"flatten" a CNN's 4D output to 2D
+```
+
+## 3. Pooling and Striding 
+---
+
+Pooling addresses the problem of sensitivity of the output feature maps from the convolution layers. Follow this [post](https://machinelearningmastery.com/pooling-layers-for-convolutional-neural-networks/) for a brief explanation. Further [Striding](https://www.google.com/search?client=opera&q=pooling+and+striding&sourceid=opera&ie=UTF-8&oe=UTF-8) is skipping positions while sliding the convolutional kernel.
+
+![](https://cdn-media-1.freecodecamp.org/images/gb08-2i83P5wPzs3SL-vosNb6Iur5kb5ZH43)
+
+Note how the filter moves on the image array input.
+
+### 3.1. Pooling
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:49.993081Z', iopub.status.busy: '2021-05-06T14:33:49.992502Z', iopub.status.idle: '2021-05-06T14:33:49.998577Z', shell.execute_reply: '2021-05-06T14:33:49.998094Z'}
+#| papermill: {duration: 0.073423, end_time: '2021-05-06T14:33:49.998713', exception: false, start_time: '2021-05-06T14:33:49.925290', status: completed}
+#| tags: []
+print("Shape of conv2 feature maps before pooling : {0}".format(conv2.shape))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:50.135444Z', iopub.status.busy: '2021-05-06T14:33:50.134527Z', iopub.status.idle: '2021-05-06T14:33:50.148963Z', shell.execute_reply: '2021-05-06T14:33:50.148420Z'}
+#| papermill: {duration: 0.084265, end_time: '2021-05-06T14:33:50.149120', exception: false, start_time: '2021-05-06T14:33:50.064855', status: completed}
+#| tags: []
+max_pool2 = F.max_pool2d(conv2, kernel_size = 2)
+print("Shape of conv2 feature maps after pooling : {0}".format(max_pool2.shape))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:50.287308Z', iopub.status.busy: '2021-05-06T14:33:50.286679Z', iopub.status.idle: '2021-05-06T14:33:50.302964Z', shell.execute_reply: '2021-05-06T14:33:50.302427Z'}
+#| papermill: {duration: 0.085896, end_time: '2021-05-06T14:33:50.303116', exception: false, start_time: '2021-05-06T14:33:50.217220', status: completed}
+#| tags: []
+avg_pool2 = F.avg_pool2d(conv2, kernel_size=2)
+print("Shape of conv2 feature maps after avg pooling: {0}".format(avg_pool2.shape))
+```
+
+## Feature map: 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:50.581236Z', iopub.status.busy: '2021-05-06T14:33:50.580339Z', iopub.status.idle: '2021-05-06T14:33:50.584824Z', shell.execute_reply: '2021-05-06T14:33:50.585543Z'}
+#| papermill: {duration: 0.080276, end_time: '2021-05-06T14:33:50.585770', exception: false, start_time: '2021-05-06T14:33:50.505494', status: completed}
+#| tags: []
+feature_map_fig = torch.tensor(np.array([[1,1,2,4], [5,6,7,8], [3,2,1,0], [1,2,3,4]], dtype = np.float32))
+fmap_fig = feature_map_fig.view(1,1,4,4)
+print("Feature map shape pre-pooling: {}".format(fmap_fig.shape))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:50.727063Z', iopub.status.busy: '2021-05-06T14:33:50.726332Z', iopub.status.idle: '2021-05-06T14:33:50.732398Z', shell.execute_reply: '2021-05-06T14:33:50.731763Z'}
+#| papermill: {duration: 0.078475, end_time: '2021-05-06T14:33:50.732537', exception: false, start_time: '2021-05-06T14:33:50.654062', status: completed}
+#| tags: []
+# Maxpool
+max_pool_fig = F.max_pool2d(fmap_fig, kernel_size=2)
+print("\nMax pool")
+print("Shape: {}".format(max_pool_fig.shape))
+print(torch.squeeze(max_pool_fig))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:50.869541Z', iopub.status.busy: '2021-05-06T14:33:50.868936Z', iopub.status.idle: '2021-05-06T14:33:50.876176Z', shell.execute_reply: '2021-05-06T14:33:50.876765Z'}
+#| papermill: {duration: 0.077629, end_time: '2021-05-06T14:33:50.876936', exception: false, start_time: '2021-05-06T14:33:50.799307', status: completed}
+#| tags: []
+# Avgpool
+avg_pool_fig = F.avg_pool2d(fmap_fig, kernel_size=2)
+print("\nAvg pool")
+print("Shape: {}".format(avg_pool_fig.shape))
+print(torch.squeeze(avg_pool_fig))
+```
+
+### 3.2. Striding
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:51.153834Z', iopub.status.busy: '2021-05-06T14:33:51.153262Z', iopub.status.idle: '2021-05-06T14:33:51.158458Z', shell.execute_reply: '2021-05-06T14:33:51.157921Z'}
+#| papermill: {duration: 0.075356, end_time: '2021-05-06T14:33:51.158593', exception: false, start_time: '2021-05-06T14:33:51.083237', status: completed}
+#| tags: []
+# Since striding is part of the convolution operation, we'll start with the feature maps before the 2nd convolution
+print("Shape of conv1 feature maps: {0}".format(conv1.shape))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:33:51.298959Z', iopub.status.busy: '2021-05-06T14:33:51.298284Z', iopub.status.idle: '2021-05-06T14:33:51.310016Z', shell.execute_reply: '2021-05-06T14:33:51.310594Z'}
+#| papermill: {duration: 0.084764, end_time: '2021-05-06T14:33:51.310775', exception: false, start_time: '2021-05-06T14:33:51.226011', status: completed}
+#| tags: []
+# Apply 2nd convolutional layer, with striding of 2
+conv2_strided = F.relu(F.conv2d(conv1, W2, bias=b2, stride=2, padding=1))
+
+# Print output shape
+print("Shape of conv2 feature maps with stride of 2: {0}".format(conv2_strided.shape))
+```
+
+# Custom CNN
+---
+
+Finally we will be creating a custom CNN model. This is combination of all what we had explored till now. Also we will be using a libraryt named torchsummary to look closely into our cutom model later. Follow the comments in the next few cells to understand better.
+
+```{python}
+#| _kg_hide-input: true
+#| execution: {iopub.execute_input: '2021-05-06T14:33:51.590073Z', iopub.status.busy: '2021-05-06T14:33:51.589500Z', iopub.status.idle: '2021-05-06T14:34:00.322024Z', shell.execute_reply: '2021-05-06T14:34:00.321073Z'}
+#| papermill: {duration: 8.80494, end_time: '2021-05-06T14:34:00.322177', exception: false, start_time: '2021-05-06T14:33:51.517237', status: completed}
+#| tags: []
+!pip install torchsummary
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:34:00.477405Z', iopub.status.busy: '2021-05-06T14:34:00.476287Z', iopub.status.idle: '2021-05-06T14:34:00.483537Z', shell.execute_reply: '2021-05-06T14:34:00.482662Z'}
+#| papermill: {duration: 0.084816, end_time: '2021-05-06T14:34:00.483718', exception: false, start_time: '2021-05-06T14:34:00.398902', status: completed}
+#| tags: []
+import torch.nn as nn
+from torchsummary import summary
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:34:00.648335Z', iopub.status.busy: '2021-05-06T14:34:00.647701Z', iopub.status.idle: '2021-05-06T14:34:00.650702Z', shell.execute_reply: '2021-05-06T14:34:00.650222Z'}
+#| papermill: {duration: 0.087564, end_time: '2021-05-06T14:34:00.650835', exception: false, start_time: '2021-05-06T14:34:00.563271', status: completed}
+#| tags: []
+class Custom_CNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=5, padding=2) #Convolution Layer
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=5, padding=2) #Convolution Layer
+        self.fc1 = nn.Linear(7*7*64, 256) #Fully Connected Layer
+        self.fc2 = nn.Linear(256, 2) #Fully Connected Layer(Final Output Layer)
+
+    def forward(self, x):
+        #First Layer with Convolution, ReLU and Max Pooling
+        x = self.conv1(x)
+        x = F.relu(x)
+        x = F.max_pool2d(x, kernel_size=2)
+        
+        #Second Layer with Convolution, ReLU and Max Pooling
+        x = self.conv2(x)
+        x = F.relu(x)
+        x = F.max_pool2d(x, kernel_size=2)
+        
+        #Fully Connected Layer with activation function
+        x = x.view(-1 , 7*7*64)
+        x = self.fc1(x)
+        x = F.relu(x)
+        
+        #Fully connected layer : Final Output Layer
+        x = self.fc2(x)
+        return x
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:34:00.801163Z', iopub.status.busy: '2021-05-06T14:34:00.800590Z', iopub.status.idle: '2021-05-06T14:34:00.819586Z', shell.execute_reply: '2021-05-06T14:34:00.819065Z'}
+#| papermill: {duration: 0.09643, end_time: '2021-05-06T14:34:00.819729', exception: false, start_time: '2021-05-06T14:34:00.723299', status: completed}
+#| tags: []
+model = Custom_CNN()
+model
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-05-06T14:34:00.972423Z', iopub.status.busy: '2021-05-06T14:34:00.971751Z', iopub.status.idle: '2021-05-06T14:34:00.996887Z', shell.execute_reply: '2021-05-06T14:34:00.997608Z'}
+#| papermill: {duration: 0.106254, end_time: '2021-05-06T14:34:00.997843', exception: false, start_time: '2021-05-06T14:34:00.891589', status: completed}
+#| tags: []
+summary(model, (3,28,28))
+```
+
+# END
+
+- What next?
+    - This notebook only introduces the model development part. I will be posting next notebook on training the network. Until then you may check and upvote if you like: 
+    
+        1. [PyTorch Logistic Regression](https://www.kaggle.com/pr2tik1/logistic-regression-in-pytorch-from-scratch)
+        2. [PyTorch MLP](https://www.kaggle.com/pr2tik1/multi-layered-perceptron-pytorch)
+        3. [Other Data Science Notebooks](https://www.kaggle.com/pr2tik1/code)
+
+
+- References:
+
+    1. https://www.coursera.org/learn/machine-learning-duke
+    2. http://d2l.ai
+    3. https://machinelearningmastery.com 
+    4. https://cs231n.github.io/convolutional-networks/
+    5. https://pytorch.org/tutorials/
+    6. All the images are directly rendered from there respective websites. Please visit by accessing them from markdown.
+    
+- Author: Pratik Kumar
+

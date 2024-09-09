@@ -1,0 +1,510 @@
+---
+title: Loan Status Prediction
+image: ../post-images/11.jpg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2021-04-25'
+categories:
+  - Data Science
+  - Data Visualization
+  - Python
+  - Machine Learning
+  - Feature Engineering
+  - Kaggle
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+The goal of this project is to develop an automated system for predicting loan eligibility based on customer details provided through an online application form. The company aims to streamline and optimize their loan approval process by leveraging data to identify customer segments that are most likely to be eligible for a loan. This will enable targeted marketing and more efficient processing of applications.
+
+### Problem Statement
+
+The company has provided a dataset with customer information, including the following features:
+- **Gender**: The gender of the applicant.
+- **Marital Status**: Whether the applicant is married or not.
+- **Education**: The education level of the applicant.
+- **Number of Dependents**: The number of people financially dependent on the applicant.
+- **Income**: The applicant's monthly income.
+- **Loan Amount**: The amount of loan applied for.
+- **Credit History**: A record of the applicant's past credit behavior.
+- **Others**: Any additional relevant features.
+
+The task is to use this data to identify which customers are eligible for a loan. This involves segmenting the customers into groups based on their likelihood of being approved for a loan. The dataset provided is partial, and the challenge is to work with the available data to build a predictive model.
+
+## Importing Libraries
+
+```{python}
+import  numpy as np
+import  pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+```{python}
+from sklearn.model_selection import train_test_split
+from sklearn import feature_selection
+from sklearn import model_selection
+from sklearn.metrics import accuracy_score 
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
+from sklearn.neighbors import KNeighborsClassifier
+
+import warnings
+warnings.filterwarnings('ignore')
+```
+
+## Importing data 
+
+```{python}
+train = pd.read_csv('../input/loan-prediction-problem-dataset/train_u6lujuX_CVtuZ9i.csv')
+test = pd.read_csv('../input/loan-prediction-problem-dataset/test_Y3wMUE5_7gLdaTN.csv')
+```
+
+```{python}
+print (train.shape, test.shape)
+```
+
+## Data Exploration
+
+```{python}
+train.head() 
+```
+
+```{python}
+train.info() 
+```
+
+```{python}
+train.isnull().sum()
+```
+
+```{python}
+test.head()
+```
+
+```{python}
+test.info()
+```
+
+```{python}
+test.isnull().sum()
+```
+
+## Data Preparation / Processing
+
+```{python}
+data = [train,test]
+for dataset in data:
+    #Filter categorical variables
+    categorical_columns = [x for x in dataset.dtypes.index if dataset.dtypes[x]=='object']
+    # Exclude ID cols and source:
+    categorical_columns = [x for x in categorical_columns if x not in ['Loan_ID' ]]
+    #Print frequency of categories
+    
+for col in categorical_columns:
+    print ('\nFrequency of Categories for variable %s'%col)
+    print (train[col].value_counts())
+```
+
+### Gender
+
+```{python}
+sns.countplot(train['Gender'])
+```
+
+```{python}
+pd.crosstab(train.Gender, train.Loan_Status, margins = True)
+```
+
+The male are in large number as compared to female applicants.Also many of them have positive Loan Status. Further Binarization of this feature should be done,
+
+```{python}
+train.Gender = train.Gender.fillna(train.Gender.mode())
+test.Gender = test.Gender.fillna(test.Gender.mode())
+
+sex = pd.get_dummies(train['Gender'] , drop_first = True )
+train.drop(['Gender'], axis = 1 , inplace =True)
+train = pd.concat([train , sex ] , axis = 1)
+
+sex = pd.get_dummies(test['Gender'] , drop_first = True )
+test.drop(['Gender'], axis = 1 , inplace =True)
+test = pd.concat([test , sex ] , axis = 1)
+```
+
+### Dependants
+
+```{python}
+plt.figure(figsize=(6,6))
+labels = ['0' , '1', '2' , '3+']
+explode = (0.05, 0, 0, 0)
+size = [345 , 102 , 101 , 51]
+
+plt.pie(size, explode=explode, labels=labels,
+        autopct='%1.1f%%', shadow = True, startangle = 90)
+plt.axis('equal')
+plt.show()
+```
+
+```{python}
+train.Dependents.value_counts()
+```
+
+```{python}
+pd.crosstab(train.Dependents , train.Loan_Status, margins = True)
+```
+
+The applicants with highest number of dependants are least in number whereas applicants with no dependance are greatest among these.
+
+```{python}
+train.Dependents = train.Dependents.fillna("0")
+test.Dependents = test.Dependents.fillna("0")
+
+rpl = {'0':'0', '1':'1', '2':'2', '3+':'3'}
+
+train.Dependents = train.Dependents.replace(rpl).astype(int)
+test.Dependents = test.Dependents.replace(rpl).astype(int)
+```
+
+### Credit History
+
+```{python}
+pd.crosstab(train.Credit_History , train.Loan_Status, margins = True)
+```
+
+```{python}
+train.Credit_History = train.Credit_History.fillna(train.Credit_History.mode()[0])
+test.Credit_History  = test.Credit_History.fillna(test.Credit_History.mode()[0])
+```
+
+#### Self Employed
+
+```{python}
+sns.countplot(train['Self_Employed'])
+```
+
+```{python}
+pd.crosstab(train.Self_Employed , train.Loan_Status,margins = True)
+```
+
+```{python}
+train.Self_Employed = train.Self_Employed.fillna(train.Self_Employed.mode())
+test.Self_Employed = test.Self_Employed.fillna(test.Self_Employed.mode())
+
+self_Employed = pd.get_dummies(train['Self_Employed'] ,prefix = 'employed' ,drop_first = True )
+train.drop(['Self_Employed'], axis = 1 , inplace =True)
+train = pd.concat([train , self_Employed ] , axis = 1)
+
+self_Employed = pd.get_dummies(test['Self_Employed'] , prefix = 'employed' ,drop_first = True )
+test.drop(['Self_Employed'], axis = 1 , inplace =True)
+test = pd.concat([test , self_Employed ] , axis = 1)
+```
+
+### Married
+
+```{python}
+sns.countplot(train.Married)
+```
+
+```{python}
+pd.crosstab(train.Married , train.Loan_Status,margins = True)
+```
+
+```{python}
+train.Married = train.Married.fillna(train.Married.mode())
+test.Married = test.Married.fillna(test.Married.mode())
+
+married = pd.get_dummies(train['Married'] , prefix = 'married',drop_first = True )
+train.drop(['Married'], axis = 1 , inplace =True)
+train = pd.concat([train , married ] , axis = 1)
+
+married = pd.get_dummies(test['Married'] , prefix = 'married', drop_first = True )
+test.drop(['Married'], axis = 1 , inplace =True)
+test = pd.concat([test , married ] , axis = 1)
+```
+
+### Loan Amount Term and Loan Amount
+
+```{python}
+train.drop(['Loan_Amount_Term'], axis = 1 , inplace =True)
+test.drop(['Loan_Amount_Term'], axis = 1 , inplace =True)
+
+train.LoanAmount = train.LoanAmount.fillna(train.LoanAmount.mean()).astype(int)
+test.LoanAmount = test.LoanAmount.fillna(test.LoanAmount.mean()).astype(int)
+```
+
+```{python}
+sns.distplot(train['LoanAmount'])
+```
+
+We observe no outliers in the continuous variable Loan Amount
+
+### Education
+
+```{python}
+sns.countplot(train.Education)
+```
+
+```{python}
+train['Education'] = train['Education'].map( {'Graduate': 0, 'Not Graduate': 1} ).astype(int)
+test['Education'] = test['Education'].map( {'Graduate': 0, 'Not Graduate': 1} ).astype(int)
+```
+
+### Property Area
+
+```{python}
+sns.countplot(train.Property_Area)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T06:55:50.624902Z', iopub.status.busy: '2021-04-22T06:55:50.624155Z', iopub.status.idle: '2021-04-22T06:55:50.627623Z', shell.execute_reply: '2021-04-22T06:55:50.627065Z'}
+#| papermill: {duration: 0.093231, end_time: '2021-04-22T06:55:50.627782', exception: false, start_time: '2021-04-22T06:55:50.534551', status: completed}
+#| tags: []
+train['Property_Area'] = train['Property_Area'].map( {'Urban': 0, 'Semiurban': 1 ,'Rural': 2  } ).astype(int)
+
+test.Property_Area = test.Property_Area.fillna(test.Property_Area.mode())
+test['Property_Area'] = test['Property_Area'].map( {'Urban': 0, 'Semiurban': 1 ,'Rural': 2  } ).astype(int)
+```
+
+### Co-Applicant income and Applicant income
+
+```{python}
+sns.distplot(train['ApplicantIncome'])
+```
+
+```{python}
+sns.distplot(train['CoapplicantIncome'])
+```
+
+### Target Variable : Loan Status
+
+```{python}
+train['Loan_Status'] = train['Loan_Status'].map( {'N': 0, 'Y': 1 } ).astype(int)
+```
+
+#### Dropping the ID column
+
+```{python}
+train.drop(['Loan_ID'], axis = 1 , inplace =True)
+```
+
+## View the datasets
+
+```{python}
+train.head()
+```
+
+```{python}
+test.head()
+```
+
+# Visualizing the correlations and relation
+
+### Plot between LoanAmount, Applicant Income, Employement and Gender
+
+*What is the relation of Loan taken between men and women?<br> Did the employed ones were greater in number to take Loan ?<br> What is distribution of Loan Amount and Income?*
+
+```{python}
+# Corrected code using height instead of size
+g = sns.lmplot(x='ApplicantIncome', y='LoanAmount', data=train, col='employed_Yes', hue='Male',
+               palette=["Red", "Blue", "Yellow"], aspect=1.2, height=3)
+g.set(ylim=(0, 800))
+# Relation between the male or female applicant's income, loan taken, and self-employment status.
+```
+
+- Above graph tells:
+    - The male applicants take more amount of loan than female.
+    - The males are higher in number of "NOT self employed" category.
+    - The amount is still larger in the income range in (0 to 20000).
+    - Also we observe that majority of applicants are NOT self employed.
+    - Highest Loan amount taken is by the female applicant of about 700 which is NOT self employed.
+    - The majority of income taken is about 0-200 with income in the range 0-20000. 
+    - The line plotted shows that with increase in income the amount of loan increases with almost same slope for the case of women in both the cases but a slightely lesser slope in the case of men in Self- Employed category as compared to non-self employed.
+
+## Boxplots for relation between Property area, amount of Loan and Education qualification 
+
+Further we analyse the relation between education status,loan taken and property area 
+
+- Property_Area: 
+    - `Urban      :0`
+    - `Semiurban  :1`
+    - `Rural      :2`
+
+```{python}
+plt.figure(figsize=(5,2))
+sns.boxplot(x="Property_Area", y="LoanAmount", hue="Education",data=train, palette="coolwarm")
+```
+
+- The above boxplot signifies that,
+    - In the Urban area the non graduates take slightly more loan than graduates. 
+    - In the Rural and semiurban area the graduates take more amount of Loan than non graduates 
+    - The higher values of Loan are mostly from Urban area 
+    - The semiurban area and rural area both have one unusual Loan amount close to zero.
+
+## Crosstab for relation between Credit History and Loan status.
+
+```{python}
+train.Credit_History.value_counts()
+```
+
+```{python}
+lc = pd.crosstab(train['Credit_History'], train['Loan_Status'])
+lc.plot(kind='bar', stacked=True, color=['red','blue'], grid=False)
+```
+
+- The credit history vs Loan Status indicates:
+    - The good credit history applicants have more chances of getting Loan.
+    - With better credit History the Loan amount given was greater too.
+    - But many were not given loan in the range 0-100
+    - The applicant with poor credit history were handled in the range 0-100 only.
+
+```{python}
+plt.figure(figsize=(9,6))
+sns.heatmap(train.drop('Loan_Status',axis=1).corr(), vmax=0.6, square=True, annot=True)
+```
+
+## Prediction
+
+The problem is of **Classification** as observed and concluded from the data and visualisations.
+
+```{python}
+X = train.drop('Loan_Status' , axis = 1 )
+y = train['Loan_Status']
+
+X_train ,X_test , y_train , y_test = train_test_split(X , y , test_size = 0.3 , random_state =102)
+```
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+logmodel = LogisticRegression()
+logmodel.fit(X_train , y_train)
+pred_l = logmodel.predict(X_test)
+acc_l = accuracy_score(y_test , pred_l)*100
+acc_l
+```
+
+```{python}
+random_forest = RandomForestClassifier(n_estimators= 100)
+random_forest.fit(X_train, y_train)
+pred_rf = random_forest.predict(X_test)
+acc_rf = accuracy_score(y_test , pred_rf)*100
+acc_rf
+```
+
+```{python}
+knn = KNeighborsClassifier(n_neighbors = 3)
+knn.fit(X_train, y_train)
+pred_knn = knn.predict(X_test)
+acc_knn = accuracy_score(y_test , pred_knn)*100
+acc_knn
+```
+
+```{python}
+gaussian = GaussianNB()
+gaussian.fit(X_train, y_train)
+pred_gb = gaussian.predict(X_test)
+acc_gb = accuracy_score(y_test , pred_gb)*100
+acc_gb
+```
+
+```{python}
+svc = SVC()
+svc.fit(X_train, y_train)
+pred_svm = svc.predict(X_test)
+acc_svm = accuracy_score(y_test , pred_svm)*100
+acc_svm
+```
+
+```{python}
+gbk = GradientBoostingClassifier()
+gbk.fit(X_train, y_train)
+pred_gbc = gbk.predict(X_test)
+acc_gbc = accuracy_score(y_test , pred_gbc)*100
+acc_gbc
+```
+
+```{python}
+## Arranging the Accuracy results
+models = pd.DataFrame({
+    'Model': ['Logistic Regression', 'Random Forrest','K- Nearest Neighbour' ,
+             'Naive Bayes' , 'SVM','Gradient Boosting Classifier'],
+    'Score': [acc_l , acc_rf , acc_knn , acc_gb ,acc_svm ,acc_gbc ]})
+models.sort_values(by='Score', ascending=False)
+```
+
+The highest classification accuracy is shown by Logistic Regression of about 83.24 %
+
+Let us Check th feature importance,
+
+```{python}
+importances = pd.DataFrame({'Features':X_train.columns,'Importance':np.round(random_forest.feature_importances_,3)})
+importances = importances.sort_values('Importance',ascending=False).set_index('Features')
+importances.head(11) 
+```
+
+```{python}
+importances.plot.bar()
+```
+
+Credit History has the maximum importance and empoloyment has the least!
+
+### Summarizing
+
+The Loan status has better relation with features such as Credit History, Applicant's Income, Loan Amount needed by them, Family status(Depenedents) and Property Area which are generally considered by the loan providing organisations. These factors are hence used to take correct decisions to provide loan status or not. This data analysis hence gives a realisation of features and the relation between them from the older decision examples hence giving a learning to predict the class of the unseen data. 
+
+Finally the we predict over unseen dataset using the Logistic Regression and Random Forest model(**Ensemble Learning**): 
+
+```{python}
+df_test = test.drop(['Loan_ID'], axis = 1)
+```
+
+```{python}
+df_test.head()
+```
+
+```{python}
+p_log = logmodel.predict(df_test)
+```
+
+```{python}
+p_rf = random_forest.predict(df_test)
+```
+
+```{python}
+predict_combine = np.zeros((df_test.shape[0]))
+
+for i in range(0, test.shape[0]):
+    temp = p_log[i] + p_rf[i]
+    if temp>=2:
+        predict_combine[i] = 1
+predict_combine = predict_combine.astype('int')
+```
+
+```{python}
+submission = pd.DataFrame({
+        "Loan_ID": test["Loan_ID"],
+        "Loan_Status": predict_combine
+    })
+
+submission.to_csv("results.csv", encoding='utf-8', index=False)
+```
+
+# Thank you
+
+Author: [Pratik Kumar](https://pr2tik1.github.io)
+

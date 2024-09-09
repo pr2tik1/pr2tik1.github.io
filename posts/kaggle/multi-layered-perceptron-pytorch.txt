@@ -1,0 +1,278 @@
+---
+title: Digit Recognition using MLP in PyTorch
+image: ../post-images/5.jpg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2021-03-10'
+categories:
+  - Data Science
+  - Data Visualization
+  - Python
+  - Machine Learning
+  - Feature Engineering
+  - Kaggle
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+In this competition, our goal is to correctly identify digits from a dataset of tens of thousands of handwritten images using custom multi-layered perceptron.
+
+
+## 1. Importing Libraries
+---
+
+```{python}
+#| _cell_guid: 79c7e3d0-c299-4dcb-8224-4455121ee9b0
+#| _uuid: d629ff2d2480ee46fbb7e2d37f6b5fab8052498a
+#| execution: {iopub.execute_input: '2021-04-21T19:31:30.182049Z', iopub.status.busy: '2021-04-21T19:31:30.180005Z', iopub.status.idle: '2021-04-21T19:31:33.059949Z', shell.execute_reply: '2021-04-21T19:31:33.058473Z'}
+#| papermill: {duration: 2.905942, end_time: '2021-04-21T19:31:33.060145', exception: false, start_time: '2021-04-21T19:31:30.154203', status: completed}
+#| tags: []
+#Importing all libraries
+import torch
+from torch import nn
+import torch.nn.functional as F
+from torch import optim
+
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader, TensorDataset, Dataset
+from torchvision.utils import make_grid
+from torch.autograd import Variable
+
+import time
+import helper
+from tqdm import tqdm
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+%matplotlib inline
+```
+
+## 2. Importing Dataset
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:33.151974Z', iopub.status.busy: '2021-04-21T19:31:33.151254Z', iopub.status.idle: '2021-04-21T19:31:40.531685Z', shell.execute_reply: '2021-04-21T19:31:40.530016Z'}
+#| papermill: {duration: 7.407805, end_time: '2021-04-21T19:31:40.531840', exception: false, start_time: '2021-04-21T19:31:33.124035', status: completed}
+#| tags: []
+#Import data
+train_df = pd.read_csv('../input/digit-recognizer/train.csv')
+test_df = pd.read_csv('../input/digit-recognizer/test.csv')
+```
+
+## 3. Train and Validation datasets
+---
+Splitting dataset into train and validation. Also converting them to float values.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:40.628258Z', iopub.status.busy: '2021-04-21T19:31:40.627193Z', iopub.status.idle: '2021-04-21T19:31:41.108765Z', shell.execute_reply: '2021-04-21T19:31:41.108085Z'}
+#| papermill: {duration: 0.513455, end_time: '2021-04-21T19:31:41.108941', exception: false, start_time: '2021-04-21T19:31:40.595486', status: completed}
+#| tags: []
+#Labels(Targets) and Inputs
+train_labels = train_df['label'].values
+train_images = (train_df.iloc[:,1:].values).astype('float32')
+test_images = (test_df.iloc[:,:].values).astype('float32')
+
+#Training and Validation Split
+train_images, val_images, train_labels, val_labels = train_test_split(train_images,  train_labels, stratify=train_labels,  random_state=302, test_size=0.2)
+```
+
+## 4. Reshaping the data to make Tensors
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:41.209115Z', iopub.status.busy: '2021-04-21T19:31:41.208330Z', iopub.status.idle: '2021-04-21T19:31:41.524132Z', shell.execute_reply: '2021-04-21T19:31:41.523549Z'}
+#| papermill: {duration: 0.350236, end_time: '2021-04-21T19:31:41.524278', exception: false, start_time: '2021-04-21T19:31:41.174042', status: completed}
+#| tags: []
+#train
+train_images_tensor = torch.tensor(train_images)/255.0
+train_labels_tensor = torch.tensor(train_labels)
+train_tensor = TensorDataset(train_images_tensor, train_labels_tensor)
+#val
+val_images_tensor = torch.tensor(val_images)/255.0
+val_labels_tensor = torch.tensor(val_labels)
+val_tensor = TensorDataset(val_images_tensor, val_labels_tensor)
+#test
+test_images_tensor = torch.tensor(test_images)/255.0
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:41.576187Z', iopub.status.busy: '2021-04-21T19:31:41.575292Z', iopub.status.idle: '2021-04-21T19:31:41.580534Z', shell.execute_reply: '2021-04-21T19:31:41.581075Z'}
+#| papermill: {duration: 0.035729, end_time: '2021-04-21T19:31:41.581221', exception: false, start_time: '2021-04-21T19:31:41.545492', status: completed}
+#| tags: []
+#View Tensor shapes 
+train_images_tensor.shape, train_labels_tensor.shape 
+```
+
+## 5. Viewing the Images
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:41.695239Z', iopub.status.busy: '2021-04-21T19:31:41.694425Z', iopub.status.idle: '2021-04-21T19:31:42.379076Z', shell.execute_reply: '2021-04-21T19:31:42.378461Z'}
+#| papermill: {duration: 0.731891, end_time: '2021-04-21T19:31:42.379221', exception: false, start_time: '2021-04-21T19:31:41.647330', status: completed}
+#| tags: []
+fig, axes = plt.subplots(2,5, figsize=(12,6))
+axes = axes.flatten()
+idx = np.random.randint(0,5000,size=10)
+for i in range(10):
+    axes[i].imshow(train_images[idx[i],:].reshape(28,28), cmap='gray')
+    axes[i].axis('off') # hide the axes ticks
+    axes[i].set_title(str(int(train_labels[idx[i]])), color= 'black', fontsize=25)
+plt.show()
+```
+
+## 6. Feeding tensors to data loader
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:42.484362Z', iopub.status.busy: '2021-04-21T19:31:42.482332Z', iopub.status.idle: '2021-04-21T19:31:42.485231Z', shell.execute_reply: '2021-04-21T19:31:42.485816Z'}
+#| papermill: {duration: 0.035053, end_time: '2021-04-21T19:31:42.486028', exception: false, start_time: '2021-04-21T19:31:42.450975', status: completed}
+#| tags: []
+#Dataloader
+train_loader = DataLoader(train_tensor, batch_size = 64, num_workers=2, shuffle=True)
+val_loader = DataLoader(val_tensor, batch_size = 64, num_workers=2, shuffle=True)
+test_loader = DataLoader(test_images_tensor, batch_size = 32, num_workers=2, shuffle=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:42.542406Z', iopub.status.busy: '2021-04-21T19:31:42.540681Z', iopub.status.idle: '2021-04-21T19:31:42.545834Z', shell.execute_reply: '2021-04-21T19:31:42.545249Z'}
+#| papermill: {duration: 0.035729, end_time: '2021-04-21T19:31:42.546004', exception: false, start_time: '2021-04-21T19:31:42.510275', status: completed}
+#| tags: []
+len(train_loader)
+```
+
+## 7. Defining Model Architecture
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:42.646949Z', iopub.status.busy: '2021-04-21T19:31:42.646114Z', iopub.status.idle: '2021-04-21T19:31:43.287932Z', shell.execute_reply: '2021-04-21T19:31:43.287302Z'}
+#| papermill: {duration: 0.671723, end_time: '2021-04-21T19:31:43.288083', exception: false, start_time: '2021-04-21T19:31:42.616360', status: completed}
+#| tags: []
+model = nn.Sequential(nn.Linear(784, 512),
+                      nn.LeakyReLU(),
+                      nn.Linear(512, 256),
+                      nn.BatchNorm1d(256),
+                      nn.LeakyReLU(),
+                      nn.Linear(256, 10),
+                      nn.LogSoftmax(dim=1))
+
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=1e-5)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu" )
+device
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:43.347177Z', iopub.status.busy: '2021-04-21T19:31:43.346398Z', iopub.status.idle: '2021-04-21T19:31:48.163633Z', shell.execute_reply: '2021-04-21T19:31:48.162596Z'}
+#| papermill: {duration: 4.850897, end_time: '2021-04-21T19:31:48.163780', exception: false, start_time: '2021-04-21T19:31:43.312883', status: completed}
+#| tags: []
+model.to(device)
+model
+```
+
+## 8. Functions for training and evaluation
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:48.276226Z', iopub.status.busy: '2021-04-21T19:31:48.275551Z', iopub.status.idle: '2021-04-21T19:31:48.496154Z', shell.execute_reply: '2021-04-21T19:31:48.494792Z'}
+#| papermill: {duration: 0.252343, end_time: '2021-04-21T19:31:48.496325', exception: false, start_time: '2021-04-21T19:31:48.243982', status: completed}
+#| tags: []
+from utility import train_model, cal_accuracy
+```
+
+## 9. Training the model over train dataset
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:31:48.615650Z', iopub.status.busy: '2021-04-21T19:31:48.614736Z', iopub.status.idle: '2021-04-21T19:33:13.757375Z', shell.execute_reply: '2021-04-21T19:33:13.756626Z'}
+#| papermill: {duration: 85.177894, end_time: '2021-04-21T19:33:13.757592', exception: false, start_time: '2021-04-21T19:31:48.579698', status: completed}
+#| tags: []
+train_l, valid_l, train_a, valid_a= train_model(model, 20, train_loader, val_loader, 
+            optimizer, criterion, device, model_save=True, model_name="model.pt")
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:33:13.854782Z', iopub.status.busy: '2021-04-21T19:33:13.853663Z', iopub.status.idle: '2021-04-21T19:33:14.064176Z', shell.execute_reply: '2021-04-21T19:33:14.063634Z'}
+#| papermill: {duration: 0.272167, end_time: '2021-04-21T19:33:14.064325', exception: false, start_time: '2021-04-21T19:33:13.792158', status: completed}
+#| tags: []
+plt.plot(train_l, label='Training loss')
+plt.plot(valid_l, label='Validation loss')
+plt.legend(frameon=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:33:14.174544Z', iopub.status.busy: '2021-04-21T19:33:14.172797Z', iopub.status.idle: '2021-04-21T19:33:14.352936Z', shell.execute_reply: '2021-04-21T19:33:14.352061Z'}
+#| papermill: {duration: 0.252394, end_time: '2021-04-21T19:33:14.353082', exception: false, start_time: '2021-04-21T19:33:14.100688', status: completed}
+#| tags: []
+plt.plot(train_a, label='Training Acc')
+plt.plot(valid_a, label='Validation Acc')
+plt.legend(frameon=False)
+```
+
+## 10. Loading the saved model
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:33:14.511433Z', iopub.status.busy: '2021-04-21T19:33:14.510535Z', iopub.status.idle: '2021-04-21T19:33:14.523729Z', shell.execute_reply: '2021-04-21T19:33:14.522995Z'}
+#| papermill: {duration: 0.05752, end_time: '2021-04-21T19:33:14.523926', exception: false, start_time: '2021-04-21T19:33:14.466406', status: completed}
+#| tags: []
+model.load_state_dict(torch.load('model.pt'))
+```
+
+## 11. Prediction
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:33:14.686922Z', iopub.status.busy: '2021-04-21T19:33:14.686026Z', iopub.status.idle: '2021-04-21T19:33:14.691510Z', shell.execute_reply: '2021-04-21T19:33:14.690473Z'}
+#| papermill: {duration: 0.052645, end_time: '2021-04-21T19:33:14.691691', exception: false, start_time: '2021-04-21T19:33:14.639046', status: completed}
+#| tags: []
+def make_predictions(data_loader):
+    model.eval()
+    test_preds = torch.LongTensor()
+    
+    for i, data in enumerate(data_loader):
+        data = data.view(-1, 28*28).to(device)
+        output = model(data)
+        preds = output.data.max(1, keepdim=True)[1]
+        test_preds = torch.cat((test_preds.to(device), preds.to(device)), dim=0)
+    return test_preds
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:33:14.776612Z', iopub.status.busy: '2021-04-21T19:33:14.775454Z', iopub.status.idle: '2021-04-21T19:33:16.931467Z', shell.execute_reply: '2021-04-21T19:33:16.930045Z'}
+#| papermill: {duration: 2.201581, end_time: '2021-04-21T19:33:16.931661', exception: false, start_time: '2021-04-21T19:33:14.730080', status: completed}
+#| tags: []
+test_set_preds = make_predictions(test_loader)
+```
+
+## 12. Submission
+---
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-21T19:33:17.091619Z', iopub.status.busy: '2021-04-21T19:33:17.090781Z', iopub.status.idle: '2021-04-21T19:33:17.363057Z', shell.execute_reply: '2021-04-21T19:33:17.361742Z'}
+#| papermill: {duration: 0.321376, end_time: '2021-04-21T19:33:17.363310', exception: false, start_time: '2021-04-21T19:33:17.041934', status: completed}
+#| tags: []
+sub = pd.read_csv("../input/digit-recognizer/sample_submission.csv")
+sub['Label'] = test_set_preds.cpu().numpy().squeeze()
+sub.to_csv("MLP#1.csv", index=False)
+sub.head()
+```
+
+# Thank you!
+
+Author: Pratik Kumar
+

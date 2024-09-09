@@ -1,0 +1,46 @@
+---
+title: Building a Web Server from scratch
+image: ../post-images/6.jpg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2024-09-12'
+categories:
+  - System Design
+  - Python
+  - REST API
+  - Web Application
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+
+## Introduction
+Building my a web server from scratch was an exciting challenge that pushed me to understand the fundamentals of networking, HTTP protocols, and server architecture. 
+It’s a rewarding way to dive deep into how web servers work behind the scenes and learn how to handle requests, manage connections, and serve content efficiently.
+
+## Requirements and Goals
+
+## Design and Considerations
+
+## Implementation Details
+
+## Challenges and Solutions
+
+## Testing and Validations
+
+## Security Considerations
+
+## Conclusion

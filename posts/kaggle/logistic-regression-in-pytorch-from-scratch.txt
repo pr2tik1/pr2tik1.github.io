@@ -1,0 +1,445 @@
+---
+title: Logistic Regression using PyTorch
+image: ../post-images/5.jpg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2021-03-10'
+categories:
+  - Data Science
+  - Data Visualization
+  - Python
+  - Machine Learning
+  - Feature Engineering
+  - Kaggle
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+
+Logisitc Regression is a linear classifier, which is very simple to understand. This forms one of the reason why neural networks are used and how are they better when compared to linear classifier like Logisitc Regression. The Logisitc Regression model is "linear" because of its decision boundary is linear. This is good for simple datasets to classify them into multi or binary classes.
+
+It's training or learning process can be broken down to forward and backward passes. We will be using the widely used MNIST data for multi-class image classification and PyTorch to implement model from scratch.    
+
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:03:52.887225Z', iopub.status.busy: '2021-04-22T07:03:52.885465Z', iopub.status.idle: '2021-04-22T07:03:53.989071Z', shell.execute_reply: '2021-04-22T07:03:53.987751Z'}
+#| papermill: {duration: 1.139796, end_time: '2021-04-22T07:03:53.989254', exception: false, start_time: '2021-04-22T07:03:52.849458', status: completed}
+#| tags: []
+#Importing Libraries
+import numpy as np 
+import matplotlib.pyplot as plt 
+from tqdm.notebook import tqdm
+import numpy as np
+import pandas as pd
+import seaborn as sns 
+
+from sklearn.model_selection import train_test_split
+%matplotlib inline
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:03:54.055591Z', iopub.status.busy: '2021-04-22T07:03:54.054936Z', iopub.status.idle: '2021-04-22T07:03:55.236857Z', shell.execute_reply: '2021-04-22T07:03:55.236286Z'}
+#| papermill: {duration: 1.216833, end_time: '2021-04-22T07:03:55.237034', exception: false, start_time: '2021-04-22T07:03:54.020201', status: completed}
+#| tags: []
+import torch 
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader, TensorDataset, Dataset
+
+import torch.nn.functional as F
+```
+
+## 1. Data
+
+Our dataset is not in the form of images, but is in the form of csv. We will be separating the labels values and pixel intensity values from the columns of dataframe.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:03:55.363917Z', iopub.status.busy: '2021-04-22T07:03:55.363290Z', iopub.status.idle: '2021-04-22T07:04:01.471671Z', shell.execute_reply: '2021-04-22T07:04:01.472228Z'}
+#| papermill: {duration: 6.144339, end_time: '2021-04-22T07:04:01.472395', exception: false, start_time: '2021-04-22T07:03:55.328056', status: completed}
+#| tags: []
+train = pd.read_csv('/kaggle/input/digit-recognizer/train.csv')
+test = pd.read_csv('/kaggle/input/digit-recognizer/test.csv')
+train.shape, test.shape
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:01.547624Z', iopub.status.busy: '2021-04-22T07:04:01.546658Z', iopub.status.idle: '2021-04-22T07:04:01.674736Z', shell.execute_reply: '2021-04-22T07:04:01.674170Z'}
+#| papermill: {duration: 0.170936, end_time: '2021-04-22T07:04:01.674874', exception: false, start_time: '2021-04-22T07:04:01.503938', status: completed}
+#| tags: []
+#Labels(Targets) and Inputs
+train_labels = train['label'].values
+train_images = (train.iloc[:,1:].values).astype('float32')
+test_images = (test.iloc[:,:].values).astype('float32')
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:01.743105Z', iopub.status.busy: '2021-04-22T07:04:01.741804Z', iopub.status.idle: '2021-04-22T07:04:02.154491Z', shell.execute_reply: '2021-04-22T07:04:02.153880Z'}
+#| papermill: {duration: 0.448773, end_time: '2021-04-22T07:04:02.154692', exception: false, start_time: '2021-04-22T07:04:01.705919', status: completed}
+#| tags: []
+#Training and Validation Split
+train_images, val_images, train_labels, val_labels = train_test_split(train_images, train_labels,
+                                                                     stratify=train_labels, random_state=302,
+                                                                     test_size=0.2)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:02.230239Z', iopub.status.busy: '2021-04-22T07:04:02.229460Z', iopub.status.idle: '2021-04-22T07:04:02.440313Z', shell.execute_reply: '2021-04-22T07:04:02.440902Z'}
+#| papermill: {duration: 0.255046, end_time: '2021-04-22T07:04:02.441135', exception: false, start_time: '2021-04-22T07:04:02.186089', status: completed}
+#| tags: []
+#train
+train_images_tensor = torch.tensor(train_images)/255.0
+train_labels_tensor = torch.tensor(train_labels)
+train_tensor = TensorDataset(train_images_tensor, train_labels_tensor)
+#val
+val_images_tensor = torch.tensor(val_images)/255.0
+val_labels_tensor = torch.tensor(val_labels)
+val_tensor = TensorDataset(val_images_tensor, val_labels_tensor)
+#test
+test_images_tensor = torch.tensor(test_images)/255.0
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:02.508600Z', iopub.status.busy: '2021-04-22T07:04:02.507899Z', iopub.status.idle: '2021-04-22T07:04:02.512388Z', shell.execute_reply: '2021-04-22T07:04:02.512910Z'}
+#| papermill: {duration: 0.039043, end_time: '2021-04-22T07:04:02.513138', exception: false, start_time: '2021-04-22T07:04:02.474095', status: completed}
+#| tags: []
+train_loader = DataLoader(train_tensor, batch_size = 100, shuffle=True)
+val_loader = DataLoader(val_tensor, batch_size = 100, shuffle=True)
+test_loader = DataLoader(test_images_tensor, batch_size = 100, shuffle=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:02.579319Z', iopub.status.busy: '2021-04-22T07:04:02.578657Z', iopub.status.idle: '2021-04-22T07:04:02.583493Z', shell.execute_reply: '2021-04-22T07:04:02.584078Z'}
+#| papermill: {duration: 0.039532, end_time: '2021-04-22T07:04:02.584249', exception: false, start_time: '2021-04-22T07:04:02.544717', status: completed}
+#| tags: []
+#Training and Test data size
+len(train_images_tensor), len(val_images_tensor), len(test_images_tensor)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:02.653429Z', iopub.status.busy: '2021-04-22T07:04:02.652717Z', iopub.status.idle: '2021-04-22T07:04:02.655464Z', shell.execute_reply: '2021-04-22T07:04:02.655937Z'}
+#| papermill: {duration: 0.040092, end_time: '2021-04-22T07:04:02.656127', exception: false, start_time: '2021-04-22T07:04:02.616035', status: completed}
+#| tags: []
+#Shape of an image
+image = train_images[3,:]
+print(image.shape)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:02.724557Z', iopub.status.busy: '2021-04-22T07:04:02.723870Z', iopub.status.idle: '2021-04-22T07:04:02.883049Z', shell.execute_reply: '2021-04-22T07:04:02.882376Z'}
+#| papermill: {duration: 0.194606, end_time: '2021-04-22T07:04:02.883187', exception: false, start_time: '2021-04-22T07:04:02.688581', status: completed}
+#| tags: []
+#Plotting an image
+image = image.reshape([28,28])
+plt.imshow(image, cmap = "gray")
+print("Image Label: ", train_labels[3])
+```
+
+Preprocessing the data to in torch data loaders with batches.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:03.026714Z', iopub.status.busy: '2021-04-22T07:04:03.025967Z', iopub.status.idle: '2021-04-22T07:04:03.055113Z', shell.execute_reply: '2021-04-22T07:04:03.054467Z'}
+#| papermill: {duration: 0.070006, end_time: '2021-04-22T07:04:03.055274', exception: false, start_time: '2021-04-22T07:04:02.985268', status: completed}
+#| tags: []
+data_iter = iter(train_loader)
+images, labels = next(data_iter)
+print("Images shape: ", images.shape)
+print("Lables shape: ", labels.shape)
+```
+
+## 2. Model
+
+We will be first performing one single forward pass and backpropagation, to understand what's going under the hood. This is rather very simple model. This does not involve anything 'deep'. On comparing it with neural networks we can consider neural networks as using logistic regression k-times with non-linear activation functions.  
+
+
+Initializing the parameters: Weights(W) and Biases(b),
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:03.262676Z', iopub.status.busy: '2021-04-22T07:04:03.262030Z', iopub.status.idle: '2021-04-22T07:04:03.298667Z', shell.execute_reply: '2021-04-22T07:04:03.298165Z'}
+#| papermill: {duration: 0.075067, end_time: '2021-04-22T07:04:03.298808', exception: false, start_time: '2021-04-22T07:04:03.223741', status: completed}
+#| tags: []
+#weights and biases
+W = torch.randn(784, 10)/np.sqrt(784)
+b = torch.zeros(10, requires_grad=True)
+W.requires_grad_()
+```
+
+The 'require_grad' is true so that both weights and biases are learned. This tells PyTorch's autograd to track gradients for these two variable and the variables depending on W and b.
+
+## 3. Forward pass 
+Forward Propagation is where we apply randomly initialized weights and biases. These parameters are the 'knobs' to tune our model for less loss and better prediction.
+
+\begin{align}
+Y = X W + b 
+\end{align}
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:03.516226Z', iopub.status.busy: '2021-04-22T07:04:03.515185Z', iopub.status.idle: '2021-04-22T07:04:03.519103Z', shell.execute_reply: '2021-04-22T07:04:03.518506Z'}
+#| papermill: {duration: 0.04355, end_time: '2021-04-22T07:04:03.519244', exception: false, start_time: '2021-04-22T07:04:03.475694', status: completed}
+#| tags: []
+#input shape after flattening the images 
+x = images.view(-1, 28*28)
+x.shape 
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:03.593728Z', iopub.status.busy: '2021-04-22T07:04:03.593043Z', iopub.status.idle: '2021-04-22T07:04:03.634251Z', shell.execute_reply: '2021-04-22T07:04:03.633611Z'}
+#| papermill: {duration: 0.08029, end_time: '2021-04-22T07:04:03.634403', exception: false, start_time: '2021-04-22T07:04:03.554113', status: completed}
+#| tags: []
+#Linear Transformation
+y = torch.matmul(x, W) + b
+y[0,:]
+```
+
+Following are the softmax implementaions that squash output of forward propagation 'y' into range of (0,1) by applying softmax activation function. This can be done by either hard-coding the softmax function or by using sotmax from the torch.nn.Functional module.
+
+\begin{align}
+p(y_i) = \text{softmax}(y_i) = \frac{\text{exp}(y_i)}{\sum_j\text{exp}(y_j)}
+\end{align}
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:03.778501Z', iopub.status.busy: '2021-04-22T07:04:03.777558Z', iopub.status.idle: '2021-04-22T07:04:04.034351Z', shell.execute_reply: '2021-04-22T07:04:04.033785Z'}
+#| papermill: {duration: 0.294866, end_time: '2021-04-22T07:04:04.034489', exception: false, start_time: '2021-04-22T07:04:03.739623', status: completed}
+#| tags: []
+#Loss Function
+def make_plot(x, f, name):
+    plt.figure()
+    plt.figure(figsize=(12,6))
+    plt.title(name, fontsize=20, fontweight='bold')
+    plt.xlabel('z', fontsize=15)
+    plt.ylabel('Activation function value', fontsize=15)
+    sns.set_style("whitegrid")
+    plt.plot(x, f, label="f (z)")
+    plt.legend(loc=4, prop={'size': 15}, frameon=True,shadow=True, facecolor="white", edgecolor="black")
+    plt.savefig(name + ".png")
+    plt.show()
+
+z = np.arange(0, 10, 0.01)
+f = np.exp(z)/sum(np.exp(z))
+make_plot(z, f, "Softmax")
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:04.113697Z', iopub.status.busy: '2021-04-22T07:04:04.113039Z', iopub.status.idle: '2021-04-22T07:04:04.126159Z', shell.execute_reply: '2021-04-22T07:04:04.125517Z'}
+#| papermill: {duration: 0.054863, end_time: '2021-04-22T07:04:04.126306', exception: false, start_time: '2021-04-22T07:04:04.071443', status: completed}
+#| tags: []
+#Probability of classes function from scratch
+prob_eqn = torch.exp(y)/torch.sum(torch.exp(y), dim=1, keepdim=True)
+prob_eqn[0]
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:04.205428Z', iopub.status.busy: '2021-04-22T07:04:04.204797Z', iopub.status.idle: '2021-04-22T07:04:04.213911Z', shell.execute_reply: '2021-04-22T07:04:04.213305Z'}
+#| papermill: {duration: 0.050398, end_time: '2021-04-22T07:04:04.214066', exception: false, start_time: '2021-04-22T07:04:04.163668', status: completed}
+#| tags: []
+#Probability of classes using softmax
+probs = F.softmax(y, dim=1)
+probs[0]
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:04.294578Z', iopub.status.busy: '2021-04-22T07:04:04.293593Z', iopub.status.idle: '2021-04-22T07:04:04.297965Z', shell.execute_reply: '2021-04-22T07:04:04.297354Z'}
+#| papermill: {duration: 0.04635, end_time: '2021-04-22T07:04:04.298118', exception: false, start_time: '2021-04-22T07:04:04.251768', status: completed}
+#| tags: []
+#Viewing the shape of labels
+labels.shape
+```
+
+Loss Function/Cost Function- Cross Entropy which is suitable for multi-class classification tasks.
+
+\begin{align}
+H_{y'}(y)=-\sum_i y'_i \text{log}(y_i)
+\end{align}
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:04.459385Z', iopub.status.busy: '2021-04-22T07:04:04.458728Z', iopub.status.idle: '2021-04-22T07:04:04.468446Z', shell.execute_reply: '2021-04-22T07:04:04.467802Z'}
+#| papermill: {duration: 0.054347, end_time: '2021-04-22T07:04:04.468585', exception: false, start_time: '2021-04-22T07:04:04.414238', status: completed}
+#| tags: []
+#Loss Function: Cross Entropy Loss
+loss = F.cross_entropy(y, labels)
+loss
+```
+
+## 4. Backprop
+
+We have forward propagation and loss, now we need to update weights that is measured by penalising the models's output from forward propagation using loss function. The updating of weights while going backwards in the model is what we call training process. This updating of weights needs an updating rule or 'optimization function' like gradient functions. We will be using SGD- Stochastic Gradient Descent. 
+
+
+\begin{align}
+\theta_{t+1} = \theta_t - \alpha \nabla_\theta \mathcal{L}
+\end{align}
+
+where $\theta$ is a parameter, $\alpha$ is our learning rate (step size), and $\nabla_\theta \mathcal{L}$ is the gradient of our loss with respect to $\theta$.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:04.629090Z', iopub.status.busy: '2021-04-22T07:04:04.628443Z', iopub.status.idle: '2021-04-22T07:04:04.631255Z', shell.execute_reply: '2021-04-22T07:04:04.630703Z'}
+#| papermill: {duration: 0.046322, end_time: '2021-04-22T07:04:04.631393', exception: false, start_time: '2021-04-22T07:04:04.585071', status: completed}
+#| tags: []
+#Update Rule
+optimizer = torch.optim.SGD([W,b], lr=0.1)
+```
+
+To compute the gradients for W and b we need to call the backward() finction on the cross entropy loss function(loss).
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:04.793224Z', iopub.status.busy: '2021-04-22T07:04:04.792598Z', iopub.status.idle: '2021-04-22T07:04:04.799900Z', shell.execute_reply: '2021-04-22T07:04:04.800373Z'}
+#| papermill: {duration: 0.052444, end_time: '2021-04-22T07:04:04.800550', exception: false, start_time: '2021-04-22T07:04:04.748106', status: completed}
+#| tags: []
+loss.backward()
+```
+
+Now the variables that required gradients have now accumulated gradients. For example,
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:04.961825Z', iopub.status.busy: '2021-04-22T07:04:04.961199Z', iopub.status.idle: '2021-04-22T07:04:04.965069Z', shell.execute_reply: '2021-04-22T07:04:04.965614Z'}
+#| papermill: {duration: 0.048099, end_time: '2021-04-22T07:04:04.965771', exception: false, start_time: '2021-04-22T07:04:04.917672', status: completed}
+#| tags: []
+b.grad
+```
+
+To apply gradient to update W and b we use the updation rule, i.e., our optimizer function. 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:05.127871Z', iopub.status.busy: '2021-04-22T07:04:05.127281Z', iopub.status.idle: '2021-04-22T07:04:05.131014Z', shell.execute_reply: '2021-04-22T07:04:05.131518Z'}
+#| papermill: {duration: 0.046516, end_time: '2021-04-22T07:04:05.131671', exception: false, start_time: '2021-04-22T07:04:05.085155', status: completed}
+#| tags: []
+optimizer.step()
+```
+
+Our learning rate is 0.1 so b is now updated by -0.1*b.grad,
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:05.294500Z', iopub.status.busy: '2021-04-22T07:04:05.293887Z', iopub.status.idle: '2021-04-22T07:04:05.299167Z', shell.execute_reply: '2021-04-22T07:04:05.299693Z'}
+#| papermill: {duration: 0.047989, end_time: '2021-04-22T07:04:05.299851', exception: false, start_time: '2021-04-22T07:04:05.251862', status: completed}
+#| tags: []
+b
+```
+
+We've now successfully trained on a minibatch! However, one minibatch probably isn't enough. At this point, we've trained the model on 100 examples out of the 60000 in the training set. We're going to need to repeat this process, for more of the data.
+
+One more thing to keep in mind though: gradients calculated by backward() don't override the old values; instead, they accumulate. Therefore, we'll need to clear the gradient buffers before you compute gradients for the next minibatch.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:05.465536Z', iopub.status.busy: '2021-04-22T07:04:05.464895Z', iopub.status.idle: '2021-04-22T07:04:05.471343Z', shell.execute_reply: '2021-04-22T07:04:05.471830Z'}
+#| papermill: {duration: 0.050808, end_time: '2021-04-22T07:04:05.472006', exception: false, start_time: '2021-04-22T07:04:05.421198', status: completed}
+#| tags: []
+print("b.grad before zero_grad(): {}".format(b.grad))
+optimizer.zero_grad()
+print("b.grad after zero_grad(): {}".format(b.grad))
+```
+
+Let's have a look on Weights for this training(1 minibatch). It looks messy! But our model will learn and we will check again at last. 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:05.640105Z', iopub.status.busy: '2021-04-22T07:04:05.639413Z', iopub.status.idle: '2021-04-22T07:04:06.959260Z', shell.execute_reply: '2021-04-22T07:04:06.959769Z'}
+#| papermill: {duration: 1.366714, end_time: '2021-04-22T07:04:06.960090', exception: false, start_time: '2021-04-22T07:04:05.593376', status: completed}
+#| tags: []
+fig, ax = plt.subplots(1,10, figsize =(20,2))
+
+for d in range(10):
+    ax[d].imshow(W[:, d].detach().view(28,28), cmap='gray')
+```
+
+## 5. Training
+
+Training on complete dataset. 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:07.136301Z', iopub.status.busy: '2021-04-22T07:04:07.135620Z', iopub.status.idle: '2021-04-22T07:04:07.695921Z', shell.execute_reply: '2021-04-22T07:04:07.695346Z'}
+#| papermill: {duration: 0.605438, end_time: '2021-04-22T07:04:07.696106', exception: false, start_time: '2021-04-22T07:04:07.090668', status: completed}
+#| tags: []
+for images, labels in tqdm(train_loader):
+    optimizer.zero_grad() #Resetting the gradients to zero
+    
+    #Forward Propagation
+    x = images.view(-1, 28*28) #Flattening the images
+    y = torch.matmul(x, W) + b #Linear Transformation
+    loss = F.cross_entropy(y, labels)
+
+    #Back propagation
+    loss.backward()
+    optimizer.step()
+```
+
+## 6. Validation 
+
+Validating our model,
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:07.901440Z', iopub.status.busy: '2021-04-22T07:04:07.900785Z', iopub.status.idle: '2021-04-22T07:04:08.021444Z', shell.execute_reply: '2021-04-22T07:04:08.022083Z'}
+#| papermill: {duration: 0.195063, end_time: '2021-04-22T07:04:08.022280', exception: false, start_time: '2021-04-22T07:04:07.827217', status: completed}
+#| tags: []
+correct = 0
+with torch.no_grad():
+    for images, labels in tqdm(val_loader):
+        x = images.view(-1, 28*28)
+        y = torch.matmul(x, W)+b
+
+        prediction = torch.argmax(y, dim=1)
+        correct += torch.sum(prediction==labels).float()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:08.114595Z', iopub.status.busy: '2021-04-22T07:04:08.113980Z', iopub.status.idle: '2021-04-22T07:04:08.120385Z', shell.execute_reply: '2021-04-22T07:04:08.119842Z'}
+#| papermill: {duration: 0.052765, end_time: '2021-04-22T07:04:08.120519', exception: false, start_time: '2021-04-22T07:04:08.067754', status: completed}
+#| tags: []
+print('Validation Accuracy : {}'.format(100*(correct/len(val_images_tensor))) )
+```
+
+## 7. Plotting the learned weights
+
+The following plots are what our logistic regression model has learned. These parameters are what our model 'sees' and classifies them into the classes of digits.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:08.299801Z', iopub.status.busy: '2021-04-22T07:04:08.299144Z', iopub.status.idle: '2021-04-22T07:04:09.465604Z', shell.execute_reply: '2021-04-22T07:04:09.466136Z'}
+#| papermill: {duration: 1.213621, end_time: '2021-04-22T07:04:09.466361', exception: false, start_time: '2021-04-22T07:04:08.252740', status: completed}
+#| tags: []
+fig, ax = plt.subplots(1,10, figsize =(20,2))
+
+for d in range(10):
+    ax[d].imshow(W[:, d].detach().view(28,28), cmap='gray')
+```
+
+## Predictions
+
+Finally predicting and submitting the results.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:09.651968Z', iopub.status.busy: '2021-04-22T07:04:09.651368Z', iopub.status.idle: '2021-04-22T07:04:09.919862Z', shell.execute_reply: '2021-04-22T07:04:09.920379Z'}
+#| papermill: {duration: 0.317247, end_time: '2021-04-22T07:04:09.920577', exception: false, start_time: '2021-04-22T07:04:09.603330', status: completed}
+#| tags: []
+test_preds = torch.LongTensor()
+for images in tqdm(test_loader):
+    x = images.view(-1, 28*28)
+    y = torch.matmul(x, W)+b
+
+    prediction = torch.argmax(y, dim=1)
+    test_preds = torch.cat((test_preds, prediction), dim=0)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-22T07:04:10.023667Z', iopub.status.busy: '2021-04-22T07:04:10.022981Z', iopub.status.idle: '2021-04-22T07:04:10.112766Z', shell.execute_reply: '2021-04-22T07:04:10.112133Z'}
+#| papermill: {duration: 0.142177, end_time: '2021-04-22T07:04:10.112905', exception: false, start_time: '2021-04-22T07:04:09.970728', status: completed}
+#| tags: []
+sub = pd.read_csv("../input/digit-recognizer/sample_submission.csv")
+sub['Label'] = test_preds.numpy().squeeze()
+sub.to_csv("results.csv", index=False)
+sub.head()
+```
+
+# Thank you!
+
+Author: [Pratik Kumar](https://pr2tik1.github.io)<br>
+References: [fastai](https://www.fast.ai), [Coursera](https://coursera.org/share/ea5cc945df9fab563eb9bc9de3089eb9)
+

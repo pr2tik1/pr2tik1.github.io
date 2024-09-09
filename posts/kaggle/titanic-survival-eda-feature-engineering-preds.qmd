@@ -1,0 +1,663 @@
+---
+title: Titanic Survival Prediction
+image: ../post-images/10.png
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2021-03-21'
+categories:
+  - Data Science
+  - Data Visualization
+  - Python
+  - Machine Learning
+  - Feature Engineering
+  - Kaggle
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+## Introduction
+
+Welcome to the Titanic Survival Prediction project, a classic challenge that serves as the perfect starting point for anyone looking to dive into the world of Machine Learning and data competitions on Kaggle. This project involves building a predictive model to determine which passengers survived the infamous Titanic disaster, a task that will guide you through essential steps in data science, from feature engineering to model development and evaluation.
+
+This competition is designed to help you get comfortable with the Kaggle platform and machine learning workflows. You'll be using Python to explore the data, perform feature engineering, visualize key trends, and develop a predictive model that can accurately classify survivors. For more details, visit the [competition page](https://www.kaggle.com/c/titanic/overview) and check out [Kaggle's YouTube video](https://www.youtube.com/watch?v=8yZMXCaFshs) for a comprehensive introduction.
+
+1. **Import Data**: Load the Titanic dataset to begin the exploration and analysis.
+2. **Feature Engineering**: Transform raw data into meaningful features that improve model performance.
+3. **Data Visualization**: Analyze and visualize the data to uncover patterns and insights.
+4. **Model Development**: Build and train machine learning models to predict passenger survival.
+5. **Model Testing**: Evaluate model accuracy and fine-tune parameters to optimize results.
+6. **Prediction and Submission**: Generate survival predictions and submit them to the Kaggle leaderboard.
+
+
+Embark on this journey to not only enhance your data science skills but also understand the power of predictive modeling in real-world scenarios.
+
+## A. Import Data
+
+```{python}
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+import warnings
+warnings.filterwarnings('ignore')
+```
+
+```{python}
+train = pd.read_csv('../input/titanic/train.csv')
+test = pd.read_csv('../input/titanic/test.csv')
+```
+
+## B. Dataset exploration: 
+---
+
+```{python}
+train.head()
+```
+
+#### B.1. Types of Variables
+
+```{python}
+# Find categorical variables
+categorical = [var for var in train.columns if train[var].dtype=='O']
+print('There are {} categorical variables'.format(len(categorical)))
+```
+
+```{python}
+# Find numerical variables
+numerical = [var for var in train.columns if train[var].dtype!='O']
+print('There are {} numerical variables'.format(len(numerical)))
+```
+
+##### Viewing the Categorical terms :
+
+```{python}
+data = [train,test]
+for dataset in data:
+    #Filter categorical variables
+    categorical_columns = [x for x in dataset.dtypes.index if dataset.dtypes[x]=='object']    
+    # Exclude ID cols and source:
+    categorical_columns = [x for x in categorical_columns if x not in ['PassengerId','Ticket','Name','Cabin']]
+    #Print frequency of categories
+    
+for col in categorical_columns:
+    print ('\nFrequency of Categories for variable %s'%col)
+    print (train[col].value_counts())
+```
+
+#### B.2. Detecting Missing  Values
+
+```{python}
+train.isnull().sum()
+```
+
+```{python}
+train.isnull().mean()
+```
+
+#### Missing Data Overview
+
+The train dataset has 12 features, with missing values observed in the following features:
+
+- **Age**: Missing in 19.86% of the records
+- **Cabin**: Missing in 77.10% of the records
+- **Embarked**: Missing in 0.22% of the records
+
+#### Analysis and Assumptions About Missing Data
+
+##### Cabin
+
+The **Cabin** feature has the highest proportion of missing values (77.10%). This substantial amount of missing data might suggest that:
+
+- For many individuals who did not survive, the cabin information was not recorded or available.
+- Survivors, on the other hand, may have been able to provide this information.
+
+The missingness here could be due to the nature of the records or circumstances surrounding the individuals who did not survive, making this data likely to fall into the *Missing Not At Random (MNAR)* category. This means the missingness is related to the unobserved value itself or other factors not accounted for.
+
+##### Age
+
+The **Age** feature has missing values in about 22% of the records. This could be due to:
+
+- Missing age information for individuals who did not survive.
+- Survivors possibly being able to provide their age when asked.
+
+This type of missing data might also be categorized as *Missing Not At Random (MNAR)* if the likelihood of missing data is related to whether the individual survived or other unobserved factors.
+
+##### Embarked
+
+The **Embarked** feature has a very small proportion of missing values (0.22%). This is a very minor amount and is likely due to random occurrences.
+
+Such a small percentage of missing data is often considered *Missing Completely At Random (MCAR)*, meaning the missingness is unrelated to the observed or unobserved data.
+
+#### Summary
+
+- **Cabin** and **Age** features likely fall into the MNAR category due to possible relationships between missingness and other factors like survival status.
+- The **Embarked** feature’s missing values are likely MCAR, as the missingness appears random and does not correlate with other data aspects.
+
+#### B.3. Outliers detection
+
+```{python}
+plt.figure(figsize=(8,6))
+plt.subplot(1, 2, 1)
+fig = train.boxplot(column='Age')
+fig.set_title('')
+fig.set_ylabel('Age')
+
+plt.subplot(1, 2, 2)
+fig = train.boxplot(column='Fare')
+fig.set_title('')
+fig.set_ylabel('Fare')
+```
+
+```{python}
+plt.figure(figsize=(8,6))
+
+plt.subplot(1, 2, 1)
+fig = train.Age.hist(bins=20)
+fig.set_ylabel('Number of passengers')
+fig.set_xlabel('Age')
+
+plt.subplot(1, 2, 2)
+fig = train.Fare.hist(bins=20)
+fig.set_ylabel('Number of passengers')
+fig.set_xlabel('Fare')
+```
+
+### B.3. Analyzing the Embarked feature
+
+```{python}
+train[train.Embarked.isnull()]
+```
+
+The `Embarked` feature, which records the port of embarkation for passengers, has a very small proportion of missing values (0.22%). This low percentage of missing data suggests a specific pattern in how the data might be missing.
+
+#### Possible Reasons for Missing Values
+
+- **Consistency Among Passengers:** For passengers who share the same ticket, cabin, and fare, it is unlikely that the missing `Embarked` data is due to discrepancies in their records. This is because passengers with identical ticket and cabin information would typically have consistent embarkation data.
+
+- **Data Generation During Dataset Construction:** The missing `Embarked` values could have resulted from data entry or construction processes. For example, if data was manually entered or generated, some records might have been incomplete due to errors or omissions during the data preparation phase.
+
+#### Nature of Missing Data
+
+Given that the missing values in the `Embarked` feature are minimal and appear to be random rather than systematic, we can categorize this missing data as:
+
+- **Missing Completely At Random (MCAR):** The missingness of the `Embarked` data is likely unrelated to both the values of the `Embarked` feature itself and any other features in the dataset. The small percentage of missing data indicates that these omissions do not follow a discernible pattern and are likely due to random errors in data entry or processing.
+
+In summary, the missing values in the `Embarked` feature are random and not indicative of any underlying patterns related to the data's other aspects. This randomness supports the classification of this missing data as MCAR.
+
+### B.4. Analyzing Cabin feature 
+
+```{python}
+train['cabin_null'] = np.where(train.Cabin.isnull(),1,0)
+train.groupby(['Survived'])['cabin_null'].mean()
+```
+
+The above figures indicates that the missing data is more in the case of passengers not survived(=0).<br>
+
+**There is a systematic loss of data: people who did not survive tend to have more information missing. Presumably, the method chosen to gather the information, contributes to the generation of these missing data.**
+
+### B.5. Analyzing the Age feature
+
+```{python}
+train['age_null'] = np.where(train.Age.isnull(),1,0)
+train.groupby(['Survived'])['age_null'].mean()
+```
+
+**There is a systematic loss of data: people who did not survive tend to have more information missing. Presumably, the method chosen to gather the information, contributes to the generation of these missing data.**
+
+### B.6. Analyzing the Fare feature
+
+The distribution of Fare is skewed, so in principle, we shouldn't estimate outliers using the mean plus minus 3 standard deviations methods, which assumes a normal distribution of the data.
+
+```{python}
+total_passengers = float(train.shape[0])
+
+print('Total number of passengers: {}'.format(train.shape[0]))
+print('Passengers that paid more than 65: {:.2f}%'.format(
+    (train[train.Fare > 65].shape[0] / total_passengers) * 100))
+print('passengers that paid more than 100: {} %'.format((
+    train[train.Fare > 100].shape[0]/ total_passengers)*100))
+```
+
+There *is **unusual** high values of **Fares** observed*, the reason is found as follows:
+
+```{python}
+#at the most extreme outliers
+train[train.Fare>300]
+```
+
+These three people have the same ticket number, indicating that they were travelling together. The Fare price in this case, 512 is the price of 3 tickets, and not one. **This is why, it is unusually high.**
+
+#### B.7. Categorical Values : 
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:45.942852Z', iopub.status.busy: '2021-04-23T20:32:45.942241Z', iopub.status.idle: '2021-04-23T20:32:45.954297Z', shell.execute_reply: '2021-04-23T20:32:45.953677Z'}
+#| papermill: {duration: 0.073536, end_time: '2021-04-23T20:32:45.954503', exception: false, start_time: '2021-04-23T20:32:45.880967', status: completed}
+#| tags: []
+print('Number of categories in the variable Name: {}'.format(
+    len(train.Name.unique())))
+
+print('Number of categories in the variable Gender: {}'.format(
+    len(train.Sex.unique())))
+
+print('Number of categories in the variable Ticket: {}'.format(
+    len(train.Ticket.unique())))
+
+print('Number of categories in the variable Cabin: {}'.format(
+    len(train.Cabin.unique())))
+
+print('Number of categories in the variable Embarked: {}'.format(
+    len(train.Embarked.unique())))
+
+print('Total number of passengers in the Titanic: {}'.format(len(train)))
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:46.082239Z', iopub.status.busy: '2021-04-23T20:32:46.081643Z', iopub.status.idle: '2021-04-23T20:32:46.084965Z', shell.execute_reply: '2021-04-23T20:32:46.084306Z'}
+#| papermill: {duration: 0.070042, end_time: '2021-04-23T20:32:46.085116', exception: false, start_time: '2021-04-23T20:32:46.015074', status: completed}
+#| tags: []
+drop_column = ['cabin_null','age_null']
+train.drop(drop_column , axis =1  ,inplace = True )
+```
+
+## C. Feature Scaling and Engineering
+Feature scaling is a technique used to standardize the range of independent variables or features of data. In machine learning and data analysis, scaling is important because it helps improve the performance and training stability of models.
+
+### C.1. Handling the Missing Values:<br>
+The dataset contains missing values in several features. To address these, we apply different strategies based on the nature of each feature:
+
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:46.442663Z', iopub.status.busy: '2021-04-23T20:32:46.442051Z', iopub.status.idle: '2021-04-23T20:32:46.444810Z', shell.execute_reply: '2021-04-23T20:32:46.445348Z'}
+#| papermill: {duration: 0.068828, end_time: '2021-04-23T20:32:46.445522', exception: false, start_time: '2021-04-23T20:32:46.376694', status: completed}
+#| tags: []
+train.isnull().sum()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:46.567380Z', iopub.status.busy: '2021-04-23T20:32:46.566835Z', iopub.status.idle: '2021-04-23T20:32:46.573905Z', shell.execute_reply: '2021-04-23T20:32:46.574381Z'}
+#| papermill: {duration: 0.069182, end_time: '2021-04-23T20:32:46.574549', exception: false, start_time: '2021-04-23T20:32:46.505367', status: completed}
+#| tags: []
+test.isnull().sum()
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:46.698254Z', iopub.status.busy: '2021-04-23T20:32:46.697685Z', iopub.status.idle: '2021-04-23T20:32:46.713090Z', shell.execute_reply: '2021-04-23T20:32:46.712561Z'}
+#| papermill: {duration: 0.078807, end_time: '2021-04-23T20:32:46.713222', exception: false, start_time: '2021-04-23T20:32:46.634415', status: completed}
+#| tags: []
+data_cleaner = [test , train]
+for dataset in data_cleaner:    
+    #completing missing age with median
+    dataset['Age'].fillna(dataset['Age'].median(), inplace = True)
+
+    #completing embarked with mode
+    dataset['Embarked'].fillna(dataset['Embarked'].mode()[0], inplace = True)
+
+    #completing missing fare with median
+    dataset['Fare'].fillna(dataset['Fare'].median(), inplace = True)
+    
+#delete the train feature
+train.drop(['Ticket'], axis=1, inplace = True)
+test.drop(['Ticket'] , axis=1 , inplace = True)
+```
+
+### C.2. Encoding
+
+Encoding is a crucial step in data preprocessing, especially for machine learning and statistical modeling. It involves converting categorical variables (features that represent categories or groups) into numerical values that can be processed by machine learning algorithms.
+
+#### C.2.1. Cabin Feature
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:47.083372Z', iopub.status.busy: '2021-04-23T20:32:47.082787Z', iopub.status.idle: '2021-04-23T20:32:47.086162Z', shell.execute_reply: '2021-04-23T20:32:47.085643Z'}
+#| papermill: {duration: 0.071415, end_time: '2021-04-23T20:32:47.086312', exception: false, start_time: '2021-04-23T20:32:47.014897', status: completed}
+#| tags: []
+drop_column = ['Cabin']
+train.drop(drop_column , axis =1  ,inplace = True )
+test.drop(drop_column , axis =1  ,inplace = True )
+```
+The Cabin feature has been dropped from the dataset due to its high proportion of missing values (77.10%), which makes it less informative.
+
+#### C.2.2. Fare Feature
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:47.333005Z', iopub.status.busy: '2021-04-23T20:32:47.332078Z', iopub.status.idle: '2021-04-23T20:32:47.348850Z', shell.execute_reply: '2021-04-23T20:32:47.349278Z'}
+#| papermill: {duration: 0.082134, end_time: '2021-04-23T20:32:47.349462', exception: false, start_time: '2021-04-23T20:32:47.267328', status: completed}
+#| tags: []
+full_data = [train,test]
+for dataset in full_data:
+    dataset.loc[ dataset['Fare'] <= 7.91, 'Fare_Band'] = 0
+    dataset.loc[(dataset['Fare'] > 7.91) & (dataset['Fare'] <= 14.454), 'Fare_Band'] = 1
+    dataset.loc[(dataset['Fare'] > 14.454) & (dataset['Fare'] <= 31), 'Fare_Band'] = 2
+    dataset.loc[ dataset['Fare'] > 31, 'Fare_Band'] = 3
+    dataset['Fare_Band'] = dataset['Fare_Band'].astype(int)
+    dataset.drop(['Fare' ], axis = 1 , inplace =True)
+```
+The Fare feature has been transformed into discrete fare bands. This transformation categorizes fare amounts into bins, which can simplify the modeling process and potentially reveal patterns.
+
+#### C.2.3. Age Feature
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:47.594090Z', iopub.status.busy: '2021-04-23T20:32:47.593120Z', iopub.status.idle: '2021-04-23T20:32:47.614967Z', shell.execute_reply: '2021-04-23T20:32:47.615359Z'}
+#| papermill: {duration: 0.085178, end_time: '2021-04-23T20:32:47.615536', exception: false, start_time: '2021-04-23T20:32:47.530358', status: completed}
+#| tags: []
+full_data = [test , train]
+for dataset in full_data:
+    
+    dataset.loc[ dataset['Age'] <= 10, 'Age'] = 0
+    dataset.loc[(dataset['Age'] > 10) & (dataset['Age'] <= 15), 'Age'] = 1
+    dataset.loc[(dataset['Age'] > 15) & (dataset['Age'] <= 20), 'Age'] = 2
+    dataset.loc[(dataset['Age'] > 20) & (dataset['Age'] <= 25), 'Age'] = 3
+    dataset.loc[(dataset['Age'] > 25) & (dataset['Age'] <= 30), 'Age'] = 4
+    dataset.loc[(dataset['Age'] > 30) & (dataset['Age'] <= 45), 'Age'] = 5
+    dataset.loc[(dataset['Age'] > 45) & (dataset['Age'] <= 60), 'Age'] = 6
+    dataset.loc[ dataset['Age'] > 60, 'Age'] = 7
+    dataset['Age'] = dataset['Age'].astype(int)
+```
+The Age feature has been converted into age bins, categorizing age into discrete intervals. This transformation simplifies the feature and can help capture age-related patterns more effectively.
+
+#### C.2.4. Sex and Embarked Feature
+
+```{python}
+full_data = [test , train]
+for dataset in full_data:
+    dataset['Embarked'] = dataset['Embarked'].map( {'S': 0, 'C': 1, 'Q': 2} ).astype(int)
+    dataset['Sex'] = dataset['Sex'].map( {'female': 0, 'male': 1} ).astype(int)
+```
+The categorical features Embarked and Sex have been encoded into numeric values. This encoding converts categorical variables into a format suitable for machine learning models.
+
+#### C.2.5. Droping the Name feature
+
+```{python}
+train.drop(['Name'],axis = 1, inplace = True)
+test.drop(['Name'],axis = 1, inplace = True )
+```
+The Name feature, which does not provide useful information for modeling, has been removed from both the training and testing datasets.
+
+#### C.2.6. Family Size
+
+```{python}
+train['family_size'] = train['SibSp'] + train['Parch'] + 1 
+test['family_size'] = test['SibSp'] + test['Parch'] + 1 
+test['IsAlone'] = 1 
+train['IsAlone'] = 1 
+train['IsAlone'].loc[train['family_size'] > 1] = 0
+test['IsAlone'].loc[test['family_size'] > 1] = 0 
+test.drop(['SibSp' , 'Parch'], axis = 1 , inplace =True)
+train.drop(['SibSp','Parch' ], axis = 1 , inplace =True)
+```
+
+A new feature, family_size, is created by combining SibSp (siblings/spouses aboard) and Parch (parents/children aboard). This feature provides insight into the size of the family traveling with the passenger.
+
+```{python}
+test.isnull().sum()
+```
+
+## D. Visualizations
+---
+Let's get some insights !
+
+```{python}
+g = sns.FacetGrid(train, col="Survived", row="Sex", hue="Embarked", height=3)
+g.map(plt.hist, "Pclass", edgecolor="w").add_legend()
+```
+
+- Observations
+    - From above graph we observe that more number of females survived as compared to males. The female survivors were more from the first class and male from third class were the most to die.
+    - The 3rd class people were the most affected, that is they less survived where as 1st class people survived is maximum than others. 
+    - The second class has almost equal survived and  couldn't survive number of people. And also we notice many of the passengers Embarked from "S".
+
+```{python}
+plt.figure(figsize = [8,5])
+sns.violinplot(x="Fare_Band", y="Age", data=train, hue='Survived',palette='coolwarm')
+```
+
+Mostly farebands are greater at the Age Group **"4"**. Survival also has *greater area corresponding to age group **"4"**.*
+
+```{python}
+train[['family_size', 'Survived']].groupby(['family_size'], as_index=False).mean()
+```
+
+```{python}
+axes = sns.catplot(x='family_size', y='Survived', hue='Sex', data=train, aspect=3, kind='point')
+```
+
+We find with increase in family size the survival rate decreases.
+
+```{python}
+plt.figure(figsize=(10,10))
+sns.heatmap(train.drop('PassengerId',axis=1).corr(), square=True, annot=True)
+```
+
+- Undestanding the Correlation matrix:
+    -  The FareBand and Pclass are highly correlated(-0.63) although negative, next to them is FareBand and IsAlone correlation(-0.57).
+    -  The Sex and Survived also have good correlation of (-0.54).
+    -  But as observed IsAlone and Family_size has the largest negative correlation (-0.69) is liable as the Family size and being alone are two opposite categories.
+
+## E. Model Training and Predicting
+---
+
+Spitting the data in ro train and test
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:53.361482Z', iopub.status.busy: '2021-04-23T20:32:53.360855Z', iopub.status.idle: '2021-04-23T20:32:53.556072Z', shell.execute_reply: '2021-04-23T20:32:53.555545Z'}
+#| papermill: {duration: 0.26645, end_time: '2021-04-23T20:32:53.556212', exception: false, start_time: '2021-04-23T20:32:53.289762', status: completed}
+#| tags: []
+X = train.drop('Survived' , axis = 1 )
+y = train['Survived']
+
+from sklearn.model_selection import train_test_split
+X_train ,X_test , y_train , y_test = train_test_split(X , y , test_size = 0.3 , random_state =102)
+```
+
+Also we need to remove Id of passengers for prediction,
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:53.839140Z', iopub.status.busy: '2021-04-23T20:32:53.838169Z', iopub.status.idle: '2021-04-23T20:32:53.841458Z', shell.execute_reply: '2021-04-23T20:32:53.840978Z'}
+#| papermill: {duration: 0.079744, end_time: '2021-04-23T20:32:53.841593', exception: false, start_time: '2021-04-23T20:32:53.761849', status: completed}
+#| tags: []
+X_train=X_train.drop(['PassengerId'],axis=1)
+X_test = X_test.drop(['PassengerId'],axis=1)
+```
+
+Importing models from scikit learn module. The objective is to classify the passenger survivior into two classes: 0 or 1, hence this is a binary classification for which we will be using classifiers. Following part of this notebook compares and finds the best model suitable for the data based upon accuracy metrics.  
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:54.128224Z', iopub.status.busy: '2021-04-23T20:32:54.127560Z', iopub.status.idle: '2021-04-23T20:32:54.355129Z', shell.execute_reply: '2021-04-23T20:32:54.354528Z'}
+#| papermill: {duration: 0.3031, end_time: '2021-04-23T20:32:54.355270', exception: false, start_time: '2021-04-23T20:32:54.052170', status: completed}
+#| tags: []
+#Importing all models
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier 
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+```
+
+### E.1. Logistic Regression
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:54.649046Z', iopub.status.busy: '2021-04-23T20:32:54.648362Z', iopub.status.idle: '2021-04-23T20:32:54.663747Z', shell.execute_reply: '2021-04-23T20:32:54.664292Z'}
+#| papermill: {duration: 0.093643, end_time: '2021-04-23T20:32:54.664464', exception: false, start_time: '2021-04-23T20:32:54.570821', status: completed}
+#| tags: []
+logmodel = LogisticRegression()
+logmodel.fit(X_train , y_train)
+pred_l = logmodel.predict(X_test)
+acc_l = accuracy_score(y_test , pred_l)*100
+acc_l
+```
+
+### E.2. Random Forest
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:54.951492Z', iopub.status.busy: '2021-04-23T20:32:54.950892Z', iopub.status.idle: '2021-04-23T20:32:55.173900Z', shell.execute_reply: '2021-04-23T20:32:55.173365Z'}
+#| papermill: {duration: 0.2952, end_time: '2021-04-23T20:32:55.174028', exception: false, start_time: '2021-04-23T20:32:54.878828', status: completed}
+#| tags: []
+random_forest = RandomForestClassifier(n_estimators= 100)
+random_forest.fit(X_train, y_train)
+pred_rf = random_forest.predict(X_test)
+acc_rf = accuracy_score(y_test , pred_rf)*100
+acc_rf
+```
+
+### E.3. K-Nearest Neighbours
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:55.462822Z', iopub.status.busy: '2021-04-23T20:32:55.462222Z', iopub.status.idle: '2021-04-23T20:32:55.481314Z', shell.execute_reply: '2021-04-23T20:32:55.481851Z'}
+#| papermill: {duration: 0.096048, end_time: '2021-04-23T20:32:55.482009', exception: false, start_time: '2021-04-23T20:32:55.385961', status: completed}
+#| tags: []
+knn = KNeighborsClassifier(n_neighbors = 3)
+
+knn.fit(X_train, y_train)
+
+pred_knn = knn.predict(X_test)
+
+acc_knn = accuracy_score(y_test , pred_knn)*100
+acc_knn
+```
+
+### E.4. Gaussian Naive Bayes Classifier
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:55.770805Z', iopub.status.busy: '2021-04-23T20:32:55.770180Z', iopub.status.idle: '2021-04-23T20:32:55.781545Z', shell.execute_reply: '2021-04-23T20:32:55.782062Z'}
+#| papermill: {duration: 0.089308, end_time: '2021-04-23T20:32:55.782221', exception: false, start_time: '2021-04-23T20:32:55.692913', status: completed}
+#| tags: []
+gaussian = GaussianNB()
+
+gaussian.fit(X_train, y_train)
+
+pred_gb = gaussian.predict(X_test)
+
+acc_gb = accuracy_score(y_test , pred_gb)*100
+acc_gb
+```
+
+### E.5. C-Support Vector Classifier
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:56.074024Z', iopub.status.busy: '2021-04-23T20:32:56.073097Z', iopub.status.idle: '2021-04-23T20:32:56.102944Z', shell.execute_reply: '2021-04-23T20:32:56.103434Z'}
+#| papermill: {duration: 0.105985, end_time: '2021-04-23T20:32:56.103602', exception: false, start_time: '2021-04-23T20:32:55.997617', status: completed}
+#| tags: []
+svc = SVC()
+
+svc.fit(X_train, y_train)
+
+pred_svc = svc.predict(X_test)
+
+acc_svc = accuracy_score(y_test , pred_svc)*100
+acc_svc
+```
+
+### E.6. Decision Tree
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:56.397685Z', iopub.status.busy: '2021-04-23T20:32:56.397048Z', iopub.status.idle: '2021-04-23T20:32:56.404967Z', shell.execute_reply: '2021-04-23T20:32:56.405437Z'}
+#| papermill: {duration: 0.08648, end_time: '2021-04-23T20:32:56.405611', exception: false, start_time: '2021-04-23T20:32:56.319131', status: completed}
+#| tags: []
+decision_tree = DecisionTreeClassifier()
+
+decision_tree.fit(X_train, y_train)
+
+pred_dt = decision_tree.predict(X_test)
+
+acc_dt = accuracy_score(y_test , pred_dt)*100
+acc_dt
+```
+
+### E.7. Linear classifiers with SGD training.
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:56.706350Z', iopub.status.busy: '2021-04-23T20:32:56.703937Z', iopub.status.idle: '2021-04-23T20:32:56.715328Z', shell.execute_reply: '2021-04-23T20:32:56.715776Z'}
+#| papermill: {duration: 0.090807, end_time: '2021-04-23T20:32:56.715936', exception: false, start_time: '2021-04-23T20:32:56.625129', status: completed}
+#| tags: []
+sgd = SGDClassifier()
+
+sgd.fit(X_train, y_train)
+
+pred_sgd = sgd.predict(X_test)
+
+acc_sgd = accuracy_score(y_test , pred_sgd)*100
+acc_sgd
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:56.875742Z', iopub.status.busy: '2021-04-23T20:32:56.875152Z', iopub.status.idle: '2021-04-23T20:32:56.879071Z', shell.execute_reply: '2021-04-23T20:32:56.878599Z'}
+#| papermill: {duration: 0.087595, end_time: '2021-04-23T20:32:56.879201', exception: false, start_time: '2021-04-23T20:32:56.791606', status: completed}
+#| tags: []
+## Arranging the Accuracy results
+models = pd.DataFrame({
+    'Model': ['Logistic Regression', 'Random Forrest','K- Nearest Neighbour' ,
+             'Naive Bayes' , 'C-Support Vector Classifier' , 'Decision Tree' , 'Stochastic Gradient Descent'],
+    'Score': [acc_l , acc_rf , acc_knn , acc_gb , acc_svc , 
+              acc_dt , acc_sgd]})
+models.sort_values(by='Score', ascending=False)
+```
+
+## Ensemble Learning
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:57.194519Z', iopub.status.busy: '2021-04-23T20:32:57.193895Z', iopub.status.idle: '2021-04-23T20:32:57.225611Z', shell.execute_reply: '2021-04-23T20:32:57.224960Z'}
+#| papermill: {duration: 0.117647, end_time: '2021-04-23T20:32:57.225746', exception: false, start_time: '2021-04-23T20:32:57.108099', status: completed}
+#| tags: []
+df_test =  test.drop(['PassengerId'],axis=1)
+
+p_l = logmodel.predict(df_test)
+p_svc = svc.predict(df_test)
+p_rf = random_forest.predict(df_test)
+p_dt = decision_tree.predict(df_test)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:57.382473Z', iopub.status.busy: '2021-04-23T20:32:57.381852Z', iopub.status.idle: '2021-04-23T20:32:57.384501Z', shell.execute_reply: '2021-04-23T20:32:57.384910Z'}
+#| papermill: {duration: 0.083898, end_time: '2021-04-23T20:32:57.385072', exception: false, start_time: '2021-04-23T20:32:57.301174', status: completed}
+#| tags: []
+predict_combine = np.zeros((df_test.shape[0]))
+for i in range(0, test.shape[0]):
+    temp = p_rf[i]+p_svc[i]+p_l[i]+p_dt[i]
+    if temp>=2:
+        predict_combine[i] = 1
+predict_combine = predict_combine.astype('int')
+```
+
+## Submission
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:57.688123Z', iopub.status.busy: '2021-04-23T20:32:57.687211Z', iopub.status.idle: '2021-04-23T20:32:57.693086Z', shell.execute_reply: '2021-04-23T20:32:57.693579Z'}
+#| papermill: {duration: 0.085841, end_time: '2021-04-23T20:32:57.693765', exception: false, start_time: '2021-04-23T20:32:57.607924', status: completed}
+#| tags: []
+submission = pd.DataFrame({
+       "PassengerId": test["PassengerId"],
+        "Survived": predict_combine
+    })
+
+submission.to_csv("submission.csv", encoding='utf-8', index=False)
+```
+
+```{python}
+#| execution: {iopub.execute_input: '2021-04-23T20:32:57.848777Z', iopub.status.busy: '2021-04-23T20:32:57.847828Z', iopub.status.idle: '2021-04-23T20:32:57.856131Z', shell.execute_reply: '2021-04-23T20:32:57.856614Z'}
+#| papermill: {duration: 0.087097, end_time: '2021-04-23T20:32:57.856782', exception: false, start_time: '2021-04-23T20:32:57.769685', status: completed}
+#| tags: []
+submission.head()
+```
+
+# Thankyou!
+
+- Kaggle: [Notebook](https://www.kaggle.com/code/pr2tik1/titanic-survival-eda-feature-engineering-preds)
+- Resources: [Udemy Course](https://www.udemy.com/share/1020r6AkcfcV5TQXo=/), Scikit-Learn docs
+

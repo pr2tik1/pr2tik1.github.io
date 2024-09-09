@@ -1,0 +1,52 @@
+---
+title: Building a URL shortner
+image: ../post-images/4.jpg
+title-block-style: default
+title-block-banner: black
+title-block-banner-color: white
+execute:
+  enabled: true
+format:
+  html:
+    code-fold: false
+author: Pratik Kumar
+date: '2024-09-10'
+categories:
+  - System Design
+  - Python
+  - REST API
+  - Web Application
+website:
+  back-to-top-navigation: true
+  page-footer: 'Copyright 2024, Pratik Kumar'
+toc: true
+jupyter: python3
+comments: 
+    utterances:
+        repo: pr2tik1/pr2tik1.github.io
+---
+
+## Introduction
+Designing a URL shortener, like [TinyURL](https://tinyurl.com/app/features/about-us), 
+is a classic problem in system design that offers a great opportunity to explore key design concepts. 
+It's not just about shrinking URLs—there’s a lot more going on behind the scenes.
+
+
+In this blog, I’m excited to share how I approached this problem. I’ll walk you through my thought process, 
+the challenges I faced, and the design decisions I made to turn long URLs into short, manageable links. Whether 
+you're curious about URL mapping, efficient lookups, or scaling the solution, I hope my journey will give you 
+some valuable insights and ideas for your own projects.
+
+## Requirements and Goals
+
+## Design and Considerations
+
+## Implementation Details
+
+## Challenges and Solutions
+
+## Testing and Validations
+
+## Security Considerations
+
+## Conclusion
