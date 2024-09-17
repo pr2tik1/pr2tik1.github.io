@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/system-design/short-url.html",
       "/posts/r-package-mgt/r-package-mgt.html",
       "/posts/remote-extension/remote-containers.html",
       "/posts/hierarchical/Plotly-Sunburst.html",

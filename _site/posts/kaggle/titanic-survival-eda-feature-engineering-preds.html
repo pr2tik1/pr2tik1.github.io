@@ -128,7 +128,9 @@ background: black;
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="Titanic Survival Prediction – devExplore">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="../post-images/10.png">
+<meta name="twitter:image" content="https://pr2tik1.github.io/posts/post-images/10.png">
+<meta name="twitter:image-height" content="501">
+<meta name="twitter:image-width" content="514">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -288,7 +290,7 @@ background: black;
 </section>
 <section id="a.-import-data" class="level2">
 <h2 class="anchored" data-anchor-id="a.-import-data">A. Import Data</h2>
-<div id="f8a8c085" class="cell" data-execution_count="1">
+<div id="a7b0bdc1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -298,7 +300,7 @@ background: black;
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="3d10a8e0" class="cell" data-execution_count="2">
+<div id="40f6f8a6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(<span class="st">'../input/titanic/train.csv'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.read_csv(<span class="st">'../input/titanic/test.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -306,9 +308,9 @@ background: black;
 <section id="b.-dataset-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="b.-dataset-exploration">B. Dataset exploration:</h2>
 <hr>
-<div id="9b2dbbdf" class="cell" data-execution_count="3">
+<div id="767d9445" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="191">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -414,7 +416,7 @@ background: black;
 </div>
 <section id="b.1.-types-of-variables" class="level4">
 <h4 class="anchored" data-anchor-id="b.1.-types-of-variables">B.1. Types of Variables</h4>
-<div id="0b6e5ede" class="cell" data-execution_count="4">
+<div id="2779b423" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find categorical variables</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>categorical <span class="op">=</span> [var <span class="cf">for</span> var <span class="kw">in</span> train.columns <span class="cf">if</span> train[var].dtype<span class="op">==</span><span class="st">'O'</span>]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'There are </span><span class="sc">{}</span><span class="st"> categorical variables'</span>.<span class="bu">format</span>(<span class="bu">len</span>(categorical)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -422,7 +424,7 @@ background: black;
 <pre><code>There are 5 categorical variables</code></pre>
 </div>
 </div>
-<div id="cb920124" class="cell" data-execution_count="5">
+<div id="c8429ded" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find numerical variables</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>numerical <span class="op">=</span> [var <span class="cf">for</span> var <span class="kw">in</span> train.columns <span class="cf">if</span> train[var].dtype<span class="op">!=</span><span class="st">'O'</span>]</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'There are </span><span class="sc">{}</span><span class="st"> numerical variables'</span>.<span class="bu">format</span>(<span class="bu">len</span>(numerical)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -432,7 +434,7 @@ background: black;
 </div>
 <section id="viewing-the-categorical-terms" class="level5">
 <h5 class="anchored" data-anchor-id="viewing-the-categorical-terms">Viewing the Categorical terms :</h5>
-<div id="a5eb3be3" class="cell" data-execution_count="6">
+<div id="0cebb581" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [train,test]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dataset <span class="kw">in</span> data:</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Filter categorical variables</span></span>
@@ -464,9 +466,9 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="b.2.-detecting-missing-values" class="level4">
 <h4 class="anchored" data-anchor-id="b.2.-detecting-missing-values">B.2. Detecting Missing Values</h4>
-<div id="cff72ebb" class="cell" data-execution_count="7">
+<div id="e7d25d0b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>train.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="195">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>PassengerId      0
 Survived         0
 Pclass           0
@@ -482,9 +484,9 @@ Embarked         2
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="0d36e522" class="cell" data-execution_count="8">
+<div id="c0c570f9" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>train.isnull().mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="196">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>PassengerId    0.000000
 Survived       0.000000
 Pclass         0.000000
@@ -545,7 +547,7 @@ dtype: float64</code></pre>
 </section>
 <section id="b.3.-outliers-detection" class="level4">
 <h4 class="anchored" data-anchor-id="b.3.-outliers-detection">B.3. Outliers detection</h4>
-<div id="772a190c" class="cell" data-execution_count="9">
+<div id="61397143" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> train.boxplot(column<span class="op">=</span><span class="st">'Age'</span>)</span>
@@ -556,7 +558,7 @@ dtype: float64</code></pre>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> train.boxplot(column<span class="op">=</span><span class="st">'Fare'</span>)</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>fig.set_title(<span class="st">''</span>)</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>fig.set_ylabel(<span class="st">'Fare'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="197">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>Text(0, 0.5, 'Fare')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -567,7 +569,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div id="75789bcb" class="cell" data-execution_count="10">
+<div id="f4c2271e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
@@ -579,7 +581,7 @@ dtype: float64</code></pre>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> train.Fare.hist(bins<span class="op">=</span><span class="dv">20</span>)</span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>fig.set_ylabel(<span class="st">'Number of passengers'</span>)</span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>fig.set_xlabel(<span class="st">'Fare'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="198">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>Text(0.5, 0, 'Fare')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -593,9 +595,9 @@ dtype: float64</code></pre>
 </section>
 <section id="b.3.-analyzing-the-embarked-feature" class="level3">
 <h3 class="anchored" data-anchor-id="b.3.-analyzing-the-embarked-feature">B.3. Analyzing the Embarked feature</h3>
-<div id="b8155bbe" class="cell" data-execution_count="11">
+<div id="c6233777" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>train[train.Embarked.isnull()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="199">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <div>
 
 
@@ -673,10 +675,10 @@ dtype: float64</code></pre>
 </section>
 <section id="b.4.-analyzing-cabin-feature" class="level3">
 <h3 class="anchored" data-anchor-id="b.4.-analyzing-cabin-feature">B.4. Analyzing Cabin feature</h3>
-<div id="1306b2f1" class="cell" data-execution_count="12">
+<div id="03886ac4" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">'cabin_null'</span>] <span class="op">=</span> np.where(train.Cabin.isnull(),<span class="dv">1</span>,<span class="dv">0</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>train.groupby([<span class="st">'Survived'</span>])[<span class="st">'cabin_null'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="200">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>Survived
 0    0.876138
 1    0.602339
@@ -688,10 +690,10 @@ Name: cabin_null, dtype: float64</code></pre>
 </section>
 <section id="b.5.-analyzing-the-age-feature" class="level3">
 <h3 class="anchored" data-anchor-id="b.5.-analyzing-the-age-feature">B.5. Analyzing the Age feature</h3>
-<div id="a6742d66" class="cell" data-execution_count="13">
+<div id="402ba8ac" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">'age_null'</span>] <span class="op">=</span> np.where(train.Age.isnull(),<span class="dv">1</span>,<span class="dv">0</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>train.groupby([<span class="st">'Survived'</span>])[<span class="st">'age_null'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="201">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>Survived
 0    0.227687
 1    0.152047
@@ -703,7 +705,7 @@ Name: age_null, dtype: float64</code></pre>
 <section id="b.6.-analyzing-the-fare-feature" class="level3">
 <h3 class="anchored" data-anchor-id="b.6.-analyzing-the-fare-feature">B.6. Analyzing the Fare feature</h3>
 <p>The distribution of Fare is skewed, so in principle, we shouldn’t estimate outliers using the mean plus minus 3 standard deviations methods, which assumes a normal distribution of the data.</p>
-<div id="446f9319" class="cell" data-execution_count="14">
+<div id="b8777015" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>total_passengers <span class="op">=</span> <span class="bu">float</span>(train.shape[<span class="dv">0</span>])</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Total number of passengers: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(train.shape[<span class="dv">0</span>]))</span>
@@ -718,10 +720,10 @@ passengers that paid more than 100: 5.948372615039282 %</code></pre>
 </div>
 </div>
 <p>There <em>is <strong>unusual</strong> high values of <strong>Fares</strong> observed</em>, the reason is found as follows:</p>
-<div id="dc32d909" class="cell" data-execution_count="15">
+<div id="f3315fd6" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#at the most extreme outliers</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>train[train.Fare<span class="op">&gt;</span><span class="dv">300</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="203">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 
 
@@ -806,7 +808,7 @@ passengers that paid more than 100: 5.948372615039282 %</code></pre>
 <p>These three people have the same ticket number, indicating that they were travelling together. The Fare price in this case, 512 is the price of 3 tickets, and not one. <strong>This is why, it is unusually high.</strong></p>
 <section id="b.7.-categorical-values" class="level4">
 <h4 class="anchored" data-anchor-id="b.7.-categorical-values">B.7. Categorical Values :</h4>
-<div id="12bad669" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:45.942852Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:45.942241Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:45.954297Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:45.953677Z&quot;}" data-papermill="{&quot;duration&quot;:0.073536,&quot;end_time&quot;:&quot;2021-04-23T20:32:45.954503&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:45.880967&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="16">
+<div id="c7690b44" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:45.942852Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:45.942241Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:45.954297Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:45.953677Z&quot;}" data-papermill="{&quot;duration&quot;:0.073536,&quot;end_time&quot;:&quot;2021-04-23T20:32:45.954503&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:45.880967&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of categories in the variable Name: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">len</span>(train.Name.unique())))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -832,7 +834,7 @@ Number of categories in the variable Embarked: 4
 Total number of passengers in the Titanic: 891</code></pre>
 </div>
 </div>
-<div id="dd69f9f0" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.082239Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.081643Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.084965Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.084306Z&quot;}" data-papermill="{&quot;duration&quot;:0.070042,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.085116&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.015074&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="17">
+<div id="6bb807ba" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.082239Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.081643Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.084965Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.084306Z&quot;}" data-papermill="{&quot;duration&quot;:0.070042,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.085116&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.015074&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>drop_column <span class="op">=</span> [<span class="st">'cabin_null'</span>,<span class="st">'age_null'</span>]</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>train.drop(drop_column , axis <span class="op">=</span><span class="dv">1</span>  ,inplace <span class="op">=</span> <span class="va">True</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -845,9 +847,9 @@ Total number of passengers in the Titanic: 891</code></pre>
 <section id="c.1.-handling-the-missing-values" class="level3">
 <h3 class="anchored" data-anchor-id="c.1.-handling-the-missing-values">C.1. Handling the Missing Values:<br></h3>
 <p>The dataset contains missing values in several features. To address these, we apply different strategies based on the nature of each feature:</p>
-<div id="b0e97c4a" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.442663Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.442051Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.444810Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.445348Z&quot;}" data-papermill="{&quot;duration&quot;:0.068828,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.445522&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.376694&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="18">
+<div id="96f5aea5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.442663Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.442051Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.444810Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.445348Z&quot;}" data-papermill="{&quot;duration&quot;:0.068828,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.445522&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.376694&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>train.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="206">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>PassengerId      0
 Survived         0
 Pclass           0
@@ -863,9 +865,9 @@ Embarked         2
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="47ef67ef" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.567380Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.566835Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.573905Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.574381Z&quot;}" data-papermill="{&quot;duration&quot;:0.069182,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.574549&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.505367&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="19">
+<div id="5e33139e" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.567380Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.566835Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.573905Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.574381Z&quot;}" data-papermill="{&quot;duration&quot;:0.069182,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.574549&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.505367&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>test.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="207">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>PassengerId      0
 Pclass           0
 Name             0
@@ -880,7 +882,7 @@ Embarked         0
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="bc0afe16" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.698254Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.697685Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.713090Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.712561Z&quot;}" data-papermill="{&quot;duration&quot;:0.078807,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.713222&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.634415&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="20">
+<div id="795e50a6" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:46.698254Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:46.697685Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:46.713090Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:46.712561Z&quot;}" data-papermill="{&quot;duration&quot;:0.078807,&quot;end_time&quot;:&quot;2021-04-23T20:32:46.713222&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:46.634415&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>data_cleaner <span class="op">=</span> [test , train]</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dataset <span class="kw">in</span> data_cleaner:    </span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#completing missing age with median</span></span>
@@ -902,7 +904,7 @@ dtype: int64</code></pre>
 <p>Encoding is a crucial step in data preprocessing, especially for machine learning and statistical modeling. It involves converting categorical variables (features that represent categories or groups) into numerical values that can be processed by machine learning algorithms.</p>
 <section id="c.2.1.-cabin-feature" class="level4">
 <h4 class="anchored" data-anchor-id="c.2.1.-cabin-feature">C.2.1. Cabin Feature</h4>
-<div id="ee4ffe0e" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:47.083372Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:47.082787Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:47.086162Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:47.085643Z&quot;}" data-papermill="{&quot;duration&quot;:0.071415,&quot;end_time&quot;:&quot;2021-04-23T20:32:47.086312&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:47.014897&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="21">
+<div id="57671006" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:47.083372Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:47.082787Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:47.086162Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:47.085643Z&quot;}" data-papermill="{&quot;duration&quot;:0.071415,&quot;end_time&quot;:&quot;2021-04-23T20:32:47.086312&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:47.014897&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>drop_column <span class="op">=</span> [<span class="st">'Cabin'</span>]</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>train.drop(drop_column , axis <span class="op">=</span><span class="dv">1</span>  ,inplace <span class="op">=</span> <span class="va">True</span> )</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>test.drop(drop_column , axis <span class="op">=</span><span class="dv">1</span>  ,inplace <span class="op">=</span> <span class="va">True</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -911,7 +913,7 @@ dtype: int64</code></pre>
 </section>
 <section id="c.2.2.-fare-feature" class="level4">
 <h4 class="anchored" data-anchor-id="c.2.2.-fare-feature">C.2.2. Fare Feature</h4>
-<div id="cf182309" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:47.333005Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:47.332078Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:47.348850Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:47.349278Z&quot;}" data-papermill="{&quot;duration&quot;:0.082134,&quot;end_time&quot;:&quot;2021-04-23T20:32:47.349462&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:47.267328&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="22">
+<div id="613fea04" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:47.333005Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:47.332078Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:47.348850Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:47.349278Z&quot;}" data-papermill="{&quot;duration&quot;:0.082134,&quot;end_time&quot;:&quot;2021-04-23T20:32:47.349462&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:47.267328&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>full_data <span class="op">=</span> [train,test]</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dataset <span class="kw">in</span> full_data:</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    dataset.loc[ dataset[<span class="st">'Fare'</span>] <span class="op">&lt;=</span> <span class="fl">7.91</span>, <span class="st">'Fare_Band'</span>] <span class="op">=</span> <span class="dv">0</span></span>
@@ -925,7 +927,7 @@ dtype: int64</code></pre>
 </section>
 <section id="c.2.3.-age-feature" class="level4">
 <h4 class="anchored" data-anchor-id="c.2.3.-age-feature">C.2.3. Age Feature</h4>
-<div id="2061b807" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:47.594090Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:47.593120Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:47.614967Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:47.615359Z&quot;}" data-papermill="{&quot;duration&quot;:0.085178,&quot;end_time&quot;:&quot;2021-04-23T20:32:47.615536&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:47.530358&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="23">
+<div id="666a4f9d" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:47.594090Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:47.593120Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:47.614967Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:47.615359Z&quot;}" data-papermill="{&quot;duration&quot;:0.085178,&quot;end_time&quot;:&quot;2021-04-23T20:32:47.615536&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:47.530358&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>full_data <span class="op">=</span> [test , train]</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dataset <span class="kw">in</span> full_data:</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -943,7 +945,7 @@ dtype: int64</code></pre>
 </section>
 <section id="c.2.4.-sex-and-embarked-feature" class="level4">
 <h4 class="anchored" data-anchor-id="c.2.4.-sex-and-embarked-feature">C.2.4. Sex and Embarked Feature</h4>
-<div id="30ba63a9" class="cell" data-execution_count="24">
+<div id="a9fa506e" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>full_data <span class="op">=</span> [test , train]</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dataset <span class="kw">in</span> full_data:</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    dataset[<span class="st">'Embarked'</span>] <span class="op">=</span> dataset[<span class="st">'Embarked'</span>].<span class="bu">map</span>( {<span class="st">'S'</span>: <span class="dv">0</span>, <span class="st">'C'</span>: <span class="dv">1</span>, <span class="st">'Q'</span>: <span class="dv">2</span>} ).astype(<span class="bu">int</span>)</span>
@@ -953,7 +955,7 @@ dtype: int64</code></pre>
 </section>
 <section id="c.2.5.-droping-the-name-feature" class="level4">
 <h4 class="anchored" data-anchor-id="c.2.5.-droping-the-name-feature">C.2.5. Droping the Name feature</h4>
-<div id="08a7d767" class="cell" data-execution_count="25">
+<div id="8c151c1b" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>train.drop([<span class="st">'Name'</span>],axis <span class="op">=</span> <span class="dv">1</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>test.drop([<span class="st">'Name'</span>],axis <span class="op">=</span> <span class="dv">1</span>, inplace <span class="op">=</span> <span class="va">True</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -961,7 +963,7 @@ dtype: int64</code></pre>
 </section>
 <section id="c.2.6.-family-size" class="level4">
 <h4 class="anchored" data-anchor-id="c.2.6.-family-size">C.2.6. Family Size</h4>
-<div id="b0125f50" class="cell" data-execution_count="26">
+<div id="f26450e0" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">'family_size'</span>] <span class="op">=</span> train[<span class="st">'SibSp'</span>] <span class="op">+</span> train[<span class="st">'Parch'</span>] <span class="op">+</span> <span class="dv">1</span> </span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>test[<span class="st">'family_size'</span>] <span class="op">=</span> test[<span class="st">'SibSp'</span>] <span class="op">+</span> test[<span class="st">'Parch'</span>] <span class="op">+</span> <span class="dv">1</span> </span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>test[<span class="st">'IsAlone'</span>] <span class="op">=</span> <span class="dv">1</span> </span>
@@ -972,9 +974,9 @@ dtype: int64</code></pre>
 <span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>train.drop([<span class="st">'SibSp'</span>,<span class="st">'Parch'</span> ], axis <span class="op">=</span> <span class="dv">1</span> , inplace <span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A new feature, family_size, is created by combining SibSp (siblings/spouses aboard) and Parch (parents/children aboard). This feature provides insight into the size of the family traveling with the passenger.</p>
-<div id="38296e45" class="cell" data-execution_count="27">
+<div id="308ff39e" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>test.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="215">
+<div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>PassengerId    0
 Pclass         0
 Sex            0
@@ -993,7 +995,7 @@ dtype: int64</code></pre>
 <h2 class="anchored" data-anchor-id="d.-visualizations">D. Visualizations</h2>
 <hr>
 <p>Let’s get some insights !</p>
-<div id="bd17dea9" class="cell" data-execution_count="28">
+<div id="ee7828dd" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(train, col<span class="op">=</span><span class="st">"Survived"</span>, row<span class="op">=</span><span class="st">"Sex"</span>, hue<span class="op">=</span><span class="st">"Embarked"</span>, height<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">map</span>(plt.hist, <span class="st">"Pclass"</span>, edgecolor<span class="op">=</span><span class="st">"w"</span>).add_legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1012,7 +1014,7 @@ dtype: int64</code></pre>
 <li>The second class has almost equal survived and couldn’t survive number of people. And also we notice many of the passengers Embarked from “S”.</li>
 </ul></li>
 </ul>
-<div id="0902bf46" class="cell" data-execution_count="29">
+<div id="241a614e" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize <span class="op">=</span> [<span class="dv">8</span>,<span class="dv">5</span>])</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>sns.violinplot(x<span class="op">=</span><span class="st">"Fare_Band"</span>, y<span class="op">=</span><span class="st">"Age"</span>, data<span class="op">=</span>train, hue<span class="op">=</span><span class="st">'Survived'</span>,palette<span class="op">=</span><span class="st">'coolwarm'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1024,9 +1026,9 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Mostly farebands are greater at the Age Group <strong>“4”</strong>. Survival also has <em>greater area corresponding to age group <strong>“4”</strong>.</em></p>
-<div id="47305c7b" class="cell" data-execution_count="30">
+<div id="f57d9cf6" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>train[[<span class="st">'family_size'</span>, <span class="st">'Survived'</span>]].groupby([<span class="st">'family_size'</span>], as_index<span class="op">=</span><span class="va">False</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="218">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <div>
 
 
@@ -1090,7 +1092,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="c4bfdb85" class="cell" data-execution_count="31">
+<div id="d74bf8ce" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>axes <span class="op">=</span> sns.catplot(x<span class="op">=</span><span class="st">'family_size'</span>, y<span class="op">=</span><span class="st">'Survived'</span>, hue<span class="op">=</span><span class="st">'Sex'</span>, data<span class="op">=</span>train, aspect<span class="op">=</span><span class="dv">3</span>, kind<span class="op">=</span><span class="st">'point'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1101,7 +1103,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>We find with increase in family size the survival rate decreases.</p>
-<div id="b6f40be3" class="cell" data-execution_count="32">
+<div id="c01aafb7" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>))</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(train.drop(<span class="st">'PassengerId'</span>,axis<span class="op">=</span><span class="dv">1</span>).corr(), square<span class="op">=</span><span class="va">True</span>, annot<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1125,7 +1127,7 @@ dtype: int64</code></pre>
 <h2 class="anchored" data-anchor-id="e.-model-training-and-predicting">E. Model Training and Predicting</h2>
 <hr>
 <p>Spitting the data in ro train and test</p>
-<div id="a931e2a6" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:53.361482Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:53.360855Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:53.556072Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:53.555545Z&quot;}" data-papermill="{&quot;duration&quot;:0.26645,&quot;end_time&quot;:&quot;2021-04-23T20:32:53.556212&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:53.289762&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="33">
+<div id="7287feff" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:53.361482Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:53.360855Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:53.556072Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:53.555545Z&quot;}" data-papermill="{&quot;duration&quot;:0.26645,&quot;end_time&quot;:&quot;2021-04-23T20:32:53.556212&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:53.289762&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> train.drop(<span class="st">'Survived'</span> , axis <span class="op">=</span> <span class="dv">1</span> )</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> train[<span class="st">'Survived'</span>]</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1133,12 +1135,12 @@ dtype: int64</code></pre>
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>X_train ,X_test , y_train , y_test <span class="op">=</span> train_test_split(X , y , test_size <span class="op">=</span> <span class="fl">0.3</span> , random_state <span class="op">=</span><span class="dv">102</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Also we need to remove Id of passengers for prediction,</p>
-<div id="6b1ae2ba" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:53.839140Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:53.838169Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:53.841458Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:53.840978Z&quot;}" data-papermill="{&quot;duration&quot;:0.079744,&quot;end_time&quot;:&quot;2021-04-23T20:32:53.841593&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:53.761849&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="34">
+<div id="179cd937" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:53.839140Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:53.838169Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:53.841458Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:53.840978Z&quot;}" data-papermill="{&quot;duration&quot;:0.079744,&quot;end_time&quot;:&quot;2021-04-23T20:32:53.841593&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:53.761849&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>X_train<span class="op">=</span>X_train.drop([<span class="st">'PassengerId'</span>],axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> X_test.drop([<span class="st">'PassengerId'</span>],axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Importing models from scikit learn module. The objective is to classify the passenger survivior into two classes: 0 or 1, hence this is a binary classification for which we will be using classifiers. Following part of this notebook compares and finds the best model suitable for the data based upon accuracy metrics.</p>
-<div id="95c6bfd5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:54.128224Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:54.127560Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:54.355129Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:54.354528Z&quot;}" data-papermill="{&quot;duration&quot;:0.3031,&quot;end_time&quot;:&quot;2021-04-23T20:32:54.355270&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:54.052170&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="35">
+<div id="b70bc1f9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:54.128224Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:54.127560Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:54.355129Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:54.354528Z&quot;}" data-papermill="{&quot;duration&quot;:0.3031,&quot;end_time&quot;:&quot;2021-04-23T20:32:54.355270&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:54.052170&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Importing all models</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression, SGDClassifier</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
@@ -1151,33 +1153,33 @@ dtype: int64</code></pre>
 </div>
 <section id="e.1.-logistic-regression" class="level3">
 <h3 class="anchored" data-anchor-id="e.1.-logistic-regression">E.1. Logistic Regression</h3>
-<div id="1f801713" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:54.649046Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:54.648362Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:54.663747Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:54.664292Z&quot;}" data-papermill="{&quot;duration&quot;:0.093643,&quot;end_time&quot;:&quot;2021-04-23T20:32:54.664464&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:54.570821&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="36">
+<div id="d44ce2fe" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:54.649046Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:54.648362Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:54.663747Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:54.664292Z&quot;}" data-papermill="{&quot;duration&quot;:0.093643,&quot;end_time&quot;:&quot;2021-04-23T20:32:54.664464&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:54.570821&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>logmodel <span class="op">=</span> LogisticRegression()</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>logmodel.fit(X_train , y_train)</span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>pred_l <span class="op">=</span> logmodel.predict(X_test)</span>
 <span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>acc_l <span class="op">=</span> accuracy_score(y_test , pred_l)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>acc_l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="224">
+<div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>79.1044776119403</code></pre>
 </div>
 </div>
 </section>
 <section id="e.2.-random-forest" class="level3">
 <h3 class="anchored" data-anchor-id="e.2.-random-forest">E.2. Random Forest</h3>
-<div id="3dbffe31" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:54.951492Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:54.950892Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:55.173900Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:55.173365Z&quot;}" data-papermill="{&quot;duration&quot;:0.2952,&quot;end_time&quot;:&quot;2021-04-23T20:32:55.174028&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:54.878828&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="37">
+<div id="3b2431ab" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:54.951492Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:54.950892Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:55.173900Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:55.173365Z&quot;}" data-papermill="{&quot;duration&quot;:0.2952,&quot;end_time&quot;:&quot;2021-04-23T20:32:55.174028&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:54.878828&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>random_forest <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span> <span class="dv">100</span>)</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>random_forest.fit(X_train, y_train)</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>pred_rf <span class="op">=</span> random_forest.predict(X_test)</span>
 <span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>acc_rf <span class="op">=</span> accuracy_score(y_test , pred_rf)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>acc_rf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="225">
-<pre><code>82.83582089552239</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>81.71641791044776</code></pre>
 </div>
 </div>
 </section>
 <section id="e.3.-k-nearest-neighbours" class="level3">
 <h3 class="anchored" data-anchor-id="e.3.-k-nearest-neighbours">E.3. K-Nearest Neighbours</h3>
-<div id="0cbc51f8" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:55.462822Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:55.462222Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:55.481314Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:55.481851Z&quot;}" data-papermill="{&quot;duration&quot;:0.096048,&quot;end_time&quot;:&quot;2021-04-23T20:32:55.482009&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:55.385961&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="38">
+<div id="fde9d9ba" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:55.462822Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:55.462222Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:55.481314Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:55.481851Z&quot;}" data-papermill="{&quot;duration&quot;:0.096048,&quot;end_time&quot;:&quot;2021-04-23T20:32:55.482009&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:55.385961&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors <span class="op">=</span> <span class="dv">3</span>)</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>knn.fit(X_train, y_train)</span>
@@ -1186,14 +1188,14 @@ dtype: int64</code></pre>
 <span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>acc_knn <span class="op">=</span> accuracy_score(y_test , pred_knn)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>acc_knn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="226">
+<div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>79.8507462686567</code></pre>
 </div>
 </div>
 </section>
 <section id="e.4.-gaussian-naive-bayes-classifier" class="level3">
 <h3 class="anchored" data-anchor-id="e.4.-gaussian-naive-bayes-classifier">E.4. Gaussian Naive Bayes Classifier</h3>
-<div id="9bbea0d2" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:55.770805Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:55.770180Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:55.781545Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:55.782062Z&quot;}" data-papermill="{&quot;duration&quot;:0.089308,&quot;end_time&quot;:&quot;2021-04-23T20:32:55.782221&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:55.692913&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="39">
+<div id="2885390f" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:55.770805Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:55.770180Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:55.781545Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:55.782062Z&quot;}" data-papermill="{&quot;duration&quot;:0.089308,&quot;end_time&quot;:&quot;2021-04-23T20:32:55.782221&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:55.692913&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>gaussian <span class="op">=</span> GaussianNB()</span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>gaussian.fit(X_train, y_train)</span>
@@ -1202,14 +1204,14 @@ dtype: int64</code></pre>
 <span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>acc_gb <span class="op">=</span> accuracy_score(y_test , pred_gb)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>acc_gb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="227">
+<div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>77.98507462686567</code></pre>
 </div>
 </div>
 </section>
 <section id="e.5.-c-support-vector-classifier" class="level3">
 <h3 class="anchored" data-anchor-id="e.5.-c-support-vector-classifier">E.5. C-Support Vector Classifier</h3>
-<div id="c90e3669" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.074024Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.073097Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.102944Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.103434Z&quot;}" data-papermill="{&quot;duration&quot;:0.105985,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.103602&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:55.997617&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="40">
+<div id="53dd0aa6" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.074024Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.073097Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.102944Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.103434Z&quot;}" data-papermill="{&quot;duration&quot;:0.105985,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.103602&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:55.997617&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>svc <span class="op">=</span> SVC()</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>svc.fit(X_train, y_train)</span>
@@ -1218,14 +1220,14 @@ dtype: int64</code></pre>
 <span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>acc_svc <span class="op">=</span> accuracy_score(y_test , pred_svc)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>acc_svc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="228">
+<div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>84.70149253731343</code></pre>
 </div>
 </div>
 </section>
 <section id="e.6.-decision-tree" class="level3">
 <h3 class="anchored" data-anchor-id="e.6.-decision-tree">E.6. Decision Tree</h3>
-<div id="bd2e27e7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.397685Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.397048Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.404967Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.405437Z&quot;}" data-papermill="{&quot;duration&quot;:0.08648,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.405611&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:56.319131&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="41">
+<div id="6befa81b" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.397685Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.397048Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.404967Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.405437Z&quot;}" data-papermill="{&quot;duration&quot;:0.08648,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.405611&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:56.319131&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>decision_tree <span class="op">=</span> DecisionTreeClassifier()</span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>decision_tree.fit(X_train, y_train)</span>
@@ -1234,14 +1236,14 @@ dtype: int64</code></pre>
 <span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>acc_dt <span class="op">=</span> accuracy_score(y_test , pred_dt)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>acc_dt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="229">
+<div class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>81.34328358208955</code></pre>
 </div>
 </div>
 </section>
 <section id="e.7.-linear-classifiers-with-sgd-training." class="level3">
 <h3 class="anchored" data-anchor-id="e.7.-linear-classifiers-with-sgd-training.">E.7. Linear classifiers with SGD training.</h3>
-<div id="3eba8e30" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.706350Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.703937Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.715328Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.715776Z&quot;}" data-papermill="{&quot;duration&quot;:0.090807,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.715936&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:56.625129&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="42">
+<div id="d2e5842f" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.706350Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.703937Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.715328Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.715776Z&quot;}" data-papermill="{&quot;duration&quot;:0.090807,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.715936&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:56.625129&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>sgd <span class="op">=</span> SGDClassifier()</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>sgd.fit(X_train, y_train)</span>
@@ -1250,11 +1252,11 @@ dtype: int64</code></pre>
 <span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>acc_sgd <span class="op">=</span> accuracy_score(y_test , pred_sgd)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>acc_sgd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="230">
-<pre><code>79.8507462686567</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>68.65671641791045</code></pre>
 </div>
 </div>
-<div id="fb11bd8c" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.875742Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.875152Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.879071Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.878599Z&quot;}" data-papermill="{&quot;duration&quot;:0.087595,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.879201&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:56.791606&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="43">
+<div id="32a9b8ec" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:56.875742Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:56.875152Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:56.879071Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:56.878599Z&quot;}" data-papermill="{&quot;duration&quot;:0.087595,&quot;end_time&quot;:&quot;2021-04-23T20:32:56.879201&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:56.791606&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Arranging the Accuracy results</span></span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Model'</span>: [<span class="st">'Logistic Regression'</span>, <span class="st">'Random Forrest'</span>,<span class="st">'K- Nearest Neighbour'</span> ,</span>
@@ -1262,7 +1264,7 @@ dtype: int64</code></pre>
 <span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Score'</span>: [acc_l , acc_rf , acc_knn , acc_gb , acc_svc , </span>
 <span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>              acc_dt , acc_sgd]})</span>
 <span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a>models.sort_values(by<span class="op">=</span><span class="st">'Score'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="231">
+<div class="cell-output cell-output-display" data-execution_count="43">
 <div>
 
 
@@ -1283,7 +1285,7 @@ dtype: int64</code></pre>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>Random Forrest</td>
-<td>82.835821</td>
+<td>81.716418</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">5</td>
@@ -1296,19 +1298,19 @@ dtype: int64</code></pre>
 <td>79.850746</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>Stochastic Gradient Descent</td>
-<td>79.850746</td>
-</tr>
-<tr class="even">
 <td data-quarto-table-cell-role="th">0</td>
 <td>Logistic Regression</td>
 <td>79.104478</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>Naive Bayes</td>
 <td>77.985075</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Stochastic Gradient Descent</td>
+<td>68.656716</td>
 </tr>
 </tbody>
 </table>
@@ -1320,7 +1322,7 @@ dtype: int64</code></pre>
 </section>
 <section id="ensemble-learning" class="level2">
 <h2 class="anchored" data-anchor-id="ensemble-learning">Ensemble Learning</h2>
-<div id="daa0c7cd" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.194519Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.193895Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.225611Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.224960Z&quot;}" data-papermill="{&quot;duration&quot;:0.117647,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.225746&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.108099&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="44">
+<div id="54a112b2" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.194519Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.193895Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.225611Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.224960Z&quot;}" data-papermill="{&quot;duration&quot;:0.117647,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.225746&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.108099&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>df_test <span class="op">=</span>  test.drop([<span class="st">'PassengerId'</span>],axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>p_l <span class="op">=</span> logmodel.predict(df_test)</span>
@@ -1328,7 +1330,7 @@ dtype: int64</code></pre>
 <span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>p_rf <span class="op">=</span> random_forest.predict(df_test)</span>
 <span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>p_dt <span class="op">=</span> decision_tree.predict(df_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="aa149187" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.382473Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.381852Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.384501Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.384910Z&quot;}" data-papermill="{&quot;duration&quot;:0.083898,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.385072&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.301174&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="45">
+<div id="6cd48a02" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.382473Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.381852Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.384501Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.384910Z&quot;}" data-papermill="{&quot;duration&quot;:0.083898,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.385072&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.301174&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>predict_combine <span class="op">=</span> np.zeros((df_test.shape[<span class="dv">0</span>]))</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, test.shape[<span class="dv">0</span>]):</span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> p_rf[i]<span class="op">+</span>p_svc[i]<span class="op">+</span>p_l[i]<span class="op">+</span>p_dt[i]</span>
@@ -1339,7 +1341,7 @@ dtype: int64</code></pre>
 </section>
 <section id="submission" class="level2">
 <h2 class="anchored" data-anchor-id="submission">Submission</h2>
-<div id="ce27fe9e" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.688123Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.687211Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.693086Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.693579Z&quot;}" data-papermill="{&quot;duration&quot;:0.085841,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.693765&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.607924&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="46">
+<div id="94d3c336" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.688123Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.687211Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.693086Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.693579Z&quot;}" data-papermill="{&quot;duration&quot;:0.085841,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.693765&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.607924&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>submission <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>       <span class="st">"PassengerId"</span>: test[<span class="st">"PassengerId"</span>],</span>
 <span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Survived"</span>: predict_combine</span>
@@ -1347,9 +1349,9 @@ dtype: int64</code></pre>
 <span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>submission.to_csv(<span class="st">"submission.csv"</span>, encoding<span class="op">=</span><span class="st">'utf-8'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="d00a5b70" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.848777Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.847828Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.856131Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.856614Z&quot;}" data-papermill="{&quot;duration&quot;:0.087097,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.856782&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.769685&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="47">
+<div id="664065d9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-23T20:32:57.848777Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-23T20:32:57.847828Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-23T20:32:57.856131Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-23T20:32:57.856614Z&quot;}" data-papermill="{&quot;duration&quot;:0.087097,&quot;end_time&quot;:&quot;2021-04-23T20:32:57.856782&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-23T20:32:57.769685&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>submission.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="235">
+<div class="cell-output cell-output-display" data-execution_count="47">
 <div>
 
 
@@ -1497,7 +1499,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/pr2tik1\.github\.io\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

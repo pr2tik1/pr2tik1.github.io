@@ -128,7 +128,7 @@ background: black;
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="Loan Status Prediction – devExplore">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="../post-images/11.jpg">
+<meta name="twitter:image" content="https://pr2tik1.github.io/posts/post-images/11.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -280,14 +280,14 @@ background: black;
 </section>
 <section id="importing-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="importing-libraries">Importing Libraries</h2>
-<div id="74a4e352" class="cell" data-execution_count="1">
+<div id="e0c7ed85" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span>  numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span>  pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="14a78bca" class="cell" data-execution_count="2">
+<div id="b6655089" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> feature_selection</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> model_selection</span>
@@ -304,11 +304,11 @@ background: black;
 </section>
 <section id="importing-data" class="level2">
 <h2 class="anchored" data-anchor-id="importing-data">Importing data</h2>
-<div id="5201e9fc" class="cell" data-execution_count="3">
+<div id="0d4f63b4" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(<span class="st">'../input/loan-prediction-problem-dataset/train_u6lujuX_CVtuZ9i.csv'</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.read_csv(<span class="st">'../input/loan-prediction-problem-dataset/test_Y3wMUE5_7gLdaTN.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="78b4374f" class="cell" data-execution_count="4">
+<div id="0cc54a83" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> (train.shape, test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(614, 13) (367, 12)</code></pre>
@@ -317,9 +317,9 @@ background: black;
 </section>
 <section id="data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="data-exploration">Data Exploration</h2>
-<div id="08f4a2af" class="cell" data-execution_count="5">
+<div id="ba280e64" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>train.head() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="163">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
@@ -429,7 +429,7 @@ background: black;
 </div>
 </div>
 </div>
-<div id="9565bd37" class="cell" data-execution_count="6">
+<div id="74c9cd04" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>train.info() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -454,9 +454,9 @@ dtypes: float64(4), int64(1), object(8)
 memory usage: 62.5+ KB</code></pre>
 </div>
 </div>
-<div id="0919b7eb" class="cell" data-execution_count="7">
+<div id="dac25e3d" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>train.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="165">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>Loan_ID               0
 Gender               13
 Married               3
@@ -473,9 +473,9 @@ Loan_Status           0
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="fc6ca4b7" class="cell" data-execution_count="8">
+<div id="942b6ac4" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>test.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="166">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
@@ -579,7 +579,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="42898576" class="cell" data-execution_count="9">
+<div id="c79037ac" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>test.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -603,9 +603,9 @@ dtypes: float64(3), int64(2), object(7)
 memory usage: 34.5+ KB</code></pre>
 </div>
 </div>
-<div id="f8ed19fa" class="cell" data-execution_count="10">
+<div id="b79dc305" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>test.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="168">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>Loan_ID               0
 Gender               11
 Married               0
@@ -624,7 +624,7 @@ dtype: int64</code></pre>
 </section>
 <section id="data-preparation-processing" class="level2">
 <h2 class="anchored" data-anchor-id="data-preparation-processing">Data Preparation / Processing</h2>
-<div id="978331eb" class="cell" data-execution_count="11">
+<div id="d162b341" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [train,test]</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dataset <span class="kw">in</span> data:</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Filter categorical variables</span></span>
@@ -680,7 +680,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 <section id="gender" class="level3">
 <h3 class="anchored" data-anchor-id="gender">Gender</h3>
-<div id="4478774c" class="cell" data-execution_count="12">
+<div id="e0528b95" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sns.countplot(train[<span class="st">'Gender'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -690,9 +690,9 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="dfcbb4a2" class="cell" data-execution_count="13">
+<div id="bfa37dcf" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(train.Gender, train.Loan_Status, margins <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="171">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -737,7 +737,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 <p>The male are in large number as compared to female applicants.Also many of them have positive Loan Status. Further Binarization of this feature should be done,</p>
-<div id="ebd7768d" class="cell" data-execution_count="14">
+<div id="5a14042c" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>train.Gender <span class="op">=</span> train.Gender.fillna(train.Gender.mode())</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>test.Gender <span class="op">=</span> test.Gender.fillna(test.Gender.mode())</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -752,7 +752,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="dependants" class="level3">
 <h3 class="anchored" data-anchor-id="dependants">Dependants</h3>
-<div id="6d044e04" class="cell" data-execution_count="15">
+<div id="f56979a8" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [<span class="st">'0'</span> , <span class="st">'1'</span>, <span class="st">'2'</span> , <span class="st">'3+'</span>]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>explode <span class="op">=</span> (<span class="fl">0.05</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
@@ -770,9 +770,9 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="864ddfec" class="cell" data-execution_count="16">
+<div id="12952c6d" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>train.Dependents.value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="174">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>Dependents
 0     345
 1     102
@@ -781,9 +781,9 @@ Name: count, dtype: int64</code></pre>
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="89644f9d" class="cell" data-execution_count="17">
+<div id="39c3126b" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(train.Dependents , train.Loan_Status, margins <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="175">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 
 
@@ -840,7 +840,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 <p>The applicants with highest number of dependants are least in number whereas applicants with no dependance are greatest among these.</p>
-<div id="2fc3e870" class="cell" data-execution_count="18">
+<div id="75b13bfc" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>train.Dependents <span class="op">=</span> train.Dependents.fillna(<span class="st">"0"</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>test.Dependents <span class="op">=</span> test.Dependents.fillna(<span class="st">"0"</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -852,9 +852,9 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="credit-history" class="level3">
 <h3 class="anchored" data-anchor-id="credit-history">Credit History</h3>
-<div id="643f559f" class="cell" data-execution_count="19">
+<div id="6484ad4c" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(train.Credit_History , train.Loan_Status, margins <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="177">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <div>
 
 
@@ -898,13 +898,13 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="05683d57" class="cell" data-execution_count="20">
+<div id="94b2126f" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>train.Credit_History <span class="op">=</span> train.Credit_History.fillna(train.Credit_History.mode()[<span class="dv">0</span>])</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>test.Credit_History  <span class="op">=</span> test.Credit_History.fillna(test.Credit_History.mode()[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="self-employed" class="level4">
 <h4 class="anchored" data-anchor-id="self-employed">Self Employed</h4>
-<div id="2c638a9a" class="cell" data-execution_count="21">
+<div id="cce4b384" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sns.countplot(train[<span class="st">'Self_Employed'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -914,9 +914,9 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="c7830a3f" class="cell" data-execution_count="22">
+<div id="6e34523e" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(train.Self_Employed , train.Loan_Status,margins <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="180">
+<div class="cell-output cell-output-display" data-execution_count="22">
 <div>
 
 
@@ -960,7 +960,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="b223d154" class="cell" data-execution_count="23">
+<div id="8cfc5826" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>train.Self_Employed <span class="op">=</span> train.Self_Employed.fillna(train.Self_Employed.mode())</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>test.Self_Employed <span class="op">=</span> test.Self_Employed.fillna(test.Self_Employed.mode())</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -976,7 +976,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="married" class="level3">
 <h3 class="anchored" data-anchor-id="married">Married</h3>
-<div id="13ba6b76" class="cell" data-execution_count="24">
+<div id="79318ece" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>sns.countplot(train.Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -986,9 +986,9 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="96b15164" class="cell" data-execution_count="25">
+<div id="add7989e" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(train.Married , train.Loan_Status,margins <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="183">
+<div class="cell-output cell-output-display" data-execution_count="25">
 <div>
 
 
@@ -1032,7 +1032,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="afd3ef24" class="cell" data-execution_count="26">
+<div id="7a7b50ef" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>train.Married <span class="op">=</span> train.Married.fillna(train.Married.mode())</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>test.Married <span class="op">=</span> test.Married.fillna(test.Married.mode())</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1047,14 +1047,14 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="loan-amount-term-and-loan-amount" class="level3">
 <h3 class="anchored" data-anchor-id="loan-amount-term-and-loan-amount">Loan Amount Term and Loan Amount</h3>
-<div id="51e9d235" class="cell" data-execution_count="27">
+<div id="1743325e" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>train.drop([<span class="st">'Loan_Amount_Term'</span>], axis <span class="op">=</span> <span class="dv">1</span> , inplace <span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>test.drop([<span class="st">'Loan_Amount_Term'</span>], axis <span class="op">=</span> <span class="dv">1</span> , inplace <span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>train.LoanAmount <span class="op">=</span> train.LoanAmount.fillna(train.LoanAmount.mean()).astype(<span class="bu">int</span>)</span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>test.LoanAmount <span class="op">=</span> test.LoanAmount.fillna(test.LoanAmount.mean()).astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e7f5029a" class="cell" data-execution_count="28">
+<div id="5f3fdb1e" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sns.distplot(train[<span class="st">'LoanAmount'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1068,7 +1068,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="education" class="level3">
 <h3 class="anchored" data-anchor-id="education">Education</h3>
-<div id="998d9552" class="cell" data-execution_count="29">
+<div id="28a1d24f" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>sns.countplot(train.Education)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1078,14 +1078,14 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="a9e59fa3" class="cell" data-execution_count="30">
+<div id="fb00c828" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">'Education'</span>] <span class="op">=</span> train[<span class="st">'Education'</span>].<span class="bu">map</span>( {<span class="st">'Graduate'</span>: <span class="dv">0</span>, <span class="st">'Not Graduate'</span>: <span class="dv">1</span>} ).astype(<span class="bu">int</span>)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>test[<span class="st">'Education'</span>] <span class="op">=</span> test[<span class="st">'Education'</span>].<span class="bu">map</span>( {<span class="st">'Graduate'</span>: <span class="dv">0</span>, <span class="st">'Not Graduate'</span>: <span class="dv">1</span>} ).astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="property-area" class="level3">
 <h3 class="anchored" data-anchor-id="property-area">Property Area</h3>
-<div id="f8371f9b" class="cell" data-execution_count="31">
+<div id="4316c41c" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>sns.countplot(train.Property_Area)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1095,7 +1095,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="636a903b" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-22T06:55:50.624902Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-22T06:55:50.624155Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-22T06:55:50.627623Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-22T06:55:50.627065Z&quot;}" data-papermill="{&quot;duration&quot;:0.093231,&quot;end_time&quot;:&quot;2021-04-22T06:55:50.627782&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-22T06:55:50.534551&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="32">
+<div id="6bf0319d" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2021-04-22T06:55:50.624902Z&quot;,&quot;iopub.status.busy&quot;:&quot;2021-04-22T06:55:50.624155Z&quot;,&quot;iopub.status.idle&quot;:&quot;2021-04-22T06:55:50.627623Z&quot;,&quot;shell.execute_reply&quot;:&quot;2021-04-22T06:55:50.627065Z&quot;}" data-papermill="{&quot;duration&quot;:0.093231,&quot;end_time&quot;:&quot;2021-04-22T06:55:50.627782&quot;,&quot;exception&quot;:false,&quot;start_time&quot;:&quot;2021-04-22T06:55:50.534551&quot;,&quot;status&quot;:&quot;completed&quot;}" data-tags="[]" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">'Property_Area'</span>] <span class="op">=</span> train[<span class="st">'Property_Area'</span>].<span class="bu">map</span>( {<span class="st">'Urban'</span>: <span class="dv">0</span>, <span class="st">'Semiurban'</span>: <span class="dv">1</span> ,<span class="st">'Rural'</span>: <span class="dv">2</span>  } ).astype(<span class="bu">int</span>)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>test.Property_Area <span class="op">=</span> test.Property_Area.fillna(test.Property_Area.mode())</span>
@@ -1104,7 +1104,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="co-applicant-income-and-applicant-income" class="level3">
 <h3 class="anchored" data-anchor-id="co-applicant-income-and-applicant-income">Co-Applicant income and Applicant income</h3>
-<div id="563a1b9e" class="cell" data-execution_count="33">
+<div id="d5991104" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>sns.distplot(train[<span class="st">'ApplicantIncome'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1114,7 +1114,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="0aa41433" class="cell" data-execution_count="34">
+<div id="368515d8" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sns.distplot(train[<span class="st">'CoapplicantIncome'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1127,12 +1127,12 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="target-variable-loan-status" class="level3">
 <h3 class="anchored" data-anchor-id="target-variable-loan-status">Target Variable : Loan Status</h3>
-<div id="c4f765c2" class="cell" data-execution_count="35">
+<div id="6ea3cbaf" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">'Loan_Status'</span>] <span class="op">=</span> train[<span class="st">'Loan_Status'</span>].<span class="bu">map</span>( {<span class="st">'N'</span>: <span class="dv">0</span>, <span class="st">'Y'</span>: <span class="dv">1</span> } ).astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="dropping-the-id-column" class="level4">
 <h4 class="anchored" data-anchor-id="dropping-the-id-column">Dropping the ID column</h4>
-<div id="2952de5a" class="cell" data-execution_count="36">
+<div id="35ff0cf1" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>train.drop([<span class="st">'Loan_ID'</span>], axis <span class="op">=</span> <span class="dv">1</span> , inplace <span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -1140,9 +1140,9 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="view-the-datasets" class="level2">
 <h2 class="anchored" data-anchor-id="view-the-datasets">View the datasets</h2>
-<div id="29024b5c" class="cell" data-execution_count="37">
+<div id="338f2091" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="195">
+<div class="cell-output cell-output-display" data-execution_count="37">
 <div>
 
 
@@ -1240,9 +1240,9 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="4df52110" class="cell" data-execution_count="38">
+<div id="95778668" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>test.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="196">
+<div class="cell-output cell-output-display" data-execution_count="38">
 <div>
 
 
@@ -1346,7 +1346,7 @@ Name: count, dtype: int64</code></pre>
 <section id="plot-between-loanamount-applicant-income-employement-and-gender" class="level3">
 <h3 class="anchored" data-anchor-id="plot-between-loanamount-applicant-income-employement-and-gender">Plot between LoanAmount, Applicant Income, Employement and Gender</h3>
 <p><em>What is the relation of Loan taken between men and women?<br> Did the employed ones were greater in number to take Loan ?<br> What is distribution of Loan Amount and Income?</em></p>
-<div id="a5f54b1e" class="cell" data-execution_count="39">
+<div id="e1a00205" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Corrected code using height instead of size</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.lmplot(x<span class="op">=</span><span class="st">'ApplicantIncome'</span>, y<span class="op">=</span><span class="st">'LoanAmount'</span>, data<span class="op">=</span>train, col<span class="op">=</span><span class="st">'employed_Yes'</span>, hue<span class="op">=</span><span class="st">'Male'</span>,</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>               palette<span class="op">=</span>[<span class="st">"Red"</span>, <span class="st">"Blue"</span>, <span class="st">"Yellow"</span>], aspect<span class="op">=</span><span class="fl">1.2</span>, height<span class="op">=</span><span class="dv">3</span>)</span>
@@ -1384,7 +1384,7 @@ Name: count, dtype: int64</code></pre>
 <li><code>Rural      :2</code></li>
 </ul></li>
 </ul>
-<div id="2c04a7a4" class="cell" data-execution_count="40">
+<div id="f574211a" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">2</span>))</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span><span class="st">"Property_Area"</span>, y<span class="op">=</span><span class="st">"LoanAmount"</span>, hue<span class="op">=</span><span class="st">"Education"</span>,data<span class="op">=</span>train, palette<span class="op">=</span><span class="st">"coolwarm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1407,16 +1407,16 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="crosstab-for-relation-between-credit-history-and-loan-status." class="level2">
 <h2 class="anchored" data-anchor-id="crosstab-for-relation-between-credit-history-and-loan-status.">Crosstab for relation between Credit History and Loan status.</h2>
-<div id="168edb4b" class="cell" data-execution_count="41">
+<div id="ea474d16" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>train.Credit_History.value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="199">
+<div class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>Credit_History
 1.0    525
 0.0     89
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="e64cb90c" class="cell" data-execution_count="42">
+<div id="53870bf4" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> pd.crosstab(train[<span class="st">'Credit_History'</span>], train[<span class="st">'Loan_Status'</span>])</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>lc.plot(kind<span class="op">=</span><span class="st">'bar'</span>, stacked<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span>[<span class="st">'red'</span>,<span class="st">'blue'</span>], grid<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1436,7 +1436,7 @@ Name: count, dtype: int64</code></pre>
 <li>The applicant with poor credit history were handled in the range 0-100 only.</li>
 </ul></li>
 </ul>
-<div id="121e3323" class="cell" data-execution_count="43">
+<div id="dba3bdfe" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>,<span class="dv">6</span>))</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(train.drop(<span class="st">'Loan_Status'</span>,axis<span class="op">=</span><span class="dv">1</span>).corr(), vmax<span class="op">=</span><span class="fl">0.6</span>, square<span class="op">=</span><span class="va">True</span>, annot<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1451,81 +1451,81 @@ Name: count, dtype: int64</code></pre>
 <section id="prediction" class="level2">
 <h2 class="anchored" data-anchor-id="prediction">Prediction</h2>
 <p>The problem is of <strong>Classification</strong> as observed and concluded from the data and visualisations.</p>
-<div id="1c5ccf96" class="cell" data-execution_count="44">
+<div id="1a615a6c" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> train.drop(<span class="st">'Loan_Status'</span> , axis <span class="op">=</span> <span class="dv">1</span> )</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> train[<span class="st">'Loan_Status'</span>]</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>X_train ,X_test , y_train , y_test <span class="op">=</span> train_test_split(X , y , test_size <span class="op">=</span> <span class="fl">0.3</span> , random_state <span class="op">=</span><span class="dv">102</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="18ade205" class="cell" data-execution_count="45">
+<div id="687f19ba" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>logmodel <span class="op">=</span> LogisticRegression()</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>logmodel.fit(X_train , y_train)</span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>pred_l <span class="op">=</span> logmodel.predict(X_test)</span>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>acc_l <span class="op">=</span> accuracy_score(y_test , pred_l)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>acc_l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="203">
+<div class="cell-output cell-output-display" data-execution_count="45">
 <pre><code>83.78378378378379</code></pre>
 </div>
 </div>
-<div id="65dd4b60" class="cell" data-execution_count="46">
+<div id="fb0a2c37" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>random_forest <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span> <span class="dv">100</span>)</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>random_forest.fit(X_train, y_train)</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>pred_rf <span class="op">=</span> random_forest.predict(X_test)</span>
 <span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>acc_rf <span class="op">=</span> accuracy_score(y_test , pred_rf)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>acc_rf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="204">
-<pre><code>78.91891891891892</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="46">
+<pre><code>81.08108108108108</code></pre>
 </div>
 </div>
-<div id="1fe6cb01" class="cell" data-execution_count="47">
+<div id="1bafd68d" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors <span class="op">=</span> <span class="dv">3</span>)</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>knn.fit(X_train, y_train)</span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>pred_knn <span class="op">=</span> knn.predict(X_test)</span>
 <span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>acc_knn <span class="op">=</span> accuracy_score(y_test , pred_knn)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>acc_knn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="205">
+<div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>61.08108108108108</code></pre>
 </div>
 </div>
-<div id="167f9bf2" class="cell" data-execution_count="48">
+<div id="f7966669" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>gaussian <span class="op">=</span> GaussianNB()</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>gaussian.fit(X_train, y_train)</span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>pred_gb <span class="op">=</span> gaussian.predict(X_test)</span>
 <span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>acc_gb <span class="op">=</span> accuracy_score(y_test , pred_gb)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>acc_gb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="206">
+<div class="cell-output cell-output-display" data-execution_count="48">
 <pre><code>82.16216216216216</code></pre>
 </div>
 </div>
-<div id="87d961c7" class="cell" data-execution_count="49">
+<div id="ce2ddabc" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>svc <span class="op">=</span> SVC()</span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>svc.fit(X_train, y_train)</span>
 <span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>pred_svm <span class="op">=</span> svc.predict(X_test)</span>
 <span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>acc_svm <span class="op">=</span> accuracy_score(y_test , pred_svm)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>acc_svm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="207">
+<div class="cell-output cell-output-display" data-execution_count="49">
 <pre><code>70.27027027027027</code></pre>
 </div>
 </div>
-<div id="7bcadc9d" class="cell" data-execution_count="50">
+<div id="0a8566f5" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>gbk <span class="op">=</span> GradientBoostingClassifier()</span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>gbk.fit(X_train, y_train)</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>pred_gbc <span class="op">=</span> gbk.predict(X_test)</span>
 <span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>acc_gbc <span class="op">=</span> accuracy_score(y_test , pred_gbc)<span class="op">*</span><span class="dv">100</span></span>
 <span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>acc_gbc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="208">
+<div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>82.16216216216216</code></pre>
 </div>
 </div>
-<div id="c9d1d6c9" class="cell" data-execution_count="51">
+<div id="a6df7715" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Arranging the Accuracy results</span></span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Model'</span>: [<span class="st">'Logistic Regression'</span>, <span class="st">'Random Forrest'</span>,<span class="st">'K- Nearest Neighbour'</span> ,</span>
 <span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">'Naive Bayes'</span> , <span class="st">'SVM'</span>,<span class="st">'Gradient Boosting Classifier'</span>],</span>
 <span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Score'</span>: [acc_l , acc_rf , acc_knn , acc_gb ,acc_svm ,acc_gbc ]})</span>
 <span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>models.sort_values(by<span class="op">=</span><span class="st">'Score'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="209">
+<div class="cell-output cell-output-display" data-execution_count="51">
 <div>
 
 
@@ -1556,7 +1556,7 @@ Name: count, dtype: int64</code></pre>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>Random Forrest</td>
-<td>78.918919</td>
+<td>81.081081</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
@@ -1576,11 +1576,11 @@ Name: count, dtype: int64</code></pre>
 </div>
 <p>The highest classification accuracy is shown by Logistic Regression of about 83.24 %</p>
 <p>Let us Check th feature importance,</p>
-<div id="551935a6" class="cell" data-execution_count="52">
+<div id="fa835bad" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>importances <span class="op">=</span> pd.DataFrame({<span class="st">'Features'</span>:X_train.columns,<span class="st">'Importance'</span>:np.<span class="bu">round</span>(random_forest.feature_importances_,<span class="dv">3</span>)})</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>importances <span class="op">=</span> importances.sort_values(<span class="st">'Importance'</span>,ascending<span class="op">=</span><span class="va">False</span>).set_index(<span class="st">'Features'</span>)</span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>importances.head(<span class="dv">11</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="210">
+<div class="cell-output cell-output-display" data-execution_count="52">
 <div>
 
 
@@ -1598,11 +1598,11 @@ Name: count, dtype: int64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Credit_History</td>
-<td>0.238</td>
+<td>0.235</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">ApplicantIncome</td>
-<td>0.231</td>
+<td>0.219</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">LoanAmount</td>
@@ -1610,7 +1610,7 @@ Name: count, dtype: int64</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">CoapplicantIncome</td>
-<td>0.119</td>
+<td>0.125</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Dependents</td>
@@ -1618,23 +1618,23 @@ Name: count, dtype: int64</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Property_Area</td>
-<td>0.048</td>
+<td>0.051</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">married_Yes</td>
 <td>0.029</td>
 </tr>
 <tr class="even">
+<td data-quarto-table-cell-role="th">Education</td>
+<td>0.028</td>
+</tr>
+<tr class="odd">
 <td data-quarto-table-cell-role="th">Male</td>
 <td>0.026</td>
 </tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">Education</td>
-<td>0.022</td>
-</tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">employed_Yes</td>
-<td>0.019</td>
+<td>0.020</td>
 </tr>
 </tbody>
 </table>
@@ -1642,7 +1642,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="423e6d32" class="cell" data-execution_count="53">
+<div id="328551e5" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>importances.plot.bar()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1657,12 +1657,12 @@ Name: count, dtype: int64</code></pre>
 <h3 class="anchored" data-anchor-id="summarizing">Summarizing</h3>
 <p>The Loan status has better relation with features such as Credit History, Applicant’s Income, Loan Amount needed by them, Family status(Depenedents) and Property Area which are generally considered by the loan providing organisations. These factors are hence used to take correct decisions to provide loan status or not. This data analysis hence gives a realisation of features and the relation between them from the older decision examples hence giving a learning to predict the class of the unseen data.</p>
 <p>Finally the we predict over unseen dataset using the Logistic Regression and Random Forest model(<strong>Ensemble Learning</strong>):</p>
-<div id="7b8af8a8" class="cell" data-execution_count="54">
+<div id="b336ffc1" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>df_test <span class="op">=</span> test.drop([<span class="st">'Loan_ID'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0aac268c" class="cell" data-execution_count="55">
+<div id="cd6fe928" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>df_test.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="213">
+<div class="cell-output cell-output-display" data-execution_count="55">
 <div>
 
 
@@ -1754,13 +1754,13 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="cb1f9685" class="cell" data-execution_count="56">
+<div id="98d005d2" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>p_log <span class="op">=</span> logmodel.predict(df_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="8ce4d144" class="cell" data-execution_count="57">
+<div id="1317c0a3" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>p_rf <span class="op">=</span> random_forest.predict(df_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ef6259ea" class="cell" data-execution_count="58">
+<div id="a8e6a5ef" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>predict_combine <span class="op">=</span> np.zeros((df_test.shape[<span class="dv">0</span>]))</span>
 <span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, test.shape[<span class="dv">0</span>]):</span>
@@ -1769,7 +1769,7 @@ Name: count, dtype: int64</code></pre>
 <span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>        predict_combine[i] <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>predict_combine <span class="op">=</span> predict_combine.astype(<span class="st">'int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7e8cb324" class="cell" data-execution_count="59">
+<div id="2d171073" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>submission <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Loan_ID"</span>: test[<span class="st">"Loan_ID"</span>],</span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Loan_Status"</span>: predict_combine</span>
@@ -1880,7 +1880,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/pr2tik1\.github\.io\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
