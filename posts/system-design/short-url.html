@@ -91,7 +91,7 @@ background: black;
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="Building a URL shortner – devExplore">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="../post-images/4.jpg">
+<meta name="twitter:image" content="https://pr2tik1.github.io/posts/post-images/4.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -195,14 +195,35 @@ background: black;
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#requirements-and-goals" id="toc-requirements-and-goals" class="nav-link" data-scroll-target="#requirements-and-goals">Requirements and Goals</a></li>
-  <li><a href="#design-and-considerations" id="toc-design-and-considerations" class="nav-link" data-scroll-target="#design-and-considerations">Design and Considerations</a></li>
-  <li><a href="#implementation-details" id="toc-implementation-details" class="nav-link" data-scroll-target="#implementation-details">Implementation Details</a></li>
-  <li><a href="#challenges-and-solutions" id="toc-challenges-and-solutions" class="nav-link" data-scroll-target="#challenges-and-solutions">Challenges and Solutions</a></li>
-  <li><a href="#testing-and-validations" id="toc-testing-and-validations" class="nav-link" data-scroll-target="#testing-and-validations">Testing and Validations</a></li>
-  <li><a href="#security-considerations" id="toc-security-considerations" class="nav-link" data-scroll-target="#security-considerations">Security Considerations</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#a.-introduction" id="toc-a.-introduction" class="nav-link active" data-scroll-target="#a.-introduction">A. Introduction</a></li>
+  <li><a href="#b.-understanding-the-problem-and-establishing-design-scope" id="toc-b.-understanding-the-problem-and-establishing-design-scope" class="nav-link" data-scroll-target="#b.-understanding-the-problem-and-establishing-design-scope">B. Understanding the Problem and Establishing Design Scope</a>
+  <ul class="collapse">
+  <li><a href="#b.1.-scope-and-assumptions" id="toc-b.1.-scope-and-assumptions" class="nav-link" data-scroll-target="#b.1.-scope-and-assumptions">B.1. Scope and Assumptions</a></li>
+  <li><a href="#b.2.-system-capacity" id="toc-b.2.-system-capacity" class="nav-link" data-scroll-target="#b.2.-system-capacity">B.2. System Capacity</a></li>
+  </ul></li>
+  <li><a href="#c.-deep-dive-into-designing" id="toc-c.-deep-dive-into-designing" class="nav-link" data-scroll-target="#c.-deep-dive-into-designing">C. Deep-Dive into designing</a>
+  <ul class="collapse">
+  <li><a href="#c.1.-client-frontenduser-interface" id="toc-c.1.-client-frontenduser-interface" class="nav-link" data-scroll-target="#c.1.-client-frontenduser-interface">C.1. Client (Frontend/User Interface)</a></li>
+  <li><a href="#c.2.-server-backendapi" id="toc-c.2.-server-backendapi" class="nav-link" data-scroll-target="#c.2.-server-backendapi">C.2. Server (Backend/API)</a></li>
+  <li><a href="#c.3.-load-balancer" id="toc-c.3.-load-balancer" class="nav-link" data-scroll-target="#c.3.-load-balancer">C.3. Load Balancer</a></li>
+  <li><a href="#c.4.-caching-layer" id="toc-c.4.-caching-layer" class="nav-link" data-scroll-target="#c.4.-caching-layer">C.4. Caching Layer</a></li>
+  <li><a href="#c.5.-database-storage" id="toc-c.5.-database-storage" class="nav-link" data-scroll-target="#c.5.-database-storage">C.5. Database (Storage)</a></li>
+  <li><a href="#c.6.-url-generation-algorithm" id="toc-c.6.-url-generation-algorithm" class="nav-link" data-scroll-target="#c.6.-url-generation-algorithm">C.6. URL Generation Algorithm</a></li>
+  </ul></li>
+  <li><a href="#d.-challenges-and-trade-offs" id="toc-d.-challenges-and-trade-offs" class="nav-link" data-scroll-target="#d.-challenges-and-trade-offs">D. Challenges and Trade-offs</a>
+  <ul class="collapse">
+  <li><a href="#scalability" id="toc-scalability" class="nav-link" data-scroll-target="#scalability">1. <strong>Scalability</strong></a></li>
+  <li><a href="#database-choice" id="toc-database-choice" class="nav-link" data-scroll-target="#database-choice">2. <strong>Database Choice</strong></a></li>
+  <li><a href="#collision-handling" id="toc-collision-handling" class="nav-link" data-scroll-target="#collision-handling">3. <strong>Collision Handling</strong></a></li>
+  <li><a href="#caching" id="toc-caching" class="nav-link" data-scroll-target="#caching">4. <strong>Caching</strong></a></li>
+  <li><a href="#redirection-speed" id="toc-redirection-speed" class="nav-link" data-scroll-target="#redirection-speed">5. <strong>Redirection Speed</strong></a></li>
+  <li><a href="#security" id="toc-security" class="nav-link" data-scroll-target="#security">6. <strong>Security</strong></a></li>
+  <li><a href="#url-expiration-analytics" id="toc-url-expiration-analytics" class="nav-link" data-scroll-target="#url-expiration-analytics">7. <strong>URL Expiration &amp; Analytics</strong></a></li>
+  </ul></li>
+  <li><a href="#e.-conclusion" id="toc-e.-conclusion" class="nav-link" data-scroll-target="#e.-conclusion">E. Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#references-and-resources" id="toc-references-and-resources" class="nav-link" data-scroll-target="#references-and-resources">References and Resources</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -213,33 +234,255 @@ background: black;
 
 
 
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="a.-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="a.-introduction">A. Introduction</h2>
 <p>Designing a URL shortener, like <a href="https://tinyurl.com/app/features/about-us">TinyURL</a>, is a classic problem in system design that offers a great opportunity to explore key design concepts. It’s not just about shrinking URLs—there’s a lot more going on behind the scenes.</p>
-<p>In this blog, I’m excited to share how I approached this problem. I’ll walk you through my thought process, the challenges I faced, and the design decisions I made to turn long URLs into short, manageable links. Whether you’re curious about URL mapping, efficient lookups, or scaling the solution, I hope my journey will give you some valuable insights and ideas for your own projects.</p>
+<p>In this blog, I’m excited to share how I approached this problem. I’ll walk you through my thought process, the challenges I faced, and the design decisions I made to turn long URLs into short, manageable links.</p>
 </section>
-<section id="requirements-and-goals" class="level2">
-<h2 class="anchored" data-anchor-id="requirements-and-goals">Requirements and Goals</h2>
+<section id="b.-understanding-the-problem-and-establishing-design-scope" class="level2">
+<h2 class="anchored" data-anchor-id="b.-understanding-the-problem-and-establishing-design-scope">B. Understanding the Problem and Establishing Design Scope</h2>
+<p>Before diving into the design, let’s clarify the requirements of a URL Shortener service—what it does, why it’s needed, and who benefits from it.</p>
+<p>A URL shortener takes a long URL and converts it into a shorter, more manageable version. The primary goal is to create a compact web address that’s easier to share, remember, and track. This service typically shortens the URL by adding a random sequence of letters and numbers. For example, a URL shortener can transform a lengthy URL like:</p>
+<blockquote class="blockquote">
+<p><code>https://www.amazon.in/gp/product/B0CHX1W1XY/ref=s9_bw_cg_Budget_2f1_w</code></p>
+</blockquote>
+<p>into a much shorter one like:</p>
+<blockquote class="blockquote">
+<p><code>https://tinyurl.com/ypbd82wy</code></p>
+</blockquote>
+<section id="b.1.-scope-and-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="b.1.-scope-and-assumptions">B.1. Scope and Assumptions</h3>
+<p>Now that we have a clear understanding of what a URL Shortener is, let’s delve deeper into the specifics and outline the requirements. To do this, we’ll address the following questions:</p>
+<ol type="1">
+<li><p>What are the key functional features required for this service?</p>
+<blockquote class="blockquote">
+<p>The service should convert a long URL into a short one, and when the shortened URL is accessed, it should redirect the user to the original long URL.</p>
+</blockquote></li>
+<li><p>What is the expected duration of the service’s operation?</p>
+<blockquote class="blockquote">
+<p>For the purpose of this design, we’ll assume the service will run for the next 10 years.</p>
+</blockquote></li>
+<li><p>How many URLs will the system need to handle simultaneously?</p>
+<blockquote class="blockquote">
+<p>We’ll assume the system may need to manage up to 1,000 URLs concurrently.</p>
+</blockquote></li>
+<li><p>What characters will be used in the shortened URLs?</p>
+<blockquote class="blockquote">
+<p>The shortened URLs will use alphanumeric characters.</p>
+</blockquote></li>
+<li><p>How long should the shortened URLs be?</p>
+<blockquote class="blockquote">
+<p>The URLs should be kept as short as possible while maintaining uniqueness.</p>
+</blockquote></li>
+<li><p>What should happen if two or more users submit the same long URL?</p>
+<blockquote class="blockquote">
+<p>Initially, the same short URL can be returned for identical long URLs. In the future, we can incorporate analytics or additional metadata to create user-specific shortened URLs.</p>
+</blockquote></li>
+</ol>
 </section>
-<section id="design-and-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="design-and-considerations">Design and Considerations</h2>
+<section id="b.2.-system-capacity" class="level3">
+<h3 class="anchored" data-anchor-id="b.2.-system-capacity">B.2. System Capacity</h3>
+<p>Next, we calculate the <strong>system’s capacity</strong> to ensure it can handle the required load. Given the need to manage around 1,000 URLs concurrently over a period of 10 years, we can estimate the total number of URLs the service will need to handle. The calculation is as follows:</p>
+<blockquote class="blockquote">
+<p>⇒ 60 seconds x 60 minutes x 24 hours x 365 days x 10 years x 1,000 URLs = 315 billion URLs over 10 years</p>
+</blockquote>
+<p>This means the system needs to generate <strong>at least</strong> <strong>315 billion unique URLs</strong> over the course of 10 years using alphanumeric short URLs. To determine how many characters are needed to support this capacity, we can calculate:</p>
+<blockquote class="blockquote">
+<p>⇒ Alphanumeric characters: a-z (26) + A-Z (26) + 0-9 (10) = 62 possible combinations</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>⇒ Since 62^7 = 3.5 trillion, using <strong>7 characters</strong> will provide more than enough combinations to handle the required number of URLs over the next 10 years.</p>
+</blockquote>
+<p>For each URL, let’s estimate the space required:</p>
+<ul>
+<li><p><strong>Shortened URL</strong>: 7 bytes (1-2 bytes per character)</p></li>
+<li><p><strong>Long URL</strong>: Assume around 100 bytes</p></li>
+<li><p><strong>Metadata</strong>: 500 bytes (e.g., userId, isValid status)</p></li>
+</ul>
+<p>This totals approximately <strong>1,000 bytes</strong> per URL. Given the need to store 315 billion URLs over 10 years:</p>
+<blockquote class="blockquote">
+<p>⇒ 1,000 bytes x 315 billion URLs = <strong>315 TB</strong> of storage space required.</p>
+</blockquote>
 </section>
-<section id="implementation-details" class="level2">
-<h2 class="anchored" data-anchor-id="implementation-details">Implementation Details</h2>
 </section>
-<section id="challenges-and-solutions" class="level2">
-<h2 class="anchored" data-anchor-id="challenges-and-solutions">Challenges and Solutions</h2>
+<section id="c.-deep-dive-into-designing" class="level2">
+<h2 class="anchored" data-anchor-id="c.-deep-dive-into-designing">C. Deep-Dive into designing</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+<section id="c.1.-client-frontenduser-interface" class="level3">
+<h3 class="anchored" data-anchor-id="c.1.-client-frontenduser-interface">C.1. Client (Frontend/User Interface)</h3>
+<p>The frontend is where users interact with the URL shortener. It’s the part of the application that makes shortening URLs easy and intuitive. The challenge here is to design a user interface (UI) that is both simple and powerful without unnecessary complexities.</p>
+<section id="c.1.1.-frontend-design-simplified-for-usability" class="level4">
+<h4 class="anchored" data-anchor-id="c.1.1.-frontend-design-simplified-for-usability">C.1.1. <strong>Frontend Design: Simplified for Usability</strong></h4>
+<ol type="1">
+<li><p><strong>Basic Form – The Core Interaction</strong><br>
+Every URL shortener needs a form where users can input their long URLs. But simplicity is key. A clean, minimal form with just one field (for the long URL) and a button (to generate the short link) reduces cognitive load for users. Users don’t want to be bombarded with options—just a quick, easy solution to shorten their URLs.</p></li>
+<li><p><strong>Optional Tracking – Adding Value with Insights</strong><br>
+Some users may want more than just shortened URLs. Adding a feature for tracking how many times each short URL was clicked gives users insights into how their links are performing. This feature could be optional, visible only to users who need it. By offering advanced analytics, we provide added value to the core functionality.</p></li>
+</ol>
+<p><strong>Tech Stack Consideration</strong>: For the frontend, using modern frameworks like <strong>React</strong> or <strong>Vue.js</strong> allows for a fast, responsive interface. These frameworks also make it easier to scale and add new features as the project evolves. We can also utilise <strong>Tailwind.css</strong> or <strong>shadcn-ui</strong> to give a minimalistic look.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-6.png" class="img-fluid figure-img" width="686"></p>
+<figcaption>Fronted of the URL Shortener App (https://github.com/pr2tik1/url-shortner-service)</figcaption>
+</figure>
+</div>
 </section>
-<section id="testing-and-validations" class="level2">
-<h2 class="anchored" data-anchor-id="testing-and-validations">Testing and Validations</h2>
 </section>
-<section id="security-considerations" class="level2">
-<h2 class="anchored" data-anchor-id="security-considerations">Security Considerations</h2>
+<section id="c.2.-server-backendapi" class="level3">
+<h3 class="anchored" data-anchor-id="c.2.-server-backendapi">C.2. Server (Backend/API)</h3>
+<p>The backend is where the heavy lifting happens. It processes the logic, manages the data, and ensures that requests are handled efficiently. The decisions made here directly impact the system’s scalability and performance.</p>
+<section id="c.2.1.-core-api-functions-the-building-blocks" class="level4">
+<h4 class="anchored" data-anchor-id="c.2.1.-core-api-functions-the-building-blocks">C.2.1. Core API Functions: The Building Blocks</h4>
+<ol type="1">
+<li><p><strong>Shorten URL – Creating Unique Short Links</strong><br>
+The core functionality of the backend is to accept long URLs from the frontend, generate unique short URLs, and store this mapping in a database. There are different ways to generate short URLs. You could use <strong>hashing algorithms</strong> (e.g., MD5 or SHA-256) or a <strong>counter-based system</strong> that assigns a unique ID for each URL and encodes it (e.g., using Base62).</p>
+<p>Hashing ensures that similar URLs produce distinct results, while a counter-based system can be faster but may require additional collision checks. Both approaches scale well but differ in complexity and performance.</p></li>
+<li><p><strong>Redirect URL – Efficient Lookup and Redirection</strong><br>
+When a user accesses a short URL, the backend retrieves the corresponding long URL from the database and redirects the user. This operation needs to be lightning-fast to avoid any latency in the user experience. By using indexed database queries and possibly caching frequently accessed short URLs, we can ensure efficient lookups and near-instantaneous redirection.</p>
+<p>Optimizing database lookups (e.g., through caching) and ensuring that the redirection process is swift prevents slowdowns and improves the overall user experience.</p></li>
+<li><p><strong>Analytics API (Optional) – Tracking Engagement</strong><br>
+If you want to give users the ability to track how often their links are used, an analytics API can be added to collect data such as click counts, user demographics, or referral sources. Implementing this feature requires balancing between data collection and performance, ensuring that analytics don’t slow down the core functionality.</p>
+<p>Offering analytics as an optional feature allows users to gain valuable insights into their links’ performance, adding another dimension to the service.</p></li>
+</ol>
+<p><strong>Tech Stack Consideration</strong>: For the backend, using a highly scalable and fast server-side language like <strong>Node.js</strong>, <strong>Python</strong>, or <strong>Go</strong> is ideal. These languages have great frameworks (like Express.js for Node.js or Flask for Python) that handle API requests efficiently.</p>
+<p>Here are the API endpoints that can be created to support these feature:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="617"></p>
+</figure>
+</div>
 </section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<section id="c.2.2.-backend-logic-how-it-all-works-together" class="level4">
+<h4 class="anchored" data-anchor-id="c.2.2.-backend-logic-how-it-all-works-together">C.2.2. Backend Logic : How It All Works Together</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="833"></p>
+</figure>
+</div>
+<ul>
+<li><strong>URL Shortening Process</strong><br>
+When a user submits a long URL, the backend generates a unique short link. This could be achieved through hashing or by assigning a unique ID. The URL pair is then stored in the database. A system like <strong>MongoDB</strong> or <strong>MySQL</strong> can be used, depending on the size and complexity of the project. NoSQL databases like <strong>MongoDB</strong> are great for flexibility and scalability, especially if you expect to store billions of URLs.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="546"></p>
+</figure>
+</div>
+<ul>
+<li><strong>Redirection Process</strong><br>
+Upon accessing a short URL, the backend retrieves the original URL from the database and redirects the user. If a caching layer (like Redis) is used, popular URLs can be served even faster, reducing the load on the database and improving response times.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-5.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="523"></p>
+</figure>
+</div>
+<ul>
+<li><strong>Analytics (Optional)</strong><br>
+If analytics are enabled, the backend can track each visit to the short URL. Data such as the number of clicks, user details, and timestamps can be stored for further analysis. However, it’s essential to balance this tracking to avoid impacting performance.</li>
+</ul>
+<p>This backend design ensures that the service is scalable, fast, and capable of handling high volumes of traffic with optional analytics support.</p>
+</section>
+</section>
+<section id="c.3.-load-balancer" class="level3">
+<h3 class="anchored" data-anchor-id="c.3.-load-balancer">C.3. Load Balancer</h3>
+<p>As the popularity of our URL shortener grows, managing increased traffic becomes critical to avoid downtime and ensure seamless user experience. A load balancer is a key component that distributes incoming traffic across multiple servers, ensuring no single server bears too much load, which could lead to crashes or performance degradation.</p>
+<p><strong>Strategy</strong>: To evenly distribute traffic, we can use algorithms like <strong>Round-Robin</strong> or <strong>Least Connections</strong>. Round-Robin cycles through servers in a balanced way, while Least Connections ensures that servers with fewer active requests receive more traffic, optimizing overall performance.</p>
+<p><strong>Tech Stack</strong>: Tools like <strong>Nginx</strong> or <strong>AWS Elastic Load Balancing</strong> are well-suited for handling traffic distribution across multiple servers efficiently.</p>
+<p>Implementing load balancing ensures higher availability and prevents bottlenecks by spreading out the traffic, making sure no single server is overwhelmed. This not only improves reliability but also optimizes resource utilization, especially as traffic scales.</p>
+</section>
+<section id="c.4.-caching-layer" class="level3">
+<h3 class="anchored" data-anchor-id="c.4.-caching-layer">C.4. Caching Layer</h3>
+<p>Frequent database lookups can slow down response times, especially as the user base grows. A caching layer helps mitigate this by storing frequently accessed URL mappings in memory, allowing the system to retrieve data much faster than querying the database each time.</p>
+<p><strong>Strategy</strong>: The caching layer should prioritize storing the most popular URL mappings. By using policies like <strong>Least Recently Used (LRU)</strong>, the cache remains efficient, keeping the most relevant data available in memory while discarding outdated information.</p>
+<p><strong>Tech Stack</strong>: Tools like <strong>Redis</strong> or <strong>Memcached</strong> are excellent choices for building a robust caching layer. Both provide high-speed, in-memory data storage that significantly reduces the load on the database and improves response times.</p>
+<p>Caching reduces the need for repeated database queries, enhancing the performance of frequently accessed URLs and providing a smoother user experience. By alleviating pressure on the database, the system scales more effectively without sacrificing speed.</p>
+</section>
+<section id="c.5.-database-storage" class="level3">
+<h3 class="anchored" data-anchor-id="c.5.-database-storage">C.5. Database (Storage)</h3>
+<p>To support millions, or even billions, of URL mappings, a well-designed and scalable database is essential. The database must efficiently store, query, and update URL mappings, ensuring the system can handle high volumes of both reads and writes.</p>
+<p><strong>Schema Design</strong>: The database schema should store short URL mappings alongside their original long URLs, user-related metadata, and expiration details (if applicable). Key fields include:</p>
+<ul>
+<li><p><strong>short_url</strong>: The unique identifier for the shortened URL.</p></li>
+<li><p><strong>long_url</strong>: The original URL.</p></li>
+<li><p><strong>user_id</strong> (optional): To track ownership if needed.</p></li>
+<li><p><strong>is_valid</strong>: Indicates if the shortened URL is still active.</p></li>
+<li><p><strong>created_at</strong>, <strong>expires_at</strong>: For tracking URL expiration or time-sensitive URLs.</p></li>
+</ul>
+<p><strong>Scalability</strong>: Choosing the right database is crucial for handling large-scale operations. <strong>MySQL</strong> works well for structured data and is suitable for smaller applications. However, <strong>MongoDB</strong> (NoSQL) is often a better choice for larger, more flexible applications that need to scale horizontally, especially when dealing with unstructured or rapidly growing data.</p>
+<p><strong>Sharding and Replication</strong>: As the system grows, <strong>sharding</strong> (dividing the database into smaller, more manageable parts) and <strong>replication</strong> (duplicating data across multiple servers) become essential for maintaining high performance and availability. These techniques distribute the load, ensuring the system remains responsive as it scales.</p>
+<p>By designing a scalable and efficient database schema, you ensure the system can handle growth without experiencing performance bottlenecks. Proper sharding and replication strategies help maintain fast read and write operations, which is critical for any high-traffic application.</p>
+</section>
+<section id="c.6.-url-generation-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="c.6.-url-generation-algorithm">C.6. URL Generation Algorithm</h3>
+<p>Generating unique and reliable short URLs is the core of any URL shortener. The right algorithm ensures that each URL gets a distinct short link without clashes.</p>
+<ul>
+<li><strong>Hash-Based Approach</strong>: One method is using a <strong>hashing algorithm</strong> like <strong>MD5</strong> or <strong>SHA-256</strong> to generate a unique short link for each URL. Hashing is useful because it consistently generates distinct outputs, even for similar inputs, making it ideal for creating unique URLs.</li>
+</ul>
+<!-- -->
+<ul>
+<li><strong>Counter-Based Approach</strong>: Alternatively, a <strong>counter-based system</strong> can assign a unique ID to each new URL. The ID is then encoded (e.g., using <strong>Base62</strong>) to generate a short URL. While this method is faster, it requires careful tracking to avoid collisions and may involve a little more overhead in maintaining uniqueness.</li>
+</ul>
+<!-- -->
+<ul>
+<li><strong>Collision Handling</strong>: Regardless of the approach, handling potential collisions (two URLs generating the same short link) is essential. If a collision is detected, a strategy like <strong>rehashing</strong> the URL or incrementing the counter can be used to generate a new, unique short link.</li>
+</ul>
+<p>By selecting the right URL generation strategy and preparing for potential collisions, you ensure that the system consistently generates unique short links without errors. This step is crucial for maintaining data integrity and preventing conflicts within the system.</p>
+</section>
+</section>
+<section id="d.-challenges-and-trade-offs" class="level2">
+<h2 class="anchored" data-anchor-id="d.-challenges-and-trade-offs">D. Challenges and Trade-offs</h2>
+<p>Building a URL shortener involves several challenges and trade-offs that need to be carefully managed to ensure efficiency, scalability, and reliability:</p>
+<section id="scalability" class="level3">
+<h3 class="anchored" data-anchor-id="scalability">1. <strong>Scalability</strong></h3>
+<p>As traffic grows, handling it effectively requires strategies like load balancing, caching, and database sharding. These ensure that the system can handle increased requests without performance bottlenecks or downtime.</p>
+</section>
+<section id="database-choice" class="level3">
+<h3 class="anchored" data-anchor-id="database-choice">2. <strong>Database Choice</strong></h3>
+<p>Choosing between SQL and NoSQL is critical. SQL databases provide structure and consistency but may struggle under heavy loads. NoSQL databases, like MongoDB, scale better for high traffic but may compromise on data consistency, making the choice a balance between structure and scalability.</p>
+</section>
+<section id="collision-handling" class="level3">
+<h3 class="anchored" data-anchor-id="collision-handling">3. <strong>Collision Handling</strong></h3>
+<p>In hash or counter-based URL generation, the risk of collisions—where two URLs generate the same short link—must be addressed. The trade-off here is between speed and ensuring uniqueness, as more reliable methods may be slower.</p>
+</section>
+<section id="caching" class="level3">
+<h3 class="anchored" data-anchor-id="caching">4. <strong>Caching</strong></h3>
+<p>Caching frequently accessed URLs helps improve response times, but improper cache management can lead to outdated or stale data. Implementing policies like Least Recently Used (LRU) helps strike a balance between performance and data freshness.</p>
+</section>
+<section id="redirection-speed" class="level3">
+<h3 class="anchored" data-anchor-id="redirection-speed">5. <strong>Redirection Speed</strong></h3>
+<p>To ensure users are quickly redirected, optimizing redirection speed through in-memory caching solutions like Redis is crucial. However, managing memory efficiently becomes a challenge as the system scales.</p>
+</section>
+<section id="security" class="level3">
+<h3 class="anchored" data-anchor-id="security">6. <strong>Security</strong></h3>
+<p>Preventing malicious use of shortened URLs adds complexity. Implementing URL filtering and validation checks ensures security but may slow down the overall process.</p>
+</section>
+<section id="url-expiration-analytics" class="level3">
+<h3 class="anchored" data-anchor-id="url-expiration-analytics">7. <strong>URL Expiration &amp; Analytics</strong></h3>
+<p>Handling expiring URLs adds complexity to the database and requires scheduled cleanup. Additionally, tracking analytics like clicks and user data provides value but increases storage and processing demands, potentially affecting overall performance.</p>
+<p>Effectively balancing these factors allows the URL shortener to be scalable, fast, and secure, while still providing a smooth user experience.</p>
+</section>
+</section>
+<section id="e.-conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="e.-conclusion">E. Conclusion</h2>
+<p>In conclusion, designing a URL shortener system involves much more than just converting long URLs into shorter ones. The process requires careful consideration of system scalability, efficient URL storage and retrieval, and the potential for additional features like analytics and custom URL generation. By tackling challenges like efficient database querying, implementing caching layers, and balancing server loads, a robust, scalable service can be created that meets user needs while maintaining performance.</p>
+<p>I hope this exploration has offered useful strategies and insights. Thank you !</p>
+<section id="references-and-resources" class="level3">
+<h3 class="anchored" data-anchor-id="references-and-resources">References and Resources</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/TinyURL" class="uri">https://en.wikipedia.org/wiki/TinyURL</a></li>
+<li>Application : <a href="https://github.com/pr2tik1/url-shortner-service" class="uri">https://github.com/pr2tik1/url-shortner-service</a></li>
+<li>https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/</li>
+<li>https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/</li>
+<li>Designs generated on : https://app.eraser.io/</li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -335,7 +578,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/pr2tik1\.github\.io\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
